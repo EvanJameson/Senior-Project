@@ -108,16 +108,16 @@ def get_links(soup):
 
 
 # inserts info of single athlete into database
-def store(data, sr_data, se_data):
+def store(data, sr_data, se_data, doc):
     # build document by piecing these together
-    doc = {'Athlete': {'Name': data['athlete'], 'School': data['school'], 'Grade': data['grade'],'TF':{'Records': sr_data, 'Results': se_data}}}
+    store_doc = {'Athlete': {'Name': data['athlete'], 'School': data['school'], 'Grade': data['grade'],'TF':doc}}
     # debug_message(doc, "json", True)
 
     # print(data)
     myclient = pymongo.MongoClient("mongodb://localhost:27017/")
     mydb = myclient["AthleteDB"] # names db
     mycol = mydb["athletes"]  # names collection
-    x = mycol.insert_one(doc)
+    x = mycol.insert_one(store_doc)
 
 
 # goes to page of specific athlete and gets all results and stores
@@ -134,6 +134,7 @@ def scrape_athlete(data):
     sr_season_flag = False
     sr_grade_flag = False
     sr_mark_flag = False
+    sr_check = False #checking JSON for data
 
     se_flag = False     # Seasons - normal results
     se_event_flag = False
@@ -148,7 +149,7 @@ def scrape_athlete(data):
     sr_grade = ""
     sr_mark = ""
 
-    sr_data = {}
+    sr_data = []
 
     se_grade = ""
     se_school = ""
@@ -163,6 +164,9 @@ def scrape_athlete(data):
     se_meet = ""
 
     se_data = {}
+
+
+    doc = {'records': sr_data, 'results': se_data}
 
     # only store as many athletes as specified so
     # things dont get out of hand
@@ -221,10 +225,33 @@ def scrape_athlete(data):
                         sr_mark = line
                         sr_season_flag = False
                         sr_grade_flag = False
-                        if not(sr_event in sr_data):
-                            sr_data.update({sr_event: {sr_season: sr_mark}})
+                        # check if event is already entered
+                        e_index = -1
+                        for event in doc["records"]:
+                            e_index += 1
+                            if event["event"] == sr_event:
+                                sr_check = True
+                                break
+                        if (sr_check): #already in
+                            doc["records"][e_index]["marks"].append(
+                                    {
+                                        "year": sr_season,
+                                        "mark": sr_mark
+                                    }
+                                )
+                            sr_check = False # need to reset manually
                         else:
-                            sr_data[sr_event].update({sr_season: sr_mark})
+                            doc["records"].append(
+                                    {
+                                        "event": sr_event,
+                                        "marks": [
+                                            {
+                                                "year": sr_season,
+                                                "mark": sr_mark
+                                            }
+                                        ]
+                                    }
+                                )
 
         # have season records, need all results now
         elif se_flag and not sr_flag:
@@ -375,7 +402,7 @@ def scrape_athlete(data):
     # debug_message(tags, "tags_text", True)
 
     # here sr_data and se_data are complete, store everything
-    store(data, sr_data, se_data)
+    store(data, sr_data, se_data, doc)
 
 
 
