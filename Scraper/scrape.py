@@ -142,6 +142,9 @@ def scrape_athlete(data):
     se_mark_flag = False
     se_date_flag = False
     se_meet_flag = False
+    se_check = False #checking JSON for data
+    se_event_check = False
+    se_meet_check = False
 
     # variables to store data
     sr_event = ""
@@ -163,7 +166,7 @@ def scrape_athlete(data):
     se_date = ""
     se_meet = ""
 
-    se_data = {}
+    se_data = []
 
 
     doc = {'records': sr_data, 'results': se_data}
@@ -310,60 +313,108 @@ def scrape_athlete(data):
                             else:
                                 # store data -> set flags to false
 
-                                # new season, add entire thing
-                                if not(se_season in se_data):
-                                    se_data.update({se_season:
-                                        {se_event:
-                                        {se_meet:
-                                        {'1':
-                                        {'pos': se_pos,
-                                         'mark': se_mark,
-                                         'date': se_date,
-                                         'wind': se_wind,
-                                         'pr': se_pr,
-                                         'sr': se_sr
-                                        }}}}})
+                                season_index = -1
+                                event_index = -1
+                                meet_index = -1
 
-                                else:
-                                    # new event in current season
-                                    if not (se_event in se_data[se_season]):
-                                        # print("\n======\n" + se_event + "\n======\n")
-                                        se_data[se_season].update({se_event:
-                                        {se_meet:
-                                        {'1':
-                                        {'pos': se_pos,
-                                         'mark': se_mark,
-                                         'date': se_date,
-                                         'wind': se_wind,
-                                         'pr': se_pr,
-                                         'sr': se_sr
-                                        }}}})
-                                        # print (se_data)
+                                for season in doc["results"]:
+                                    season_index += 1
+                                    if season["season"] == se_season:
+                                        se_check = True # season exists
+                                        for event in season["events"]:
+                                            event_index += 1
+                                            if event["event"] == se_event:
+                                                se_event_check = True # event exists
+                                                for meet in event["meets"]:
+                                                    meet_index += 1
+                                                    if meet["meet"] == se_meet:
+                                                        se_meet_check = True # meet exists
+                                        break
+                                # Season, event, and meet exist
+                                if (se_check and se_event_check and se_meet_check):
+                                    doc["results"][season_index]["events"][event_index]["meets"][meet_index]["marks"].append(
+                                            {
+                                                'pos': se_pos,
+                                                'mark': se_mark,
+                                                'date': se_date,
+                                                'wind': se_wind,
+                                                'pr': se_pr,
+                                                'sr': se_sr
+                                            }
+                                        )
 
-                                    # event is already in, just need to add new mark
-                                    else:
-                                        # event is in, need to check if running at same meet
-                                        if not (se_meet in se_data[se_season][se_event]):
-                                            se_data[se_season][se_event].update({se_meet:
-                                            {'1':
-                                            {'pos': se_pos,
-                                             'mark': se_mark,
-                                             'date': se_date,
-                                             'wind': se_wind,
-                                             'pr': se_pr,
-                                             'sr': se_sr
-                                            }}})
-                                        # person is running the same event at the same meet on the same day
-                                        else:
-                                            se_data[se_season][se_event][se_meet].update(
-                                            {'2':
-                                            {'pos': se_pos,
-                                             'mark': se_mark,
-                                             'date': se_date,
-                                             'wind': se_wind,
-                                             'pr': se_pr,
-                                             'sr': se_sr
-                                            }})
+                                # Season and event exist
+                                elif (se_check and se_event_check):
+                                    doc["results"][season_index]["events"][event_index]["meets"].append(
+                                            {
+                                                "meet": se_meet,
+                                                "marks": [
+                                                    {
+                                                        'pos': se_pos,
+                                                        'mark': se_mark,
+                                                        'date': se_date,
+                                                        'wind': se_wind,
+                                                        'pr': se_pr,
+                                                        'sr': se_sr
+                                                    }
+                                                ]
+                                            }
+                                        )
+
+                                # Season exists
+                                elif (se_check):
+                                    doc["results"][season_index]["events"].append(
+                                            {
+                                                "event": se_event,
+                                                "meets": [
+                                                    {
+                                                        "meet": se_meet,
+                                                        "marks": [
+                                                            {
+                                                                'pos': se_pos,
+                                                                'mark': se_mark,
+                                                                'date': se_date,
+                                                                'wind': se_wind,
+                                                                'pr': se_pr,
+                                                                'sr': se_sr
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        )
+
+                                # Brand new season
+                                elif not (se_check):
+                                    doc["results"].append(
+                                        {
+                                            "season": se_season,
+                                            "events": [
+                                                {
+                                                    "event": se_event,
+                                                    "meets": [
+                                                        {
+                                                            "meet": se_meet,
+                                                            "marks": [
+                                                                {
+                                                                    'pos': se_pos,
+                                                                    'mark': se_mark,
+                                                                    'date': se_date,
+                                                                    'wind': se_wind,
+                                                                    'pr': se_pr,
+                                                                    'sr': se_sr
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    )
+
+                                se_check = False
+                                se_event_check = False
+                                se_meet_check = False
 
                                 se_pos_flag = False
                                 se_mark_flag = False
