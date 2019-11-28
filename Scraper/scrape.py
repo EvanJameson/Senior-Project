@@ -110,7 +110,7 @@ def get_links(soup):
 # inserts info of single athlete into database
 def store(data, sr_data, se_data, doc):
     # build document by piecing these together
-    store_doc = {'Athlete': {'Name': data['athlete'], 'School': data['school'], 'Grade': data['grade'],'TF':doc}}
+    store_doc = {'athlete': {'name': data['athlete'], 'school': data['school'], 'grade': data['grade'],'tf':doc}}
     # debug_message(doc, "json", True)
 
     # print(data)
