@@ -11,12 +11,45 @@ var athleteSchema = new mongoose.Schema({
     School: String,
     Grade: String,
     TF:{
-      Records: mongoose.Schema.Types.Mixed,
-      Results: mongoose.Schema.Types.Mixed
+      records: [
+        {
+          event: String,
+          marks: [
+            {
+              year: String,
+              mark: String
+            }
+          ]
+        }
+      ],
+      results: [
+        {
+          season: String,
+          events: [
+            {
+              event: String,
+              meets: [
+                {
+                  meet: String,
+                  marks: [
+                    {
+                      pos: String,
+                      mark: String,
+                      date: String,
+                      wind: String,
+                      pr: Boolean,
+                      sr: Boolean
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   }
 },{ collection: 'athletes'}, {strict: false});
-
 //TODO: Define Schema for School index
 
 //TODO: Define Schema for Meet index
