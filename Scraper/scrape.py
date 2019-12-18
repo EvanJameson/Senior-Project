@@ -247,11 +247,12 @@ def scrape_athlete(data):
     lines = []
 
     # only store as many athletes as specified so things dont get out of hand
+    # set to any negative number to run scrape of full site
     if(athletes_stored == int(sys.argv[2])):
         quit("", True)
 
     athletes_stored += 1
-    print("Scraping [" + str(athletes_stored) + "/" + sys.argv[2] + "] " + data['athlete'] + " ", end = '')
+    print("Scraping " + data['athlete'] + " ", end = '')
 
     link = "https://www.athletic.net/TrackAndField" + data['athlete_link']
     soup = get_soup(link)
@@ -295,7 +296,7 @@ def scrape_result_data (soup):
 
     table = soup.find_all("td")
     athlete_links = get_links(soup)
-    print("\nScraping Rankings List...\n")
+
 
     # set i to keep track of what line of soup we're on
     i = 0
@@ -337,13 +338,19 @@ def scrape_result_data (soup):
                 # check if athlete already exists in database before
                 # going to page and scarping
                 if not (athlete_exists(data)):
-                    debug_length = len("Scraping [" + str(athletes_stored) + "/" + sys.argv[2] + "] " + data['athlete'] + " ")
-
+                    debug_length = len("Scraping " + athlete + " ")
+                    debug_width = 65 - debug_length
                     try:
                         scrape_athlete(data)
-                        print('{:{fill}{align}{width}}'.format(colored(" Success", 'green'), fill = '-', align = '>', width = 65 - debug_length))
+                        print('{:{fill}{align}{width}}'.format(colored(" Success", 'green'), fill = '-', align = '>', width = debug_width), end='')
+                        print(" [" + str(athletes_stored) + "/" + sys.argv[2] + "] ")
                     except Exception as e:
-                        print('{:{fill}{align}{width}}'.format(colored(" Failure", 'red'), fill = '-', align = '>', width = 65 - debug_length))
+                        print('{:{fill}{align}{width}}'.format(colored(" Failure", 'red'), fill = '-', align = '>', width = debug_width), end='')
+                        print(" [" + str(athletes_stored) + "/" + sys.argv[2] + "] ")
+                        # add failures to log file
+                        log = open("logfile.txt", "a")
+                        log.write("https://www.athletic.net/TrackAndField" + athlete_link)
+                        log.close()
                         # print(e)
                 else:
                     print("Athlete exists, skipping...")
@@ -356,6 +363,7 @@ def scrape_result_data (soup):
 
 # builds url to loop through every page for a specific event
 def build_result_url(num_page, event_url):
+    print("\nScraping Rankings List...\n")
     for page in range(num_page):
         results_url = event_url
 
@@ -366,6 +374,8 @@ def build_result_url(num_page, event_url):
         # get soup of page and pass to parser
         soup = get_soup(results_url)
         scrape_result_data(soup)
+
+        print("\nNext Page...\n")
 
 
 # build next part of url by adding event and other necessary info
@@ -394,6 +404,8 @@ def build_event_url(year):
         # build next part of url (results in page)
         build_result_url(num_page, event_url)
 
+        print("\nNext Event...\n")
+
 
 # Takes the years file and reads line by line
 # loops through all possible pages of events and years
@@ -410,6 +422,7 @@ def build_year_url(years):
         build_event_url(year)
 
         # advance to next year
+        print("\nNext Year...\n")
         year_num += 1
         line = years.readline()
 
@@ -447,7 +460,7 @@ def main():
     timer("start")
 
     # Debugging, pass link to play with html
-    elif sys.argv[1] == "-debug":
+    if sys.argv[1] == "-debug":
         print("Entering debug mode:")
         debug(get_soup(sys.argv[2]))
 
@@ -455,7 +468,7 @@ def main():
     # all athletic.net top even results
     # this should reach every athlete ever stored
     elif sys.argv[1] == "-auto":
-        print("Starting with full scrape functionality...")
+        print("Starting with full scrape functionality...\n")
         with open("years.txt") as fp:
             build_year_url(fp)
 
