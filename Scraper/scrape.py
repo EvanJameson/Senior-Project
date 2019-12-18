@@ -337,9 +337,11 @@ def scrape_result_data (soup):
 
                 # check if athlete already exists in database before
                 # going to page and scarping
+
+                debug_length = len("Scraping " + athlete + " ")
+                debug_width = 65 - debug_length
                 if not (athlete_exists(data)):
-                    debug_length = len("Scraping " + athlete + " ")
-                    debug_width = 65 - debug_length
+
                     try:
                         scrape_athlete(data)
                         print('{:{fill}{align}{width}}'.format(colored(" Success", 'green'), fill = '-', align = '>', width = debug_width), end='')
@@ -348,13 +350,21 @@ def scrape_result_data (soup):
                         print('{:{fill}{align}{width}}'.format(colored(" Failure", 'red'), fill = '-', align = '>', width = debug_width), end='')
                         print(" [" + str(athletes_stored) + "/" + sys.argv[2] + "] ")
                         # add failures to log file
-                        log = open("logfile.txt", "a")
-                        log.write("https://www.athletic.net/TrackAndField" + athlete_link)
+                        log = open("fail_logfile.txt", "a")
+                        log.write("-------------------------------------------------------------------\n")
+                        log.write("https://www.athletic.net/TrackAndField" + athlete_link + "\n")
+                        log.write(str(e))
+                        log.write("\n-------------------------------------------------------------------")
                         log.close()
                         # print(e)
                 else:
-                    print("Athlete exists, skipping...")
-
+                    print("Scraping " + athlete + " ", end = '')
+                    print('{:{fill}{align}{width}}'.format(colored(" Athlete exists", 'yellow'), fill = '-', align = '>', width = debug_width), end='')
+                    print(" [" + str(athletes_stored) + "/" + sys.argv[2] + "] ")
+                    # add repeats to logfile
+                    log = open("repeat_logfile.txt", "a")
+                    log.write("https://www.athletic.net/TrackAndField" + athlete_link)
+                    log.close()
         i += 1
 
 
