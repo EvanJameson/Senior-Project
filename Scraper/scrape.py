@@ -442,28 +442,14 @@ def debug(soup):
             athlete_links.append(temp[q1:q2])
 
 
-
 # driver
 def main():
     timer("start")
-    # Parses from the single link passed in
-    if sys.argv[1] == "-link":
-        print("Parsing by link...")
-        parser(get_soup(sys.argv[2]))
 
     # Debugging, pass link to play with html
     elif sys.argv[1] == "-debug":
         print("Entering debug mode:")
         debug(get_soup(sys.argv[2]))
-
-    # Parses an html file based on the filename passed in
-    elif sys.argv[1] == "-file":
-        print("Parsing by file...")
-        with open(sys.argv[2]) as fp:
-            file = fp.read()
-            soup = BeautifulSoup(file, "html.parser")
-            print("Parsing " + sys.argv[2] + "...")
-            parser(soup)
 
     # Uses year links from years.txt to loop through
     # all athletic.net top even results
@@ -472,7 +458,6 @@ def main():
         print("Starting with full scrape functionality...")
         with open("years.txt") as fp:
             build_year_url(fp)
-
 
 
 if __name__== "__main__":
