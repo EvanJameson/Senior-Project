@@ -10,20 +10,32 @@ CREATE TABLE Athletes(
   Grade ENUM('9th Grade','10th Grade','11th Grade','12th Grade','freshman', 'sophomore','junior','senior') NOT NULL
 ) AUTO_INCREMENT = 1;
 
-##Stores information about individual Results
+#Stores information about individual Results
 CREATE TABLE Results(
   ResultID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   Position INT NOT NULL,
-  TimeMark TIME,          ##for running events
-  DistanceMarkInches INT, ##for field events (storing as inches to easily convert back while also maintaining comparator)
-  Pr boolean NOT NULL,
-  Sr boolean NOT NULL,
-  Wind decimal NOT NULL,
-  Sport ENUM('xc','tf') NOT NULL,
-  Season VARCHAR(100) NOT NULL
+  TimeMark TIME(3),       #for running events (3 for millisecond precision)
+  DistanceMarkInches DECIMAL(5,2) NOT NULL, #2 after . 3 before #for field events (storing as inches to easily convert back while also maintaining comparator)
+  PR boolean NOT NULL,
+  SR boolean NOT NULL,
+  Wind DECIMAL(2,1) NOT NULL,
+  Sport ENUM('XC','TF') NOT NULL,
+  Season VARCHAR(100) NOT NULL,
+  HandTime BOOLEAN NOT NULL,
+  Converted BOOLEAN NOT NULL,
+  DQ BOOLEAN NOT NULL,
+  DNF BOOLEAN NOT NULL,
+  DNS BOOLEAN NOT NULL,
+  SCR BOOLEAN NOT NULL,
+  FS BOOLEAN NOT NULL,
+  NT BOOLEAN NOT NULL,
+  ND BOOLEAN NOT NULL,
+  NM BOOLEAN NOT NULL,
+  NH BOOLEAN NOT NULL,
+  FOUL BOOLEAN NOT NULL
 ) AUTO_INCREMENT = 1;
 
-##Stores information about individual Schools
+#Stores information about individual Schools
 CREATE TABLE Schools(
   SchoolID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   Name VARCHAR(100) NOT NULL,
@@ -31,15 +43,15 @@ CREATE TABLE Schools(
   Location VARCHAR(100) NOT NULL
 ) AUTO_INCREMENT = 1;
 
-##Stores information about individual Meets
+#Stores information about individual Meets
 CREATE TABLE Meets(
   MeetID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   Name VARCHAR(100) NOT NULL,
   Day DATE NOT NULL,
-  Sport ENUM('xc','tf') NOT NULL
+  Sport ENUM('XC','TF') NOT NULL
 ) AUTO_INCREMENT = 1;
 
-##Stores information about individual Events
+#Stores information about individual Events
 CREATE TABLE Events(
   EventID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   Name VARCHAR(100)
