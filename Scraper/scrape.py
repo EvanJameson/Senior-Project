@@ -5,21 +5,17 @@ import time
 import json
 from urllib.request import Request, urlopen
 from bs4 import BeautifulSoup
-
-# unicode dot char?
-# convert keys to base64? hex?
+from termcolor import colored
 
 athletes_stored = 0
 parse_time_start = time.time()
 # parse_time_stop = time.time()
 months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
-events =["55 Meter Dash", "60 Meter Dash", "100 Meters", "200 Meters", "300 Meters", "400 Meters", "500 Meters", "800 Meters", "1600 Meters", "3200 Meters",
-         "60m Hurdles - 39\"", "110m Hurdles - 36\"", "110m Hurdles - 39\"", "300m Hurdles - 30\"", "300m Hurdles - 36\"",
-         "4x100 Relay", "4x200 Relay", "4x400 Relay", "4x800 Relay", "4x1600 Relay", "SMR 100-100-200-400m", "DMR 1200-400-800-1600m - [12-4-8-16]",
-         "Shot Put - 10lb", "Shot Put - 12lb", "Discus - 1.6kg", "High Jump", "Pole Vault", "Long Jump", "Triple Jump",
-         "400 Meters - Relay Split", "SMR 1600m", "Swedish 100-200-300-400m", "SMR 100-100-200-400m" ,"100 Meters - Wheelchair",
-         "Discus - 1.6kg"
-         ]
+events = ["100 Meters", "200 Meters", "400 Meters", "800 Meters", "1500 Meters", "1600 Meters", "1 Mile", "3000 Meters", "3200 Meters", "2 Miles", "5000 Meters", "110m Hurdles - 33\"", "110m Hurdles - 36\"", "110m Hurdles - 39\"", "110m Hurdles - 42\"", "300m Hurdles - 30\"", "300m Hurdles - 33\"", "300m Hurdles - 36\"", "300m Hurdles - 39\"", "400m Hurdles - 30\"", "400m Hurdles - 33\"", "400m Hurdles - 36\"", "2k Steeplechase", "3k Steeplechase", "4x100 Relay", "4x200 Relay", "4x400 Relay", "4x800 Relay", "4x1600 Relay", "SMR 100-100-200-400m", "SMR 1600m", "DMR 1200-400-800-1600m", "Shot Put", "Discus", "Javelin", "High Jump", "Pole Vault", "Long Jump", "Triple Jump", "Hammer", "25 Meter Dash", "30 Meter Dash", "35 Meter Dash", "40 Meter Dash", "45 Meter Dash", "50 Meter Dash", "55 Meter Dash", "60 Meter Dash", "70 Meter Dash", "75 Meter Dash", "80 Meter Dash", "90 Meter Dash", "100 Meters", "110 Meters", "145 Meters", "150 Meters", "160 Meters", "165 Meters", "180 Meters", "200 Meters", "250 Meters", "300 Meters", "360 Meters", "400 Meters", "500 Meters", "550 Meters", "600 Meters", "720 Meters", "750 Meters", "800 Meters", "800m Racewalk", "1000 Meters", "1200 Meters", "1440 Meters", "1500 Meters", "1500m Racewalk", "1600 Meters", "1600m Racewalk", "2000 Meters", "2400 Meters", "3000 Meters", "3000m Racewalk", "3200 Meters", "5000 Meters", "5000m Racewalk", "8000 Meters", "10,000 Meters", "10,000 Meters Racewalk", "20,000 Meters Racewalk", "1-Hour Racewalk", "40m Hurdles", "45m Hurdles", "50m Hurdles", "55m Hurdles - 30\"", "55m Hurdles - 33\"", "55m Hurdles - 39\"", "55m Hurdles - 42\"", "60m Hurdles - 30\"", "60m Hurdles - 33\"", "60m Hurdles - 36\"", "60m Hurdles - 39\"", "65m Hurdles", "70m Hurdles", "75m Hurdles", "80m Hurdles", "100m Hurdles - 30\"", "100m Hurdles - 33\"", "100m Hurdles - 36\"", "110m Hurdles", "195m Hurdles", "200m Hurdles", "300m Hurdles - 30\"", "300m Hurdles - 33\"", "400m Hurdles - 30\"", "1k Steeplechase", "1.5k Steeplechase", "1 Mile Steeplechase", "2k Steeplechase", "3k Steeplechase", "4x50 Relay", "4x55 Relay", "4x60 Relay", "4x60 Shuttle Relay", "4x75 Relay", "4x80 Relay", "4x100 Relay", "4x100 Throwers Relay", "4x133 Relay", "4x145 Relay", "4x150 Relay", "4x160 Yard Relay", "4x160 Relay", "4x180 Relay", "4x200 Relay", "4x225 Relay", "4x240 Relay", "4x300 Relay", "4x320 Relay", "4x360 Relay", "4x375 Relay", "4x400 Relay", "4x600 Relay", "4x720 Relay", "4x750 Relay", "4x800 Relay", "4x1200 Relay", "4x1500 Relay", "4x1600 Relay", "4x3200 Relay", "SMR 200-100-100-200m", "SMR 200-180-180-216m", "SMR 100-100-200-400m", "SMR 200-200-300-100m", "SMR 160-80-80-480m", "Swedish 100-200-300-400m", "SMR 300-200-200-500m", "SMR 100-300-600-200m", "SMR 400-200-200-400m", "SMR 200-200-600-400m", "SMR 180-180-360-720m", "SMR 435-145-290-580m", "SMR 450-150-150-750m", "SMR 400-160-160-800m", "SMR 1600m", "SMR 320-160-480-640m", "SMR 480-160-160-800m", "SMR 600-200-400-800m", "MMR 800-400-400-800m", "MMR 1200-800-200-400m", "DMR 1000-200-400-800m", "DMR 200-400-800-1200m", "DMR 800-200-400-1600m", "DMR 400-400-800-1600m", "DMR 400-800-800-1200m", "DMR 1000-200-600-1600m", "DMR 400-800-1200-1200m", "DMR 1200-400-800-1600m", "DMR 800-800-1600-1600m", "DMR 1200-800-1600-3200m", "4x50 Shuttle Hurdles", "4x51.5 Shuttle Hurdles", "4x55 Shuttle Hurdles", "4x60 Shuttle Hurdles", "4x65 Shuttle Hurdles", "4x70 Shuttle Hurdles", "4x80y Shuttle Hurdles", "4x100 Shuttle Hurdles", "4x102.5 Shuttle Hurdles", "4x110 Shuttle Hurdles", "4x120y Shuttle Hurdles", "4x160m Shuttle Hurdles", "4x200m Shuttle Hurdles", "4x300 Shuttle Hurdles", "4x400 Shuttle Hurdles", "4x440y Shuttle Hurdles", "Shot Put - 4lb", "Shot Put - 6lb", "Shot Put - 8lb", "Shot Put - 10lb", "Shot Put - 12lb", "Shot Put - 16lb", "Shot Put - 3kg", "Shot Put - 4kg", "Shot Put - 5kg", "Shot Put - 6kg", "JV Shot Put", "Softball Throw", "Baseball Throw", "Soccerball Throw", "Discus - 1kg", "Discus - 1.5kg", "Discus - 1.6kg", "Discus - 1.75kg", "Discus - 2kg", "Javelin - 300g TJ", "Javelin - 500g TJ", "Javelin - 600g", "Javelin - 800g", "High Jump", "Pole Vault", "Long Jump", "Standing Long Jump", "Triple Jump", "Standing Triple Jump", "Hammer - 3kg", "Hammer - 4kg", "Hammer - 5kg", "Hammer - 6kg", "Hammer - 12lb", "Hammer - 16lb", "Weight Throw", "Super Weight Throw", "Ultra Weight Throw", "Medicine Ball Throw OHB", "Medicine Ball Throw UHF", "Roster Only", "Attendee", "Other", "Triathlon Score", "Tetrathlon Score", "Pentathlon Score (Indoor)", "Pentathlon Score (Outdoor)", "Heptathlon Score", "Octathlon Score", "Decathlon Score", "Throws Penthlon Score", "40 Yard Dash", "45 Yard Dash", "50 Yard Dash", "60 Yard Dash", "100 Yard Dash", "110 Yard Dash", "200 Yards", "220 Yards", "300 Yards", "330 Yards", "440 Yards", "500 Yards", "600 Yards", "660 Yards", "880 Yards", "1000 Yards", "1320 Yards", "Mile Racewalk", "1 Mile", "2 Miles", "3 Miles", "6 Miles", "Half Marathon", "Marathon", "40y Hurdles", "45y Hurdles", "50y Hurdles", "60y Hurdles", "120y Hurdles", "180y Hurdles", "200y Hurdles", "220y Hurdles", "330y Hurdles", "440y Hurdles", "4x50 Yard Shuttle Relay", "4x110 Yard Relay", "4x200 Yard Relay", "4x220 Yard Relay", "4x320 Yard Relay", "4x400 Yard Relay", "4x440 Yard Relay", "4x800 Yard Relay", "4x880 Yard Relay", "4xMile Relay", "SMR 110-110-220-440y", "SMR 110-220-440-880y", "SMR 200-200-400-880y", "DMR 1320-440-880-Mile", "4x55y Shuttle Hurdles"]
+
+# =============================================
+# ---------------|HELPER FUNCS|----------------
+# =============================================
 
 # FIX QUIT
 def quit(msg, timer_stop):
@@ -30,7 +26,7 @@ def quit(msg, timer_stop):
     bump = "\n\n=================================\n"
     if(timer_stop) and msg == "":
         timer("stop")
-        print (parse_time_stop)
+        #print (parse_time_stop)
         msg = halt + (str(athletes_stored) + " stored in " +
               str(round(parse_time_stop - parse_time_start, 2)) + " seconds")+ bump
         sys.exit(msg)
@@ -84,6 +80,12 @@ def debug_message(msg, flag, stop):
         if stop:
             quit("List Printed",True)
 
+    elif flag == "complete":
+        if stop:
+            quit(msg, True)
+        else:
+            print(msg)
+
     # Strings
     else:
         if stop:
@@ -107,459 +109,8 @@ def get_links(soup):
     return athlete_links
 
 
-# inserts info of single athlete into database
-def store(data, sr_data, se_data, doc):
-    # build document by piecing these together
-    store_doc = {'athlete': {'name': data['athlete'], 'school': data['school'], 'grade': data['grade'],'tf':doc}}
-    # debug_message(doc, "json", True)
-
-    # print(data)
-    myclient = pymongo.MongoClient("mongodb://localhost:27017/")
-    mydb = myclient["AthleteDB"] # names db
-    mycol = mydb["athletes"]  # names collection
-    x = mycol.insert_one(store_doc)
-
-
-# goes to page of specific athlete and gets all results and stores
-def scrape_athlete(data):
-
-    global athletes_stored
-    global events
-
-    lines = []
-
-    # flags to track where I am in athlete page
-    sr_flag = False      # Season records
-    sr_event_flag = False
-    sr_season_flag = False
-    sr_grade_flag = False
-    sr_mark_flag = False
-    sr_check = False #checking JSON for data
-
-    se_flag = False     # Seasons - normal results
-    se_event_flag = False
-    se_pos_flag = False
-    se_mark_flag = False
-    se_date_flag = False
-    se_meet_flag = False
-    se_check = False #checking JSON for data
-    se_event_check = False
-    se_meet_check = False
-
-    # variables to store data
-    sr_event = ""
-    sr_season = ""
-    sr_grade = ""
-    sr_mark = ""
-
-    sr_data = []
-
-    se_grade = ""
-    se_school = ""
-
-    se_event = ""
-    se_pos = ""
-    se_mark = ""
-    se_wind = ""
-    se_pr = False
-    sr_sr = False
-    se_date = ""
-    se_meet = ""
-
-    se_data = []
-
-
-    doc = {'records': sr_data, 'results': se_data}
-
-    # only store as many athletes as specified so
-    # things dont get out of hand
-    if(athletes_stored == int(sys.argv[2])):
-        quit("", True)
-
-    athletes_stored += 1
-
-    link = "https://www.athletic.net/TrackAndField" + data['athlete_link']
-    # link = "https://www.athletic.net/TrackAndField/Athlete.aspx?AID=9261230"
-    soup = getsoup(link)
-    tags = soup.find_all(["td", "h4", "h5"])
-
-    prev_line = ""
-    i = 0
-
-    # clean tags and remove duplicate lines
-    for e in tags:
-        cur_line = e.getText().strip()
-        if cur_line != prev_line:
-            lines.append(cur_line)
-
-        prev_line = e.getText().strip()
-
-    # debug_message(lines, "tags_text", True)
-    # debug_message(tags, "tags_text", True)
-
-
-
-    # loops get all season records and all marks recorded
-    for e in lines:
-        line = e
-
-        # event -> season -> grade -> mark
-        # skip first line, "Season Records"
-        if sr_flag and not se_flag:
-            # get event
-            if line in events:
-                sr_event_flag = True
-
-            if sr_event_flag:
-                sr_event_flag = False
-                sr_event = line
-            else:
-                # get season
-                if not sr_season_flag:
-                    sr_season_flag = True
-                    sr_season = line
-                else:
-                    # get grade
-                    if not sr_grade_flag:
-                        sr_grade_flag = True
-                        sr_grade = line
-                    else:
-                        # get mark, set flags false, store data
-                        sr_mark = line
-                        sr_season_flag = False
-                        sr_grade_flag = False
-                        # check if event is already entered
-                        e_index = -1
-                        for event in doc["records"]:
-                            e_index += 1
-                            if event["event"] == sr_event:
-                                sr_check = True
-                                break
-                        if (sr_check): #already in
-                            doc["records"][e_index]["marks"].append(
-                                    {
-                                        "year": sr_season,
-                                        "mark": sr_mark
-                                    }
-                                )
-                            sr_check = False # need to reset manually
-                        else:
-                            doc["records"].append(
-                                    {
-                                        "event": sr_event,
-                                        "marks": [
-                                            {
-                                                "year": sr_season,
-                                                "mark": sr_mark
-                                            }
-                                        ]
-                                    }
-                                )
-
-        # have season records, need all results now
-        elif se_flag and not sr_flag:
-            # get event
-            if line in events:
-                se_event_flag = True
-
-            if se_event_flag:
-                se_event_flag = False
-                se_event = line.replace('.', '-') # dicus 1.6kg
-                # print(se_event)
-            else:
-                # get pos
-                if not se_pos_flag:
-                    se_pos_flag = True
-                    se_pos = line
-                else:
-                    # get mark
-                    if not se_mark_flag:
-                        se_mark_flag = True
-                        # check for pr and set to true if found
-                        if "PR" in line:
-                            se_pr = True
-                            line = line.replace('PR','')
-                        else:
-                            se_pr = False
-
-                        if "SR" in line:
-                            se_sr = True
-                            line = line.replace('SR','')
-                        else:
-                            se_sr = False
-
-                        #
-                        # pull text apart to get wind speed
-                        if "(" in line and ")" in line:
-                            w1 = line.index("(")
-                            w2 = line.index(")")
-                            se_wind = line[w1:w2+1]
-                            line = line[0:w1]
-
-                        else:
-                            se_wind = ""
-
-                        se_mark = line
-                    else:
-                        # get date
-                        if not se_date_flag:
-                            se_date_flag = True
-                            se_date = line
-                        else:
-                            # get meet
-                            if not se_meet_flag:
-                                se_meet_flag = True
-                                se_meet = line.replace('.', '')
-                            else:
-                                # store data -> set flags to false
-
-                                season_index = -1
-                                event_index = -1
-                                meet_index = -1
-
-                                for season in doc["results"]:
-                                    season_index += 1
-                                    if season["season"] == se_season:
-                                        se_check = True # season exists
-                                        for event in season["events"]:
-                                            event_index += 1
-                                            if event["event"] == se_event:
-                                                se_event_check = True # event exists
-                                                for meet in event["meets"]:
-                                                    meet_index += 1
-                                                    if meet["meet"] == se_meet:
-                                                        se_meet_check = True # meet exists
-                                        break
-                                # Season, event, and meet exist
-                                if (se_check and se_event_check and se_meet_check):
-                                    doc["results"][season_index]["events"][event_index]["meets"][meet_index]["marks"].append(
-                                            {
-                                                'pos': se_pos,
-                                                'mark': se_mark,
-                                                'date': se_date,
-                                                'wind': se_wind,
-                                                'pr': se_pr,
-                                                'sr': se_sr
-                                            }
-                                        )
-
-                                # Season and event exist
-                                elif (se_check and se_event_check):
-                                    doc["results"][season_index]["events"][event_index]["meets"].append(
-                                            {
-                                                "meet": se_meet,
-                                                "marks": [
-                                                    {
-                                                        'pos': se_pos,
-                                                        'mark': se_mark,
-                                                        'date': se_date,
-                                                        'wind': se_wind,
-                                                        'pr': se_pr,
-                                                        'sr': se_sr
-                                                    }
-                                                ]
-                                            }
-                                        )
-
-                                # Season exists
-                                elif (se_check):
-                                    doc["results"][season_index]["events"].append(
-                                            {
-                                                "event": se_event,
-                                                "meets": [
-                                                    {
-                                                        "meet": se_meet,
-                                                        "marks": [
-                                                            {
-                                                                'pos': se_pos,
-                                                                'mark': se_mark,
-                                                                'date': se_date,
-                                                                'wind': se_wind,
-                                                                'pr': se_pr,
-                                                                'sr': se_sr
-                                                            }
-                                                        ]
-                                                    }
-                                                ]
-                                            }
-                                        )
-
-                                # Brand new season
-                                elif not (se_check):
-                                    doc["results"].append(
-                                        {
-                                            "season": se_season,
-                                            "events": [
-                                                {
-                                                    "event": se_event,
-                                                    "meets": [
-                                                        {
-                                                            "meet": se_meet,
-                                                            "marks": [
-                                                                {
-                                                                    'pos': se_pos,
-                                                                    'mark': se_mark,
-                                                                    'date': se_date,
-                                                                    'wind': se_wind,
-                                                                    'pr': se_pr,
-                                                                    'sr': se_sr
-                                                                }
-                                                            ]
-                                                        }
-                                                    ]
-                                                }
-                                            ]
-                                        }
-                                    )
-
-                                se_check = False
-                                se_event_check = False
-                                se_meet_check = False
-
-                                se_pos_flag = False
-                                se_mark_flag = False
-                                se_date_flag = False
-                                se_meet_flag = False
-                                se_pr = False
-                                se_sr = False
-
-
-
-
-        # check section
-        if line == "Season Records":
-            sr_flag = True
-
-        # need to get grade and school out
-        if "Outdoor Season" in line or "Indoor Season" in line:
-            se_flag = True
-            sr_flag = False
-            se_grade = line[len(line) - 10:]
-            se_school = line[line.index("Season") + 29:len(line) - 10]
-            se_season = (line[:line.index("Season") + 6] + line[line.index("                    ") + 19:]).replace('.', ' ')
-            se_pos_flag = False
-            se_mark_flag = False
-            se_date_flag = False
-            se_meet_flag = False
-            se_pr = False
-            se_sr = False
-
-
-
-
-        i += 1
-    # debug_message(se_data, "json", True)
-    # debug_message(sr_data, "dict", True)
-    # debug_message(tags, "tags_text", True)
-
-    # here sr_data and se_data are complete, store everything
-    store(data, sr_data, se_data, doc)
-
-
-
-# check if athlete exists in DB already **TODO**
-def athlete_exists(data):
-    return False
-
-
-# parses page based on html soup passed in
-# only does one page at a time
-def parser (soup):
-    table = soup.find_all("td")
-    athlete_links = get_links(soup)
-    # print("\nParsing Results\n============================================\n")
-
-    # set i to keep track of what line of soup we're on
-    i = 0
-
-    # set a to keep track of which link we're on
-    a = 0
-    for e in table:
-
-        # pull text out of tag
-        text = e.getText()
-
-        # this is for links (?)
-        link = e
-
-        # header data prior to 9
-        if i > 8:
-
-            # dictionary to store data of single athlete to then be
-            # passed to store() <- [this may change]
-            data ={}
-
-            # position, check for tied athletes and assign
-            # appropriate position on list
-            if i%9 == 0:
-                position = text
-                if position == "":
-                    position = prev_pos # the position of the tied athletes
-                else:
-                    prev_pos = position
-
-            # get grade of athlete
-            if i%9 == 1:
-                grade = text
-
-            # get athlete name and link **TODO**
-            # skipping the other links provided for the time being
-            if i%9 == 2:
-                athlete = text
-                athlete_link = athlete_links[a]
-                a += 1
-
-            # get mark, check for wind and PR
-            if i%9 == 4:
-                mark = text
-
-                # set pr to true and remove from mark
-                if "PR" in mark:
-                    pr = True
-                    mark = mark.replace('PR','')
-                else:
-                    pr = False
-
-                # pull text apart to get wind speed
-                if "(" in mark and ")" in mark:
-                    w1 = text.index("(")
-                    w2 = text.index(")")
-                    mark = text[0:w1]
-                    wind = text[w1:w2+1]
-                else:
-                    wind = ""
-
-            # get state of athlete
-            if i%9 == 5:
-                state = text
-
-            # get school of athlete
-            if i%9 == 6:
-                school = text
-
-            # get date of mark [mth dy]
-            if i%9 == 7:
-                date = text
-
-            # get meet of mark and pass all data on
-            if i%9 == 8:
-                meet = text
-                data.update({'position': position,'grade': grade,'athlete': athlete,
-                             'athlete_link': athlete_link, 'mark': mark,'wind': wind,
-                             'pr': pr,'state': state,'school': school,'date': date,'meet': meet})
-
-                # check if athlete already exists in database before
-                # going to page and scarping
-                if not (athlete_exists(data)):
-                    scrape_athlete(data)
-
-                # store(data) # insert data into DB
-                # debug_message(data, "dict", False)
-        i += 1
-
-
 # gets the number of results for an event
-def results (soup):
+def get_num_results (soup):
     table = soup.find_all("td")
     i = 0
     for e in table:
@@ -578,7 +129,7 @@ def results (soup):
 
 
 # get the soup based on the link given
-def getsoup(link):
+def get_soup(link):
     req = Request(link, headers={'User-Agent': 'Mozilla/5.0'})
     fp = urlopen(req)
     mybytes = fp.read()
@@ -588,45 +139,314 @@ def getsoup(link):
     return soup
 
 
+# clean tags and remove duplicate lines
+# also removes records from tags, only results remain
+def clean_lines(tags, lines):
+    prev_line = ""
+    save_data = False
+
+    for e in tags:
+        cur_line = e.getText().strip()
+        if "Outdoor Season" in cur_line or "Indoor Season" in cur_line:
+            save_data = True
+
+        if (save_data):
+            if cur_line != prev_line:
+                lines.append(cur_line)
+
+            prev_line = cur_line
+
+    return lines
+
+
+# check if athlete exists in DB already **TODO**
+def athlete_exists(data):
+    return False
+
+
+# check if result exists in DB already **TODO**
+def result_exists(data):
+    return False
+
+
+# clean up result and extract wind and pr / sr
+def clean_result(result):
+    pos = result[0]
+    mark = result[1]
+    date = result[2]
+    meet = result[3]
+    pr = False
+    sr = False
+    wind = ""
+
+    # Clean position
+    if not(pos.isnumeric()):
+        pos = "--"
+
+    # Clean mark
+    if "(" in mark and ")" in mark:
+        w1 = mark.index("(")
+        w2 = mark.index(")")
+        wind = mark[w1:w2+1]
+        final_mark = mark[0:w1]
+
+    if "PR" in mark:
+        pr = True
+        if wind == "":
+            p = mark.index("PR")
+            final_mark = mark[0:p]
+
+    if "SR" in mark:
+        sr = True
+        if wind == "":
+            s = mark.index("SR")
+            final_mark = mark[0:s]
+
+    if (not (pr or sr)) and wind == "":
+        final_mark = mark.strip()
+
+    result[0] = pos
+    result[1] = final_mark
+    result[2] = date
+    result[3] = meet
+    result.append(wind)
+    result.append(pr)
+    result.append(sr)
+
+    return result
+
+
+def print_scrape_result(msg, color, debug_width):
+    global athletes_stored
+    print('{:{fill}{align}{width}}'.format(colored(msg, color), fill = '-', align = '>', width = debug_width), end='')
+    print(" [" + str(athletes_stored) + "/" + sys.argv[2] + "] ")
+
+
+def handle_scrape_exception(e, athlete_link):
+    log = open("fail_logfile.txt", "a")
+    log.write("-------------------------------------------------------------------\n")
+    log.write("https://www.athletic.net/TrackAndField" + athlete_link + "\n")
+    log.write(str(e))
+    log.write("\n-------------------------------------------------------------------\n")
+    log.close()
+
+
+def handle_repeat_athlete(athlete_link):
+    log = open("repeat_logfile.txt", "a")
+    log.write("https://www.athletic.net/TrackAndField" + athlete_link)
+    log.close()
+
+# =============================================
+# ----------------|MAIN FUNCS|-----------------
+# =============================================
+
+# inserts info of single athlete into database
+def store(data, sr_data, se_data, doc):
+    # build document by piecing these together
+    store_doc = {'athlete': {'name': data['athlete'], 'school': data['school'], 'grade': data['grade'],'tf':doc}}
+    # debug_message(doc, "json", True)
+
+    # print(data)
+    myclient = pymongo.MongoClient("mongodb://localhost:27017/")
+    mydb = myclient["AthleteDB"] # names db
+    mycol = mydb["athletes"]  # names collection
+    x = mycol.insert_one(store_doc)
+
+
+# Convert to appropriate datatypes and insert into table
+def insert_result(result, season, event):
+    result = clean_result(result)
+
+    pos = result[0]
+    mark = result[1]
+    date = result[2]
+    meet = result[3]
+    wind = result[4]
+    pr = result[5]
+    sr = result[6]
+
+
+# scraping data from page of individual athlete
+def scrape_athlete(data):
+    global athletes_stored
+    global events
+
+    lines = []
+
+    # only store as many athletes as specified so things dont get out of hand
+    # set to any negative number to run scrape of full site
+    if(athletes_stored == int(sys.argv[2])):
+        quit("", True)
+
+    athletes_stored += 1
+    print("Scraping " + data['athlete'] + " ", end = '')
+
+    link = "https://www.athletic.net/TrackAndField" + data['athlete_link']
+    soup = get_soup(link)
+    tags = soup.find_all(["td", "h4", "h5"])
+
+    lines = clean_lines(tags, lines)
+
+    result = []
+    result_index = 1
+    for line in lines:
+
+        # Check if line denotes season
+        if "Outdoor Season" in line or "Indoor Season" in line:
+            season = line
+        else:
+
+            # Check if line denotes event
+            if line in events:
+                event = line
+            else:
+
+                # Based on structure of page get contents of result and send to insert
+                if result_index % 5 > 0:
+                    result.append(line)
+                    result_index += 1
+
+                else:
+                    if not (result_exists(data)):
+                        insert_result(result, season, event)
+
+                    result_index = 1
+                    result = []
+
+
+# gets necessary data from one result then passes in athletes link to be scraped
+def scrape_result_table (soup):
+    global athletes_stored
+
+    table = soup.find_all("td")
+    athlete_links = get_links(soup)
+
+
+    # set i to keep track of what line of soup we're on
+    result_index = 0
+
+    # set a to keep track of which link we're on
+    link_index = 0
+    for athlete_result in table:
+
+
+        # pull text out of tag
+        text = athlete_result.getText()
+
+        # header data prior to 9
+        if result_index > 8:
+
+            # dictionary to store data of single athlete to then be
+            # passed to store() <- [this may change]
+            data ={}
+
+            # get grade of athlete
+            if result_index%9 == 1:
+                grade = text
+
+            # get athlete name and link **TODO**
+            # skipping the other links provided for the time being
+            if result_index%9 == 2:
+                athlete = text
+                athlete_link = athlete_links[link_index]
+                link_index += 1
+
+            # get school of athlete
+            if result_index%9 == 6:
+                school = text
+
+            # get meet of mark and pass all data on
+            if result_index%9 == 8:
+
+                data.update({'grade': grade,'athlete': athlete, 'athlete_link': athlete_link, 'school': school})
+
+                # check if athlete already exists in database before
+                # going to page and scraping
+
+                debug_length = len("Scraping " + athlete + " ")
+                debug_width = 65 - debug_length
+                if not (athlete_exists(data)):
+                    try:
+                        scrape_athlete(data)
+                        print_scrape_result(" Success", "green", debug_width)
+                    except Exception as e:
+                        print_scrape_result(" Failure", "red", debug_width)
+                        # add failures to log file
+                        handle_scrape_exception(e, athlete_link)
+
+                else:
+                    print("Scraping " + athlete + " ", end = '')
+                    print_scrape_result(" Athlete exists", "yellow", debug_width)
+
+                    # add repeats to logfile
+                    handle_repeat_athlete(athlete_link)
+
+        result_index += 1
+
+
+# builds url to loop through every page for a specific event
+def build_result_url(num_page, event_url):
+    print("\nScraping Rankings List...\n")
+    for page in range(num_page):
+        results_url = event_url
+
+        # only pages after the first need &page=x added on
+        if page > 0:
+            results_url = event_url + "&page=" + str(page)
+
+        # get soup of page and pass to parser
+        soup = get_soup(results_url)
+        scrape_result_table(soup)
+
+        print("\nNext Page...\n")
+
+
+# build next part of url by adding event and other necessary info
+def build_event_url(year):
+    # builds url for a certain event number
+    # get event from 1 to 478 (keeping small for testing)
+    for event in range(1, 2):
+
+        # at this level make it to base page of an event
+        # need to find amount of results
+        event_url = year + "&Event=" + str(event)
+        num_results = get_num_results(get_soup(event_url))
+        print("Parsing event " + str(event))
+        print(str(num_results) + " results")
+
+        # event has no results reported and is skipped
+        if num_results is None:
+            print("Skipping event.")
+            continue
+
+        # get num page for each event
+        # 100 results per page, + 2 for first page and excess
+        num_page = int((num_results /100) + 2)
+        print(str(num_page) + " pages")
+
+        # build next part of url (results in page)
+        build_result_url(num_page, event_url)
+
+        print("\nNext Event...\n")
+
+
 # Takes the years file and reads line by line
 # loops through all possible pages of events and years
-def mac_daddy(years):
+def build_year_url(years):
     line = years.readline()
+    year_num = 1
 
     # get link to each year of events
     while line:
         year = line.strip()
+        print("Parsing year " + str(year_num))
 
-        # builds url for a certain event number
-        # get event from 1 to 478 (keeping small for testing)
-        for event in range(1, 2):
-
-            # at this level make it to base page of an event
-            # need to find amount of results
-            event_url = year + "&Event=" + str(event)
-            num_results = results(getsoup(event_url))
-
-            # event has no results reported and is skipped
-            if num_results is None:
-                continue
-
-            # get num page for each event
-            # 100 results per page, + 2 for first page and excess
-            num_page = int((num_results /100) + 2)
-
-            # builds url to loop through every page for a specific event
-            for page in range(num_page):
-                results_url = event_url
-
-                # only pages after the first need &page=x added on
-                if page > 0:
-                    results_url = event_url + "&page=" + str(page)
-
-                # get soup of page and pass to parser
-                soup = getsoup(results_url)
-                parser(soup)
+        # build next part of url (event)
+        build_event_url(year)
 
         # advance to next year
+        print("\nNext Year...\n")
+        year_num += 1
         line = years.readline()
 
 
@@ -658,33 +478,23 @@ def debug(soup):
             athlete_links.append(temp[q1:q2])
 
 
-
 # driver
 def main():
     timer("start")
-    # Parses from the single link passed in
-    if sys.argv[1] == "-link":
-        parser(getsoup(sys.argv[2]))
 
     # Debugging, pass link to play with html
-    elif sys.argv[1] == "-debug":
-        debug(getsoup(sys.argv[2]))
-
-    # Parses an html file based on the filename passed in
-    elif sys.argv[1] == "-file":
-        with open(sys.argv[2]) as fp:
-            file = fp.read()
-            soup = BeautifulSoup(file, "html.parser")
-            parser(soup)
+    if sys.argv[1] == "-debug":
+        print("Entering debug mode:")
+        debug(get_soup(sys.argv[2]))
 
     # Uses year links from years.txt to loop through
     # all athletic.net top even results
     # this should reach every athlete ever stored
-    # [BUT NOT EVERY RESULT EVER STORED]
     elif sys.argv[1] == "-auto":
+        print("Starting with full scrape functionality...\n")
         with open("years.txt") as fp:
-            mac_daddy(fp)
-
+            build_year_url(fp)
+        debug_message("Scrape Complete", "Complete", True)
 
 
 if __name__== "__main__":
