@@ -387,19 +387,6 @@ def insert_athlete_result(athlete_id, result_id):
 # =============================================
 
 
-# inserts info of single athlete into database
-def store(data, sr_data, se_data, doc):
-    # build document by piecing these together
-    store_doc = {'athlete': {'name': data['athlete'], 'school': data['school'], 'grade': data['grade'],'tf':doc}}
-    # debug_message(doc, "json", True)
-
-    # print(data)
-    myclient = pymongo.MongoClient("mongodb://localhost:27017/")
-    mydb = myclient["AthleteDB"] # names db
-    mycol = mydb["athletes"]  # names collection
-    x = mycol.insert_one(store_doc)
-
-
 # scraping data from page of individual athlete
 def scrape_athlete(data, athlete_id):
     global athletes_stored
