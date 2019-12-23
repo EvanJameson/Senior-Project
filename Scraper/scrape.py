@@ -26,7 +26,7 @@ dbcursor = db.cursor()
 # ---------------|HELPER FUNCS|----------------
 # =============================================
 
-# FIX QUIT
+
 def quit(msg, timer_stop):
     global parse_time_start
     global parse_time_stop
@@ -295,6 +295,7 @@ def clean_result(result):
     else:
         final_mark = ("track", final_mark)
 
+    # TODO: If you do this techincally every result ever would have a wind guage, find different way to store
     if wind == "":
         wind = 0.0
 
@@ -328,9 +329,63 @@ def handle_repeat_athlete(athlete_link):
     log.write("https://www.athletic.net/TrackAndField" + athlete_link)
     log.close()
 
+
+# =============================================
+# ---------------|INSERT FUNCS|----------------
+# =============================================
+
+
+def insert_athlete(data):
+
+    insert = "INSERT INTO Athletes (Name, Gender, Grade) VALUES (%s, %s, %s)"
+    vals = (data['athlete'], "Male", data['grade'])
+
+    dbcursor.execute(insert, vals)
+    db.commit()
+
+    athlete_id = dbcursor.lastrowid
+
+    return athlete_id
+
+
+# Convert to appropriate datatypes and insert into table
+def insert_result(result, season, event):
+    global dbcursor
+
+    # get info out of result and turn into dict
+    result = clean_result(result)
+
+    insert = "INSERT INTO Results (Position, TimeMark, DistanceMarkInches, Pr, Sr, Wind, Sport, Season, HandTime, Converted, DQ, DNF, DNS, SCR, FS, NT, ND, NM, NH, FOUL) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
+    vals = ()
+    if (result['mark'][0] == "track"):
+        vals = (str(result['pos']), str(result['mark'][1]), "0", result['pr'], result['sr'], str(result['wind']), "TF", season, result['handtime'], result['converted'], result['dq'], result['dnf'], result['dns'], result['scr'], result['fs'], result['nt'], result['nd'], result['nm'], result['nh'], result['foul'])
+    elif (result['mark'][0] == "field"):
+        vals = (str(result['pos']), "0", str(result['mark'][1]), result['pr'], result['sr'], str(result['wind']), "TF", season, result['handtime'], result['converted'], result['dq'], result['dnf'], result['dns'], result['scr'], result['fs'], result['nt'], result['nd'], result['nm'], result['nh'], result['foul'])
+
+
+    dbcursor.execute(insert, vals)
+    db.commit()
+
+    result_id = dbcursor.lastrowid # gets id of result
+
+    # use result_id to maintain relationship in "Athletes_Results"
+    return result_id
+
+
+# Insert AthleteID and ResultID pair to maintain relationship
+def insert_athlete_result(athlete_id, result_id):
+
+    insert = "INSERT INTO Athletes_Results (AthleteID, ResultID) VALUES (%s, %s)"
+    vals = (athlete_id, result_id)
+
+    dbcursor.execute(insert, vals)
+    db.commit()
+
+
 # =============================================
 # ----------------|MAIN FUNCS|-----------------
 # =============================================
+
 
 # inserts info of single athlete into database
 def store(data, sr_data, se_data, doc):
@@ -345,26 +400,8 @@ def store(data, sr_data, se_data, doc):
     x = mycol.insert_one(store_doc)
 
 
-# Convert to appropriate datatypes and insert into table
-# TODO: need to insert into other tables in order to maintain proper relationships
-# otherwise data means nothing
-def insert_result(result, season, event):
-    global dbcursor
-
-    result = clean_result(result)
-
-    insert = "INSERT INTO Results (Position, TimeMark, DistanceMarkInches, Pr, Sr, Wind, Sport, Season, HandTime, Converted, DQ, DNF, DNS, SCR, FS, NT, ND, NM, NH, FOUL) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
-    vals = ()
-    if (result['mark'][0] == "track"):
-        vals = (str(result['pos']), str(result['mark'][1]), "0", result['pr'], result['sr'], str(result['wind']), "TF", season, result['handtime'], result['converted'], result['dq'], result['dnf'], result['dns'], result['scr'], result['fs'], result['nt'], result['nd'], result['nm'], result['nh'], result['foul'])
-    elif (result['mark'][0] == "field"):
-        vals = (str(result['pos']), "0", str(result['mark'][1]), result['pr'], result['sr'], str(result['wind']), "TF", season, result['handtime'], result['converted'], result['dq'], result['dnf'], result['dns'], result['scr'], result['fs'], result['nt'], result['nd'], result['nm'], result['nh'], result['foul'])
-
-    dbcursor.execute(insert, vals)
-    db.commit()
-
 # scraping data from page of individual athlete
-def scrape_athlete(data):
+def scrape_athlete(data, athlete_id):
     global athletes_stored
     global events
 
@@ -406,7 +443,8 @@ def scrape_athlete(data):
                 else:
                     #debug_message(result, "list", False)
                     if not (result_exists(data)):
-                        insert_result(result, season, event)
+                        result_id = insert_result(result, season, event)
+                        insert_athlete_result(athlete_id, result_id) # maintain relationship
 
                     result_index = 1
                     result = []
@@ -465,7 +503,8 @@ def scrape_result_table (soup):
                 debug_width = 65 - debug_length
                 if not (athlete_exists(data)):
                     try:
-                        scrape_athlete(data)
+                        athlete_id = insert_athlete(data)
+                        scrape_athlete(data, athlete_id)
                         print_scrape_result(" Success", "green", debug_width)
                     except Exception as e:
                         print_scrape_result(" Failure", "red", debug_width)
