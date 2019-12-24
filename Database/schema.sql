@@ -2,15 +2,15 @@
 ##ENTITY SETS##
 ###############
 
-##Stores information about individual Athletes
+# Stores information about individual Athletes
 CREATE TABLE Athletes(
   AthleteID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   Name VARCHAR(100) NOT NULL,
-  Gender ENUM('male','female') NOT NULL,
-  Grade ENUM('9th Grade','10th Grade','11th Grade','12th Grade','freshman', 'sophomore','junior','senior') NOT NULL
+  Gender ENUM('Male','Female') NOT NULL,
+  Grade ENUM('9','10','11','12','freshman', 'sophomore','junior','senior') NOT NULL
 ) AUTO_INCREMENT = 1;
 
-#Stores information about individual Results
+# Stores information about individual Results
 CREATE TABLE Results(
   ResultID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   Position INT NOT NULL,
@@ -35,15 +35,16 @@ CREATE TABLE Results(
   FOUL BOOLEAN NOT NULL
 ) AUTO_INCREMENT = 1;
 
-#Stores information about individual Schools
+# Stores information about individual Schools
 CREATE TABLE Schools(
   SchoolID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   Name VARCHAR(100) NOT NULL,
   Mascot VARCHAR(100) NOT NULL,
-  Location VARCHAR(100) NOT NULL
+  City VARCHAR(100) NOT NULL,
+  State VARCHAR(100) NOT NULL
 ) AUTO_INCREMENT = 1;
 
-#Stores information about individual Meets
+# Stores information about individual Meets
 CREATE TABLE Meets(
   MeetID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   Name VARCHAR(100) NOT NULL,
@@ -51,7 +52,7 @@ CREATE TABLE Meets(
   Sport ENUM('XC','TF') NOT NULL
 ) AUTO_INCREMENT = 1;
 
-#Stores information about individual Events
+# Stores information about individual Events
 CREATE TABLE Events(
   EventID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   Name VARCHAR(100)
@@ -61,25 +62,35 @@ CREATE TABLE Events(
 ##RELATIONSHIP SETS##
 #####################
 
-##Maintains the Many-to-Many relationship between Athletes and Schools
+# Maintains the Many-to-Many relationship between Athletes and Schools
 CREATE TABLE Athletes_Schools(
   AthleteID INT NOT NULL,
   SchoolID INT NOT NULL,
-  PRIMARY KEY(AthleteId, SchoolId),
+  PRIMARY KEY (AthleteId, SchoolId),
   FOREIGN KEY (AthleteID) REFERENCES Athletes(AthleteID),
   FOREIGN KEY (SchoolID) REFERENCES Schools(SchoolID)
 );
 
-##Maintains the Many-to-Many relationship between Athletes and Results
+# Maintains the Many-to-Many relationship between Athletes and Results
+# Relays make this a MTM realtionship
 CREATE TABLE Athletes_Results(
   AthleteID INT NOT NULL,
   ResultID INT NOT NULL,
-  PRIMARY KEY(AthleteId, ResultId),
+  PRIMARY KEY (AthleteId, ResultId),
   FOREIGN KEY (AthleteID) REFERENCES Athletes(AthleteID),
   FOREIGN KEY (ResultID) REFERENCES Results(ResultID)
 );
 
-##Maintains the Many-to-One relationship between Results and Events
+# Maintains the Many-to-Many relationship between Meets and Schools
+CREATE TABLE Meets_Schools(
+  MeetID INT NOT NULL,
+  SchoolID INT NOT NULL,
+  PRIMARY KEY (MeetID, SchoolID),
+  FOREIGN KEY (MeetID) REFERENCES Meets(MeetID),
+  FOREIGN KEY (SchoolID) REFERENCES Schools(SchoolID)
+);
+
+# Maintains the Many-to-One relationship between Results and Events
 CREATE TABLE Results_Events(
   ResultID INT NOT NULL PRIMARY KEY,
   EventID INT NOT NULL,
@@ -87,7 +98,7 @@ CREATE TABLE Results_Events(
   FOREIGN KEY (EventID) REFERENCES Events(EventID)
 );
 
-##Maintains the Many-to-One relationship between Results and Meets
+# Maintains the Many-to-One relationship between Results and Meets
 CREATE TABLE Results_Meets(
   ResultID INT NOT NULL PRIMARY KEY,
   MeetID INT NOT NULL,
@@ -95,10 +106,4 @@ CREATE TABLE Results_Meets(
   FOREIGN KEY (MeetID) REFERENCES Meets(MeetID)
 );
 
-##Maintains the Many-to-One relationship between Meets and Schools
-CREATE TABLE Meets_Schools(
-  MeetID INT NOT NULL PRIMARY KEY,
-  SchoolID INT NOT NULL,
-  FOREIGN KEY (MeetID) REFERENCES Meets(MeetID),
-  FOREIGN KEY (SchoolID) REFERENCES Schools(SchoolID)
-);
+

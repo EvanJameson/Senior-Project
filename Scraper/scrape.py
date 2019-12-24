@@ -1,8 +1,8 @@
 import sys
 import urllib.request
-import pymongo
 import time
 import json
+import re
 import mysql.connector
 from urllib.request import Request, urlopen
 from bs4 import BeautifulSoup
@@ -54,13 +54,13 @@ def timer (flag):
         # print(parse_time_stop - parse_time_start)
 
 
+# Print debug message based on flag and type of message passed
 def debug_message(msg, flag, stop):
-
-    # Print out key value pairs of dictionary
     if flag == "dict" :
-        print("========================================")
+        print("\n\n{")
         for k in msg:
             print (str(k) + ": " + str(msg[k]))
+        print("}\n")
         if stop:
             quit("Dict Printed",True)
 
@@ -70,7 +70,6 @@ def debug_message(msg, flag, stop):
         if stop:
             quit("JSON Printed",True)
 
-    # Print soup
     elif flag == "soup":
         for e in msg:
             print(e)
@@ -98,13 +97,13 @@ def debug_message(msg, flag, stop):
     # Strings
     else:
         if stop:
-            quit(msg,True)
+            quit(msg, True)
         else:
             print(msg)
 
-# gets all links and returns as a list
+# gets all athlete links and returns as a list
 # to be consumed during parsing
-def get_links(soup):
+def get_athlete_links(soup):
     temp_links = [td.a for td in soup.findAll('td')]
     athlete_links = []
     for link in temp_links:
@@ -114,8 +113,22 @@ def get_links(soup):
             q2 = temp.index(">") - 1
             # print (temp[q1:q2])
             athlete_links.append(temp[q1:q2])
-    # debug_message(athlete_links, "list", True)
     return athlete_links
+
+
+# gets all school links and returns as a list
+# to be consumed during parsing
+def get_school_links(soup):
+    temp_links = [td.a for td in soup.findAll('td')]
+    school_links = []
+    for link in temp_links:
+        if (not (link is None)) and "/School" in str(link):
+            temp = str(link)
+            q1 = temp.index("/")
+            q2 = temp.index(">") - 1
+            # print (temp[q1:q2])
+            school_links.append(temp[q1:q2])
+    return school_links
 
 
 # gets the number of results for an event
@@ -166,16 +179,6 @@ def clean_lines(tags, lines):
             prev_line = cur_line
 
     return lines
-
-
-# check if athlete exists in DB already **TODO**
-def athlete_exists(data):
-    return False
-
-
-# check if result exists in DB already **TODO**
-def result_exists(data):
-    return False
 
 
 # clean up result and extract wind and pr / sr
@@ -309,6 +312,38 @@ def clean_result(result):
     return result
 
 
+def clean_school(text):
+
+    # Name
+    n1 = text.index("\"Name\":\"") + 8
+    n2 = text.index(",\"Level") - 1
+    name = text[n1:n2]
+
+    # City
+    c1 = text.index("City\":") + 7
+    c2 = text.index(",\"State") - 1
+    city = text[c1:c2]
+
+    # State
+    s1 = text.index("State\":") + 8
+    s2 = text.index(",\"Mascot") - 1
+    state = text[s1:s2]
+
+    # Mascot
+    m1 = text.index("Mascot\":") + 9
+    m2 = text.index(",\"MascotUrl") - 1
+    mascot = text[m1:m2]
+
+    # TODO: Mascot link (link for team image, may use later somehow . . . )
+    ml1 = text.index("MascotUrl\":") + 14
+    ml2 = text.index(",\"TeamRecords") - 1
+    mascot_link = text[ml1:ml2]
+
+    school_data = {'name': name, 'city': city, 'state': state, 'mascot': mascot, 'mascot_link': mascot_link}
+
+    return school_data
+
+
 def print_scrape_result(msg, color, debug_width):
     global athletes_stored
     print('{:{fill}{align}{width}}'.format(colored(msg, color), fill = '-', align = '>', width = debug_width), end='')
@@ -331,12 +366,36 @@ def handle_repeat_athlete(athlete_link):
 
 
 # =============================================
+# ------------|CONCURRENCY FUNCS|--------------
+# =============================================
+
+
+# check if athlete exists in DB already **TODO**
+def athlete_exists(data):
+    return False
+
+
+# check if result exists in DB already **TODO**
+def result_exists(data):
+    return False
+
+
+# check if school exists in DB already **TODO**
+def school_exists():
+    return False
+
+
+# check if meet exists in DB already **TODO**
+def meet_exists():
+    return False
+
+
+# =============================================
 # ---------------|INSERT FUNCS|----------------
 # =============================================
 
 
 def insert_athlete(data):
-
     insert = "INSERT INTO Athletes (Name, Gender, Grade) VALUES (%s, %s, %s)"
     vals = (data['athlete'], "Male", data['grade'])
 
@@ -366,15 +425,33 @@ def insert_result(result, season, event):
     dbcursor.execute(insert, vals)
     db.commit()
 
-    result_id = dbcursor.lastrowid # gets id of result
+    result_id = dbcursor.lastrowid
 
-    # use result_id to maintain relationship in "Athletes_Results"
     return result_id
+
+
+# Insert new school into table
+def insert_school(school_data):
+    global dbcursor
+
+    insert = "INSERT INTO Schools (Name, Mascot, City, State) VALUES (%s, %s, %s, %s)"
+    vals = (school_data['name'], school_data['mascot'], school_data['city'], school_data['state'])
+
+    dbcursor.execute(insert, vals)
+    db.commit()
+
+    school_id = dbcursor.lastrowid
+
+    return school_id
+
+
+# Insert new meet into table
+def insert_meet():
+    print("TODO")
 
 
 # Insert AthleteID and ResultID pair to maintain relationship
 def insert_athlete_result(athlete_id, result_id):
-
     insert = "INSERT INTO Athletes_Results (AthleteID, ResultID) VALUES (%s, %s)"
     vals = (athlete_id, result_id)
 
@@ -382,9 +459,50 @@ def insert_athlete_result(athlete_id, result_id):
     db.commit()
 
 
+# Insert AthleteID and SchoolID pair to maintain relationship
+def insert_athlete_school(athlete_id, school_id):
+    insert = "INSERT INTO Athletes_Schools (AthleteID, SchoolID) VALUES (%s, %s)"
+    vals = (athlete_id, school_id)
+
+    dbcursor.execute(insert, vals)
+    db.commit()
+
+
+# Insert MeetID and SchoolID pair to maintain relationship
+def insert_meet_school():
+    print("TODO")
+
+
+# Insert ResultID and EventID pair to maintain relationship
+def insert_result_event():
+    print("TODO")
+
+
+# Insert ResultID and MeetID pair to maintain relationship
+def insert_result_meet():
+    print("TODO")
+
+
 # =============================================
-# ----------------|MAIN FUNCS|-----------------
+# -------------|MAIN SCRAPE FUNCS|-------------
 # =============================================
+
+# scrape school info from athlete page
+def scrape_school(data, athlete_id):
+    lines = []
+
+    link = "https://www.athletic.net/TrackAndField" + data['school_link']
+    soup = get_soup(link)
+    regex = r"\"teamNav\"(.*?)\"siteSupport\""
+
+    # use regex to get string that contains info
+    matchObj = re.search( regex, soup.getText())
+
+    # clean string and get back dict of necessary info
+    school_data = clean_school(matchObj.group())
+
+    school_id = insert_school(school_data)
+    insert_athlete_school(athlete_id, school_id)
 
 
 # scraping data from page of individual athlete
@@ -442,7 +560,8 @@ def scrape_result_table (soup):
     global athletes_stored
 
     table = soup.find_all("td")
-    athlete_links = get_links(soup)
+    athlete_links = get_athlete_links(soup)
+    school_links = get_school_links(soup)
 
 
     # set i to keep track of what line of soup we're on
@@ -472,6 +591,7 @@ def scrape_result_table (soup):
             if result_index%9 == 2:
                 athlete = text
                 athlete_link = athlete_links[link_index]
+                school_link = school_links[link_index]
                 link_index += 1
 
             # get school of athlete
@@ -481,7 +601,7 @@ def scrape_result_table (soup):
             # get meet of mark and pass all data on
             if result_index%9 == 8:
 
-                data.update({'grade': grade,'athlete': athlete, 'athlete_link': athlete_link, 'school': school})
+                data.update({'grade': grade,'athlete': athlete, 'athlete_link': athlete_link, 'school_link': school_link, 'school': school})
 
                 # check if athlete already exists in database before
                 # going to page and scraping
@@ -492,6 +612,7 @@ def scrape_result_table (soup):
                     try:
                         athlete_id = insert_athlete(data)
                         scrape_athlete(data, athlete_id)
+                        scrape_school(data, athlete_id)
                         print_scrape_result(" Success", "green", debug_width)
                     except Exception as e:
                         print_scrape_result(" Failure", "red", debug_width)
