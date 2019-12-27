@@ -47,7 +47,7 @@ CREATE TABLE Schools(
 # Stores information about individual Meets
 CREATE TABLE Meets(
   MeetID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  Name VARCHAR(100) NOT NULL,
+  Name VARCHAR(255) NOT NULL,
   Day DATE NOT NULL,
   Sport ENUM('XC','TF') NOT NULL
 ) AUTO_INCREMENT = 1;
