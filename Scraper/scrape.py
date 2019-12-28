@@ -357,9 +357,23 @@ def clean_school(text):
     return school_data
 
 
-def clean_meet(result):
+# TODO: Need to remove names of people in relays
+def clean_meet(result, athlete):
     meet_year = ""
     month = ""
+
+    meet = result['meet']
+
+    # check for relay
+    if athlete in meet:
+        cap_count = 0
+        c1 = meet.index(",")
+        temp = meet[:c1]
+        for i in range(len(temp) - 1, 0, -1):
+            if ord(temp[i]) >= 65 and ord(temp[i]) <= 90:
+                cap_count += 1
+                if cap_count == 2:
+                    meet = temp[:i]
 
     # split date
     bad_month = result['date'][:3]
@@ -377,10 +391,9 @@ def clean_meet(result):
             if i < 10:
                 meet_month = "0" + meet_month
 
-
     date = meet_year + "-" + meet_month + "-" + meet_day
 
-    meet_data = {'name': result['meet'], 'date': date}
+    meet_data = {'name': meet, 'date': date}
 
     return meet_data
 
@@ -456,14 +469,12 @@ def insert_result(result, season, event):
     global db
     global dbcursor
 
-
     insert = "INSERT INTO Results (Position, TimeMark, DistanceMarkInches, Pr, Sr, Wind, Sport, Season, HandTime, Converted, DQ, DNF, DNS, SCR, FS, NT, ND, NM, NH, FOUL) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
     vals = ()
     if (result['mark'][0] == "track"):
         vals = (str(result['pos']), str(result['mark'][1]), "0", result['pr'], result['sr'], str(result['wind']), "TF", season, result['handtime'], result['converted'], result['dq'], result['dnf'], result['dns'], result['scr'], result['fs'], result['nt'], result['nd'], result['nm'], result['nh'], result['foul'])
     elif (result['mark'][0] == "field"):
         vals = (str(result['pos']), "0", str(result['mark'][1]), result['pr'], result['sr'], str(result['wind']), "TF", season, result['handtime'], result['converted'], result['dq'], result['dnf'], result['dns'], result['scr'], result['fs'], result['nt'], result['nd'], result['nm'], result['nh'], result['foul'])
-
 
     dbcursor.execute(insert, vals)
     db.commit()
@@ -626,10 +637,11 @@ def scrape_athlete(data, athlete_id):
                         insert_athlete_result(athlete_id, result_id) # maintain relationship
 
                         # get info out of result and turn into dict
-                        meet_data = clean_meet(result)
+                        meet_data = clean_meet(result, data['athlete'])
 
                         if not (meet_exists()):
-                            insert_meet(meet_data)
+                            meet_id = insert_meet(meet_data)
+                            insert_result_meet(result_id, meet_id)
 
                     result_index = 1
                     result = []
