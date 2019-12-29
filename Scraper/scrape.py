@@ -1,3 +1,4 @@
+import traceback
 import sys
 import urllib.request
 import time
@@ -13,7 +14,7 @@ parse_time_start = time.time()
 # parse_time_stop = time.time()
 months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
 years = ["2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020"]
-events = ["100 Meters", "200 Meters", "400 Meters", "400 Meters - Relay Split", "800 Meters", "1500 Meters", "1600 Meters", "1 Mile", "3000 Meters", "3200 Meters", "2 Miles", "5000 Meters", "110m Hurdles - 33\"", "110m Hurdles - 36\"", "110m Hurdles - 39\"", "110m Hurdles - 42\"", "300m Hurdles - 30\"", "300m Hurdles - 33\"", "300m Hurdles - 36\"", "300m Hurdles - 39\"", "400m Hurdles - 30\"", "400m Hurdles - 33\"", "400m Hurdles - 36\"", "2k Steeplechase", "3k Steeplechase", "4x100 Relay", "4x200 Relay", "4x400 Relay", "4x800 Relay", "4x1600 Relay", "SMR 100-100-200-400m", "SMR 1600m", "DMR 1200-400-800-1600m", "Shot Put", "Discus", "Javelin", "High Jump", "Pole Vault", "Long Jump", "Triple Jump", "Hammer", "25 Meter Dash", "30 Meter Dash", "35 Meter Dash", "40 Meter Dash", "45 Meter Dash", "50 Meter Dash", "55 Meter Dash", "60 Meter Dash", "70 Meter Dash", "75 Meter Dash", "80 Meter Dash", "90 Meter Dash", "100 Meters", "110 Meters", "145 Meters", "150 Meters", "160 Meters", "165 Meters", "180 Meters", "200 Meters", "250 Meters", "300 Meters", "360 Meters", "400 Meters", "500 Meters", "550 Meters", "600 Meters", "720 Meters", "750 Meters", "800 Meters", "800m Racewalk", "1000 Meters", "1200 Meters", "1440 Meters", "1500 Meters", "1500m Racewalk", "1600 Meters", "1600m Racewalk", "2000 Meters", "2400 Meters", "3000 Meters", "3000m Racewalk", "3200 Meters", "5000 Meters", "5000m Racewalk", "8000 Meters", "10,000 Meters", "10,000 Meters Racewalk", "20,000 Meters Racewalk", "1-Hour Racewalk", "40m Hurdles", "45m Hurdles", "50m Hurdles", "55m Hurdles - 30\"", "55m Hurdles - 33\"", "55m Hurdles - 39\"", "55m Hurdles - 42\"", "60m Hurdles - 30\"", "60m Hurdles - 33\"", "60m Hurdles - 36\"", "60m Hurdles - 39\"", "65m Hurdles", "70m Hurdles", "75m Hurdles", "80m Hurdles", "100m Hurdles - 30\"", "100m Hurdles - 33\"", "100m Hurdles - 36\"", "110m Hurdles", "195m Hurdles", "200m Hurdles", "300m Hurdles - 30\"", "300m Hurdles - 33\"", "400m Hurdles - 30\"", "1k Steeplechase", "1.5k Steeplechase", "1 Mile Steeplechase", "2k Steeplechase", "3k Steeplechase", "4x50 Relay", "4x55 Relay", "4x60 Relay", "4x60 Shuttle Relay", "4x75 Relay", "4x80 Relay", "4x100 Relay", "4x100 Throwers Relay", "4x133 Relay", "4x145 Relay", "4x150 Relay", "4x160 Yard Relay", "4x160 Relay", "4x180 Relay", "4x200 Relay", "4x225 Relay", "4x240 Relay", "4x300 Relay", "4x320 Relay", "4x360 Relay", "4x375 Relay", "4x400 Relay", "4x600 Relay", "4x720 Relay", "4x750 Relay", "4x800 Relay", "4x1200 Relay", "4x1500 Relay", "4x1600 Relay", "4x3200 Relay", "SMR 200-100-100-200m", "SMR 200-180-180-216m", "SMR 100-100-200-400m", "SMR 200-200-300-100m", "SMR 160-80-80-480m", "Swedish 100-200-300-400m", "SMR 300-200-200-500m", "SMR 100-300-600-200m", "SMR 400-200-200-400m", "SMR 200-200-600-400m", "SMR 180-180-360-720m", "SMR 435-145-290-580m", "SMR 450-150-150-750m", "SMR 400-160-160-800m", "SMR 1600m", "SMR 320-160-480-640m", "SMR 480-160-160-800m", "SMR 600-200-400-800m", "MMR 800-400-400-800m", "MMR 1200-800-200-400m", "DMR 1000-200-400-800m", "DMR 200-400-800-1200m", "DMR 800-200-400-1600m", "DMR 400-400-800-1600m", "DMR 400-800-800-1200m", "DMR 1000-200-600-1600m", "DMR 400-800-1200-1200m", "DMR 1200-400-800-1600m", "DMR 800-800-1600-1600m", "DMR 1200-800-1600-3200m", "4x50 Shuttle Hurdles", "4x51.5 Shuttle Hurdles", "4x55 Shuttle Hurdles", "4x60 Shuttle Hurdles", "4x65 Shuttle Hurdles", "4x70 Shuttle Hurdles", "4x80y Shuttle Hurdles", "4x100 Shuttle Hurdles", "4x102.5 Shuttle Hurdles", "4x110 Shuttle Hurdles", "4x120y Shuttle Hurdles", "4x160m Shuttle Hurdles", "4x200m Shuttle Hurdles", "4x300 Shuttle Hurdles", "4x400 Shuttle Hurdles", "4x440y Shuttle Hurdles", "Shot Put - 4lb", "Shot Put - 6lb", "Shot Put - 8lb", "Shot Put - 10lb", "Shot Put - 12lb", "Shot Put - 16lb", "Shot Put - 3kg", "Shot Put - 4kg", "Shot Put - 5kg", "Shot Put - 6kg", "JV Shot Put", "Softball Throw", "Baseball Throw", "Soccerball Throw", "Discus - 1kg", "Discus - 1.5kg", "Discus - 1.6kg", "Discus - 1.75kg", "Discus - 2kg", "Javelin - 300g TJ", "Javelin - 500g TJ", "Javelin - 600g", "Javelin - 800g", "High Jump", "Pole Vault", "Long Jump", "Standing Long Jump", "Triple Jump", "Standing Triple Jump", "Hammer - 3kg", "Hammer - 4kg", "Hammer - 5kg", "Hammer - 6kg", "Hammer - 12lb", "Hammer - 16lb", "Weight Throw", "Super Weight Throw", "Ultra Weight Throw", "Medicine Ball Throw OHB", "Medicine Ball Throw UHF", "Roster Only", "Attendee", "Other", "Triathlon Score", "Tetrathlon Score", "Pentathlon Score (Indoor)", "Pentathlon Score (Outdoor)", "Heptathlon Score", "Octathlon Score", "Decathlon Score", "Throws Penthlon Score", "40 Yard Dash", "45 Yard Dash", "50 Yard Dash", "60 Yard Dash", "100 Yard Dash", "110 Yard Dash", "200 Yards", "220 Yards", "300 Yards", "330 Yards", "440 Yards", "500 Yards", "600 Yards", "660 Yards", "880 Yards", "1000 Yards", "1320 Yards", "Mile Racewalk", "1 Mile", "2 Miles", "3 Miles", "6 Miles", "Half Marathon", "Marathon", "40y Hurdles", "45y Hurdles", "50y Hurdles", "60y Hurdles", "120y Hurdles", "180y Hurdles", "200y Hurdles", "220y Hurdles", "330y Hurdles", "440y Hurdles", "4x50 Yard Shuttle Relay", "4x110 Yard Relay", "4x200 Yard Relay", "4x220 Yard Relay", "4x320 Yard Relay", "4x400 Yard Relay", "4x440 Yard Relay", "4x800 Yard Relay", "4x880 Yard Relay", "4xMile Relay", "SMR 110-110-220-440y", "SMR 110-220-440-880y", "SMR 200-200-400-880y", "DMR 1320-440-880-Mile", "4x55y Shuttle Hurdles"]
+events = ["100 Meters", "100 Meters - Wheelchair", "200 Meters", "400 Meters", "400 Meters - Relay Split", "800 Meters", "1500 Meters", "1600 Meters", "1 Mile", "3000 Meters", "3200 Meters", "2 Miles", "5000 Meters", "110m Hurdles - 33\"", "110m Hurdles - 36\"", "110m Hurdles - 39\"", "110m Hurdles - 42\"", "300m Hurdles - 30\"", "300m Hurdles - 33\"", "300m Hurdles - 36\"", "300m Hurdles - 39\"", "400m Hurdles - 30\"", "400m Hurdles - 33\"", "400m Hurdles - 36\"", "2k Steeplechase", "3k Steeplechase", "4x100 Relay", "4x200 Relay", "4x400 Relay", "4x800 Relay", "4x1600 Relay", "SMR 100-100-200-400m", "SMR 1600m", "DMR 1200-400-800-1600m", "Shot Put", "Discus", "Javelin", "High Jump", "Pole Vault", "Long Jump", "Triple Jump", "Hammer", "25 Meter Dash", "30 Meter Dash", "35 Meter Dash", "40 Meter Dash", "45 Meter Dash", "50 Meter Dash", "55 Meter Dash", "60 Meter Dash", "70 Meter Dash", "75 Meter Dash", "80 Meter Dash", "90 Meter Dash", "100 Meters", "110 Meters", "145 Meters", "150 Meters", "160 Meters", "165 Meters", "180 Meters", "200 Meters", "250 Meters", "300 Meters", "360 Meters", "400 Meters", "500 Meters", "550 Meters", "600 Meters", "720 Meters", "750 Meters", "800 Meters", "800m Racewalk", "1000 Meters", "1200 Meters", "1440 Meters", "1500 Meters", "1500m Racewalk", "1600 Meters", "1600m Racewalk", "2000 Meters", "2400 Meters", "3000 Meters", "3000m Racewalk", "3200 Meters", "5000 Meters", "5000m Racewalk", "8000 Meters", "10,000 Meters", "10,000 Meters Racewalk", "20,000 Meters Racewalk", "1-Hour Racewalk", "40m Hurdles", "45m Hurdles", "50m Hurdles", "55m Hurdles - 30\"", "55m Hurdles - 33\"", "55m Hurdles - 39\"", "55m Hurdles - 42\"", "60m Hurdles - 30\"", "60m Hurdles - 33\"", "60m Hurdles - 36\"", "60m Hurdles - 39\"", "65m Hurdles", "70m Hurdles", "75m Hurdles", "80m Hurdles", "100m Hurdles - 30\"", "100m Hurdles - 33\"", "100m Hurdles - 36\"", "110m Hurdles", "195m Hurdles", "200m Hurdles", "300m Hurdles - 30\"", "300m Hurdles - 33\"", "400m Hurdles - 30\"", "1k Steeplechase", "1.5k Steeplechase", "1 Mile Steeplechase", "2k Steeplechase", "3k Steeplechase", "4x50 Relay", "4x55 Relay", "4x60 Relay", "4x60 Shuttle Relay", "4x75 Relay", "4x80 Relay", "4x100 Relay", "4x100 Throwers Relay", "4x133 Relay", "4x145 Relay", "4x150 Relay", "4x160 Yard Relay", "4x160 Relay", "4x180 Relay", "4x200 Relay", "4x225 Relay", "4x240 Relay", "4x300 Relay", "4x320 Relay", "4x360 Relay", "4x375 Relay", "4x400 Relay", "4x600 Relay", "4x720 Relay", "4x750 Relay", "4x800 Relay", "4x1200 Relay", "4x1500 Relay", "4x1600 Relay", "4x3200 Relay", "SMR 200-100-100-200m", "SMR 200-180-180-216m", "SMR 100-100-200-400m", "SMR 200-200-300-100m", "SMR 160-80-80-480m", "Swedish 100-200-300-400m", "SMR 300-200-200-500m", "SMR 100-300-600-200m", "SMR 400-200-200-400m", "SMR 200-200-600-400m", "SMR 180-180-360-720m", "SMR 435-145-290-580m", "SMR 450-150-150-750m", "SMR 400-160-160-800m", "SMR 1600m", "SMR 320-160-480-640m", "SMR 480-160-160-800m", "SMR 600-200-400-800m", "MMR 800-400-400-800m", "MMR 1200-800-200-400m", "DMR 1000-200-400-800m", "DMR 200-400-800-1200m", "DMR 800-200-400-1600m", "DMR 400-400-800-1600m", "DMR 400-800-800-1200m", "DMR 1000-200-600-1600m", "DMR 400-800-1200-1200m", "DMR 1200-400-800-1600m", "DMR 800-800-1600-1600m", "DMR 1200-800-1600-3200m", "4x50 Shuttle Hurdles", "4x51.5 Shuttle Hurdles", "4x55 Shuttle Hurdles", "4x60 Shuttle Hurdles", "4x65 Shuttle Hurdles", "4x70 Shuttle Hurdles", "4x80y Shuttle Hurdles", "4x100 Shuttle Hurdles", "4x102.5 Shuttle Hurdles", "4x110 Shuttle Hurdles", "4x120y Shuttle Hurdles", "4x160m Shuttle Hurdles", "4x200m Shuttle Hurdles", "4x300 Shuttle Hurdles", "4x400 Shuttle Hurdles", "4x440y Shuttle Hurdles", "Shot Put - 4lb", "Shot Put - 6lb", "Shot Put - 8lb", "Shot Put - 10lb", "Shot Put - 12lb", "Shot Put - 16lb", "Shot Put - 3kg", "Shot Put - 4kg", "Shot Put - 5kg", "Shot Put - 6kg", "JV Shot Put", "Softball Throw", "Baseball Throw", "Soccerball Throw", "Discus - 1kg", "Discus - 1.5kg", "Discus - 1.6kg", "Discus - 1.75kg", "Discus - 2kg", "Javelin - 300g TJ", "Javelin - 500g TJ", "Javelin - 600g", "Javelin - 800g", "High Jump", "Pole Vault", "Long Jump", "Standing Long Jump", "Triple Jump", "Standing Triple Jump", "Hammer - 3kg", "Hammer - 4kg", "Hammer - 5kg", "Hammer - 6kg", "Hammer - 12lb", "Hammer - 16lb", "Weight Throw", "Super Weight Throw", "Ultra Weight Throw", "Medicine Ball Throw OHB", "Medicine Ball Throw UHF", "Roster Only", "Attendee", "Other", "Triathlon Score", "Tetrathlon Score", "Pentathlon Score (Indoor)", "Pentathlon Score (Outdoor)", "Heptathlon Score", "Octathlon Score", "Decathlon Score", "Throws Penthlon Score", "40 Yard Dash", "45 Yard Dash", "50 Yard Dash", "60 Yard Dash", "100 Yard Dash", "110 Yard Dash", "200 Yards", "220 Yards", "300 Yards", "330 Yards", "440 Yards", "500 Yards", "600 Yards", "660 Yards", "880 Yards", "1000 Yards", "1320 Yards", "Mile Racewalk", "1 Mile", "2 Miles", "3 Miles", "6 Miles", "Half Marathon", "Marathon", "40y Hurdles", "45y Hurdles", "50y Hurdles", "60y Hurdles", "120y Hurdles", "180y Hurdles", "200y Hurdles", "220y Hurdles", "330y Hurdles", "440y Hurdles", "4x50 Yard Shuttle Relay", "4x110 Yard Relay", "4x200 Yard Relay", "4x220 Yard Relay", "4x320 Yard Relay", "4x400 Yard Relay", "4x440 Yard Relay", "4x800 Yard Relay", "4x880 Yard Relay", "4xMile Relay", "SMR 110-110-220-440y", "SMR 110-220-440-880y", "SMR 200-200-400-880y", "DMR 1320-440-880-Mile", "4x55y Shuttle Hurdles"]
 db = mysql.connector.connect(
   host="localhost",
   user="root",
@@ -122,6 +123,8 @@ def get_athlete_links(soup):
 def get_school_links(soup):
     temp_links = [td.a for td in soup.findAll('td')]
     school_links = []
+    none_count = -100
+
     for link in temp_links:
         if (not (link is None)) and "/School" in str(link):
             temp = str(link)
@@ -129,6 +132,13 @@ def get_school_links(soup):
             q2 = temp.index(">") - 1
             # print (temp[q1:q2])
             school_links.append(temp[q1:q2])
+        if (not (link is None)):
+            none_count = 0
+        elif (link is None):
+            none_count += 1
+            if none_count > 2:
+                school_links.append("Unattached")
+
     return school_links
 
 
@@ -218,7 +228,10 @@ def clean_result(result, season, event):
 
     # Clean position
     if not(pos.isnumeric()):
-        pos = "--"
+        pos = 0
+
+    if pos == "" or pos == " ":
+        pos = 0
 
     # Clean mark
     if "h" in mark:
@@ -276,6 +289,10 @@ def clean_result(result, season, event):
         final_mark = "0.0"
         scr = True
 
+    elif "DQ" in final_mark:
+        final_mark = "0.0"
+        dq = True
+
     elif "FS" in final_mark:
         final_mark = "0.0"
         fs = True
@@ -314,9 +331,6 @@ def clean_result(result, season, event):
     # TODO: If you do this techincally every result ever would have a wind guage, find different way to store
     if wind == "":
         wind = 0.0
-
-    if pos == "--":
-        pos = "0"
 
     result = {'pos': pos, 'mark': final_mark, 'date': date, 'meet': meet, 'season': season, 'event': event,'wind': wind, 'pr': pr, 'sr': sr,
               'handtime': handtime, 'converted': converted, 'dq': dq, 'dnf': dnf, 'dns': dns, 'scr': scr, 'fs': fs,
@@ -366,14 +380,17 @@ def clean_meet(result, athlete):
 
     # check for relay
     if athlete in meet:
-        cap_count = 0
-        c1 = meet.index(",")
-        temp = meet[:c1]
-        for i in range(len(temp) - 1, 0, -1):
-            if ord(temp[i]) >= 65 and ord(temp[i]) <= 90:
-                cap_count += 1
-                if cap_count == 2:
-                    meet = temp[:i]
+        if "," in meet:
+            cap_count = 0
+            c1 = meet.index(",")
+            temp = meet[:c1]
+            for i in range(len(temp) - 1, 0, -1):
+                if ord(temp[i]) >= 65 and ord(temp[i]) <= 90:
+                    cap_count += 1
+                    if cap_count == 2:
+                        meet = temp[:i]
+        else:
+            meet.replace(athlete,"")
 
     # split date
     bad_month = result['date'][:3]
@@ -407,8 +424,10 @@ def print_scrape_result(msg, color, debug_width):
 def handle_scrape_exception(e, athlete_link):
     log = open("fail_logfile.txt", "a")
     log.write("-------------------------------------------------------------------\n")
+    log.write("Athlete [" + str(athletes_stored) + "/" + sys.argv[2] + "]\n")
     log.write("https://www.athletic.net/TrackAndField" + athlete_link + "\n")
-    log.write(str(e))
+    log.write("Exception:       " + str(e))
+    log.write("\nTrace:           " + str(traceback.format_exc()))
     log.write("\n-------------------------------------------------------------------\n")
     log.close()
 
@@ -567,6 +586,10 @@ def insert_result_meet(result_id, meet_id):
 # =============================================
 
 
+# Unattached athlete, find where they run
+def scrape_school_deep():
+    no = 0
+
 # scrape school info from school page
 def scrape_school(data, athlete_id):
     lines = []
@@ -620,6 +643,7 @@ def scrape_athlete(data, athlete_id):
             # Check if line denotes event
             if line in events:
                 event = line
+
             else:
 
                 # Based on structure of page get contents of result and send to insert
@@ -628,7 +652,6 @@ def scrape_athlete(data, athlete_id):
                     result_index += 1
 
                 else:
-                    #debug_message(result, "list", False)
                     if not (result_exists(data)):
 
                         # get info out of result and turn into dict
@@ -677,12 +700,18 @@ def scrape_result_table (soup):
             # get grade of athlete
             if result_index%9 == 1:
                 grade = text
+                if grade == "-":
+                    grade = "?"
+
 
             # get athlete name and link **TODO**
             # skipping the other links provided for the time being
             if result_index%9 == 2:
                 athlete = text
                 athlete_link = athlete_links[link_index]
+                # if link_index >= len(school_links):
+                #     debug_message(school_links, "list", False)
+                #     print("size: " + str(len(school_links)) + "\nindex: " + str(link_index))
                 school_link = school_links[link_index]
                 link_index += 1
 
@@ -704,7 +733,10 @@ def scrape_result_table (soup):
                     try:
                         athlete_id = insert_athlete(data)
                         scrape_athlete(data, athlete_id)
-                        scrape_school(data, athlete_id)
+                        if school_link == "Unattached":
+                            scrape_school_deep()
+                        else:
+                            scrape_school(data, athlete_id)
                         print_scrape_result(" Success", "green", debug_width)
                     except Exception as e:
                         print_scrape_result(" Failure", "red", debug_width)
@@ -827,7 +859,7 @@ def main():
     # Uses year links from years.txt to loop through
     # all athletic.net top even results
     # this should reach every athlete ever stored
-    elif sys.argv[1] == "-auto":
+    elif sys.argv[1] == "-full":
         print("Starting with full scrape functionality...\n")
         with open("years.txt") as fp:
             build_year_url(fp)

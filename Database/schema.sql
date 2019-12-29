@@ -7,7 +7,7 @@ CREATE TABLE Athletes(
   AthleteID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   Name VARCHAR(100) NOT NULL,
   Gender ENUM('Male','Female') NOT NULL,
-  Grade ENUM('9','10','11','12','freshman', 'sophomore','junior','senior') NOT NULL
+  Grade ENUM('?','9','10','11','12','17-18','Fr','So','Jr','Sr','Freshman', 'Sophomore','Junior','Senior') NOT NULL
 ) AUTO_INCREMENT = 1;
 
 # Stores information about individual Results
