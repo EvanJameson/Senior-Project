@@ -560,8 +560,15 @@ def insert_athlete_school(athlete_id, school_id):
 
 
 # Insert MeetID and SchoolID pair to maintain relationship
-def insert_meet_school():
-    print("TODO")
+def insert_meet_school(meet_id, school_id):
+    global db
+    global dbcursor
+
+    insert = "INSERT INTO Meets_Schools (MeetID, SchoolID) VALUES (%s, %s)"
+    vals = (meet_id, school_id)
+
+    dbcursor.execute(insert, vals)
+    db.commit()
 
 
 # Insert ResultID and EventID pair to maintain relationship
@@ -586,9 +593,20 @@ def insert_result_meet(result_id, meet_id):
 # =============================================
 
 
-# Unattached athlete, find where they run
-def scrape_school_deep():
-    no = 0
+# Unattached athlete, find where they run and pass to scrape school
+def scrape_school_deep(data,athlete_id):
+    lines = []
+
+    athlete_link = "https://www.athletic.net/TrackAndField" + data['athlete_link']
+    athlete_soup = get_soup(athlete_link)
+
+    temp_links = [td.a for td in athlete_soup.findAll('b')]
+
+    # debug_message(athlete_soup, "soup", True)
+    # debug_message(temp_links, "soup", True)
+    #
+    # At this point I need to move on from the scraper, not going
+    # to handle this edge case unless I must
 
 # scrape school info from school page
 def scrape_school(data, athlete_id):
@@ -607,9 +625,10 @@ def scrape_school(data, athlete_id):
     school_id = insert_school(school_data)
     insert_athlete_school(athlete_id, school_id)
 
+    return school_id
 
 # scraping data from page of individual athlete
-def scrape_athlete(data, athlete_id):
+def scrape_athlete(data, athlete_id, school_id):
     global athletes_stored
     global events
 
@@ -665,6 +684,7 @@ def scrape_athlete(data, athlete_id):
                         if not (meet_exists()):
                             meet_id = insert_meet(meet_data)
                             insert_result_meet(result_id, meet_id)
+                            insert_meet_school(meet_id, school_id)
 
                     result_index = 1
                     result = []
@@ -703,9 +723,6 @@ def scrape_result_table (soup):
                 if grade == "-":
                     grade = "?"
 
-
-            # get athlete name and link **TODO**
-            # skipping the other links provided for the time being
             if result_index%9 == 2:
                 athlete = text
                 athlete_link = athlete_links[link_index]
@@ -731,12 +748,16 @@ def scrape_result_table (soup):
                 debug_width = 65 - debug_length
                 if not (athlete_exists(data)):
                     try:
+                        school_id = -1
                         athlete_id = insert_athlete(data)
-                        scrape_athlete(data, athlete_id)
+                        # moved scrape_athlete, not sure if bad
                         if school_link == "Unattached":
-                            scrape_school_deep()
+                            scrape_school_deep(data, athlete_id)
+                            school_id = 1 # just a default for now for unattached people
                         else:
-                            scrape_school(data, athlete_id)
+                            school_id = scrape_school(data, athlete_id)
+
+                        scrape_athlete(data, athlete_id, school_id) # to here
                         print_scrape_result(" Success", "green", debug_width)
                     except Exception as e:
                         print_scrape_result(" Failure", "red", debug_width)

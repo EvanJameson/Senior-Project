@@ -23,7 +23,7 @@ CREATE TABLE Results(
   Season VARCHAR(100) NOT NULL,
   HandTime BOOLEAN NOT NULL,
   Converted BOOLEAN NOT NULL,
-  DQ BOOLEAN NOT NULL,
+  DQ BOOLEAN NOT NULL, #Make this boolean block an enum, only need booleans if every boolean combo is possible
   DNF BOOLEAN NOT NULL,
   DNS BOOLEAN NOT NULL,
   SCR BOOLEAN NOT NULL,
@@ -98,7 +98,7 @@ CREATE TABLE Results_Events(
   FOREIGN KEY (EventID) REFERENCES Events(EventID)
 );
 
-# Maintains the Many-to-One relationship between Results and Meets
+# Maintains the Many-to-One relationship between Results and Meets (fix foreign keys)
 CREATE TABLE Results_Meets(
   ResultID INT NOT NULL PRIMARY KEY,
   MeetID INT NOT NULL,

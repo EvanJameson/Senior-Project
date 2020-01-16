@@ -6,6 +6,18 @@ SELECT * FROM Schools;
 SELECT * FROM Meets;
 SELECT * FROM Athletes_Results;
 SELECT * FROM Results_Meets;
+SELECT * FROM Meets_Schools;
+
+# Check Meet and school, need to look for ones that also visit meet
+SELECT C.*
+FROM
+	(SELECT  M.MeetID as mid, COUNT(MS.MeetID) as Num_Schools
+	FROM Schools S, Meets M, Meets_Schools MS
+	WHERE S.SchoolID = MS.SchoolID and MS.MeetID = M.MeetID
+	GROUP BY M.MeetID
+	ORDER BY Num_Schools) C
+WHERE C.Num_Schools > 0
+;
 
 # Check athlete and meet
 SELECT M.*
