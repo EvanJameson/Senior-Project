@@ -4,9 +4,12 @@ SELECT * FROM Results;
 SELECT * FROM Athletes;
 SELECT * FROM Schools;
 SELECT * FROM Meets;
+SELECT * FROM Events;
 SELECT * FROM Athletes_Results;
 SELECT * FROM Results_Meets;
 SELECT * FROM Meets_Schools;
+
+INSERT INTO Events (Name) VALUES ("100 Meters");
 
 # Check Meet and school, need to look for ones that also visit meet
 SELECT C.*

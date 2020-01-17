@@ -462,6 +462,8 @@ def school_exists():
 def meet_exists():
     return False
 
+def event_exists():
+    return False
 
 # =============================================
 # ---------------|INSERT FUNCS|----------------
@@ -535,6 +537,22 @@ def insert_meet(meet_data):
     return meet_id
 
 
+# Insert new event into table
+def insert_event(event):
+    global db
+    global dbcursor
+
+    insert = "INSERT INTO Events (Name) VALUES (%s)"
+    vals = (event,)
+
+    dbcursor.execute(insert, vals)
+    db.commit()
+
+    event_id = dbcursor.lastrowid
+
+    return event_id
+
+
 # Insert AthleteID and ResultID pair to maintain relationship
 def insert_athlete_result(athlete_id, result_id):
     global db
@@ -572,8 +590,15 @@ def insert_meet_school(meet_id, school_id):
 
 
 # Insert ResultID and EventID pair to maintain relationship
-def insert_result_event():
-    print("TODO")
+def insert_result_event(result_id, event_id):
+    global db
+    global dbcursor
+
+    insert = "INSERT INTO Results_Events (ResultID, EventID) VALUES (%s, %s)"
+    vals = (result_id, event_id)
+
+    dbcursor.execute(insert, vals)
+    db.commit()
 
 
 # Insert ResultID and MeetID pair to maintain relationship
@@ -675,9 +700,10 @@ def scrape_athlete(data, athlete_id, school_id):
 
                         # get info out of result and turn into dict
                         result = clean_result(result, season, event)
-                        result_id = insert_result(result, season, event)
+                        result_id = insert_result(result, season, event) # dont need to pass season and event here
                         insert_athlete_result(athlete_id, result_id) # maintain relationship
-
+                        event_id = insert_event(event)
+                        insert_result_event(result_id, event_id)
                         # get info out of result and turn into dict
                         meet_data = clean_meet(result, data['athlete'])
 
