@@ -22,7 +22,15 @@ db = mysql.connector.connect(
   database="resultsDB",
   auth_plugin='mysql_native_password'
 )
-dbcursor = db.cursor()
+dbcursor = db.cursor(buffered=True)
+
+# =============================================
+# ---------------|DICT -> OBJECT|--------------
+# =============================================
+
+class objectview(object):
+    def __init__(self, d):
+        self.__dict__ = d
 
 # =============================================
 # ---------------|HELPER FUNCS|----------------
@@ -225,6 +233,7 @@ def clean_result(result, season, event):
     nm = False
     nh = False
     foul = False
+    markType = ""
 
     # Clean position
     if not(pos.isnumeric()):
@@ -275,48 +284,50 @@ def clean_result(result, season, event):
 
     elif final_mark == "DQ":
         final_mark = "0.0"
-        dq = True
+        markType = "DQ"
 
     elif "DNF" in final_mark:
         final_mark = "0.0"
-        dnf = True
+        markType = "DNF"
 
     elif "DNS" in final_mark:
         final_mark = "0.0"
-        dns = True
+        markType = "DNS"
 
     elif "SCR" in final_mark:
         final_mark = "0.0"
-        scr = True
+        markType = "SCR"
 
     elif "DQ" in final_mark:
         final_mark = "0.0"
-        dq = True
+        markType = "DQ"
 
     elif "FS" in final_mark:
         final_mark = "0.0"
-        fs = True
+        markType = "FS"
 
     elif "NT" in final_mark:
         final_mark = "0.0"
-        nt = True
+        markType = "NT"
 
     elif "ND" in final_mark:
         final_mark = "0.0"
-        nd = True
+        markType = "ND"
 
     elif "NM" in final_mark: # not a val in db
         final_mark = "0.0"
-        nm = True
+        markType = "NM"
 
     elif "NH" in final_mark:
         final_mark = "0.0"
-        nh = True
+        markType = "NH"
 
     elif "FOUL" in final_mark:
         final_mark = "0.0"
-        foul = True
+        markType = "FOUL"
 
+    if markType == "":
+        markType = "LEGAL"
 
     # check if field event mark or running mark
     if "'" in final_mark:
@@ -324,6 +335,11 @@ def clean_result(result, season, event):
         feet = final_mark[:d]
         inches = final_mark[d + 2:]
         final_mark = ("field", (float(feet) * 12.0) + float(inches))
+
+    elif "m" in final_mark:
+        d = final_mark.index("m")
+        meters = final_mark[:d]
+        final_mark = ("field", (float(meters) / 0.0254)) # turning meters into inches
 
     else:
         final_mark = ("track", final_mark)
@@ -333,8 +349,7 @@ def clean_result(result, season, event):
         wind = 0.0
 
     result = {'pos': pos, 'mark': final_mark, 'date': date, 'meet': meet, 'season': season, 'event': event,'wind': wind, 'pr': pr, 'sr': sr,
-              'handtime': handtime, 'converted': converted, 'dq': dq, 'dnf': dnf, 'dns': dns, 'scr': scr, 'fs': fs,
-              'nt': nt, 'nd': nd, 'nm': nm, 'nh': nh, 'foul': foul}
+              'handtime': handtime, 'converted': converted, 'markType': markType}
 
     return result
 
@@ -442,28 +457,140 @@ def handle_repeat_athlete(athlete_link):
 # ------------|CONCURRENCY FUNCS|--------------
 # =============================================
 
+def unattached_athlete_exists(name, grade):
+    global db
+    global dbcursor
+
+    dbcursor.execute(
+        "SELECT AthleteID, COUNT(*) FROM Athletes WHERE  Name = (%s) and Grade = (%s) GROUP BY AthleteID",
+        (name, grade)
+    )
+
+    if dbcursor.rowcount == 0:
+        b = {"exists": False, "athlete_id": -2}
+        d = objectview(b)
+        return d
+
+    elif dbcursor.rowcount == 1:
+        results = dbcursor.fetchall()
+
+        aid = results[0][0]
+        b = {"exists": True, "athlete_id": aid}
+        d = objectview(b)
+        return d
+
+    else:
+        b = {"exists": True, "athlete_id": -3}
+        d = objectview(b)
+        return d
 
 # check if athlete exists in DB already **TODO**
-def athlete_exists(data):
-    return False
+def athlete_exists(name, grade, school):
+    global db
+    global dbcursor
+
+    if school == "Unattached":
+        return unattached_athlete_exists(name, grade)
+
+    dbcursor.execute(
+        "SELECT A.AthleteID, COUNT(*) FROM Athletes A, Schools S, Athletes_Schools ASS WHERE A.AthleteID = ASS.AthleteID and S.SchoolID = ASS.SchoolID and A.Name = (%s) and A.Grade = (%s) and S.Name = (%s) GROUP BY AthleteID",
+        (name, grade, school)
+    )
+
+    if dbcursor.rowcount == 0:
+        b = {"exists": False, "athlete_id": -2}
+        d = objectview(b)
+        return d
+
+    elif dbcursor.rowcount == 1:
+        results = dbcursor.fetchall()
+
+        aid = results[0][0]
+        b = {"exists": True, "athlete_id": aid}
+        d = objectview(b)
+        return d
 
 
 # check if result exists in DB already **TODO**
+# if athlete_exists is implemente correctly i dont think this one needs to exist
 def result_exists(data):
     return False
 
 
 # check if school exists in DB already **TODO**
-def school_exists():
-    return False
+def school_exists(name, mascot, city, state):
+    global db
+    global dbcursor
+
+    dbcursor.execute(
+        "SELECT SchoolID, COUNT(*) FROM Schools WHERE Name = (%s) and Mascot = (%s) and City = (%s) and State = (%s) GROUP BY SchoolID",
+        (name, mascot, city, state)
+    )
+
+    if dbcursor.rowcount == 0:
+        b = {"exists": False, "school_id": -2}
+        d = objectview(b)
+        return d
+
+    elif dbcursor.rowcount > 0:
+        results = dbcursor.fetchall()
+
+        sid = results[0][0]
+        b = {"exists": True, "school_id": sid}
+        d = objectview(b)
+        return d
 
 
 # check if meet exists in DB already **TODO**
-def meet_exists():
-    return False
+def meet_exists(meet, date):
+    global db
+    global dbcursor
 
-def event_exists():
-    return False
+    dbcursor.execute(
+        "SELECT MeetID, COUNT(*) FROM Meets WHERE Name = (%s) and Day = (%s) GROUP BY MeetID",
+        (meet, date)
+    )
+
+    if dbcursor.rowcount == 0:
+        b = {"exists": False, "meet_id": -2}
+        d = objectview(b)
+        return d
+
+    elif dbcursor.rowcount > 0:
+        results = dbcursor.fetchall()
+
+        mid = results[0][0]
+        b = {"exists": True, "meet_id": mid}
+        d = objectview(b)
+        return d
+
+
+# need useless val for no event
+# abstract to object instead of checker function
+# return exists object that has whether or not it exists and the corresponding id
+def event_exists(event):
+    global db
+    global dbcursor
+
+    dbcursor.execute(
+        "SELECT EventID, COUNT(*) FROM Events WHERE Name = (%s) GROUP BY EventID",
+        (event,)
+    )
+
+    if dbcursor.rowcount == 0:
+        b = {"exists": False, "event_id": -2}
+        d = objectview(b)
+        return d
+
+    elif dbcursor.rowcount > 0:
+        results = dbcursor.fetchall()
+
+
+        eid = results[0][0]
+        b = {"exists": True, "event_id": eid}
+        d = objectview(b)
+        return d
+
 
 # =============================================
 # ---------------|INSERT FUNCS|----------------
@@ -486,16 +613,18 @@ def insert_athlete(data):
 
 
 # Convert to appropriate datatypes and insert into table
-def insert_result(result, season, event):
+def insert_result(result, season, event, event_id, meet_id):
     global db
     global dbcursor
 
-    insert = "INSERT INTO Results (Position, TimeMark, DistanceMarkInches, Pr, Sr, Wind, Sport, Season, HandTime, Converted, DQ, DNF, DNS, SCR, FS, NT, ND, NM, NH, FOUL) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
+    insert = "INSERT INTO Results (Position, TimeMark, DistanceMarkInches, Pr, Sr, Wind, Sport, Season, HandTime, Converted, MarkType, EventID, MeetID) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
     vals = ()
     if (result['mark'][0] == "track"):
-        vals = (str(result['pos']), str(result['mark'][1]), "0", result['pr'], result['sr'], str(result['wind']), "TF", season, result['handtime'], result['converted'], result['dq'], result['dnf'], result['dns'], result['scr'], result['fs'], result['nt'], result['nd'], result['nm'], result['nh'], result['foul'])
+        vals = (str(result['pos']), str(result['mark'][1]), "0", result['pr'], result['sr'], str(result['wind']), "TF", season, result['handtime'], result['converted'], result['markType'], event_id, meet_id)
     elif (result['mark'][0] == "field"):
-        vals = (str(result['pos']), "0", str(result['mark'][1]), result['pr'], result['sr'], str(result['wind']), "TF", season, result['handtime'], result['converted'], result['dq'], result['dnf'], result['dns'], result['scr'], result['fs'], result['nt'], result['nd'], result['nm'], result['nh'], result['foul'])
+        vals = (str(result['pos']), "0", str(result['mark'][1]), result['pr'], result['sr'], str(result['wind']), "TF", season, result['handtime'], result['converted'], result['markType'], event_id, meet_id)
+
+    # debug_message(event_id, "", False)
 
     dbcursor.execute(insert, vals)
     db.commit()
@@ -590,27 +719,27 @@ def insert_meet_school(meet_id, school_id):
 
 
 # Insert ResultID and EventID pair to maintain relationship
-def insert_result_event(result_id, event_id):
-    global db
-    global dbcursor
+# def insert_result_event(result_id, event_id):
+#     global db
+#     global dbcursor
 
-    insert = "INSERT INTO Results_Events (ResultID, EventID) VALUES (%s, %s)"
-    vals = (result_id, event_id)
+#     insert = "INSERT INTO Results_Events (ResultID, EventID) VALUES (%s, %s)"
+#     vals = (result_id, event_id)
 
-    dbcursor.execute(insert, vals)
-    db.commit()
+#     dbcursor.execute(insert, vals)
+#     db.commit()
 
 
 # Insert ResultID and MeetID pair to maintain relationship
-def insert_result_meet(result_id, meet_id):
-    global db
-    global dbcursor
+# def insert_result_meet(result_id, meet_id):
+#     global db
+#     global dbcursor
 
-    insert = "INSERT INTO Results_Meets (ResultID, MeetID) VALUES (%s, %s)"
-    vals = (result_id, meet_id)
+#     insert = "INSERT INTO Results_Meets (ResultID, MeetID) VALUES (%s, %s)"
+#     vals = (result_id, meet_id)
 
-    dbcursor.execute(insert, vals)
-    db.commit()
+#     dbcursor.execute(insert, vals)
+#     db.commit()
 
 
 # =============================================
@@ -641,13 +770,20 @@ def scrape_school(data, athlete_id):
     soup = get_soup(link)
     regex = r"\"teamNav\"(.*?)\"siteSupport\""
 
+    school_id = -1
+
     # use regex to get string that contains info
     matchObj = re.search(regex, soup.getText())
 
     # clean string and get back dict of necessary info
     school_data = clean_school(matchObj.group())
 
-    school_id = insert_school(school_data)
+    check_school = school_exists(school_data['name'], school_data['mascot'], school_data['city'], school_data['state'])
+    if not (check_school.exists):
+        school_id = insert_school(school_data)
+    else:
+        school_id = check_school.school_id
+
     insert_athlete_school(athlete_id, school_id)
 
     return school_id
@@ -659,12 +795,7 @@ def scrape_athlete(data, athlete_id, school_id):
 
     lines = []
 
-    # only store as many athletes as specified so things dont get out of hand
-    # set to any negative number to run scrape of full site
-    if(athletes_stored == int(sys.argv[2])):
-        quit("", True)
 
-    athletes_stored += 1
     print("Scraping " + data['athlete'] + " ", end = '')
 
     link = "https://www.athletic.net/TrackAndField" + data['athlete_link'] + "&L=0"
@@ -697,20 +828,31 @@ def scrape_athlete(data, athlete_id, school_id):
 
                 else:
                     if not (result_exists(data)):
+                        event_id = -1
+                        meet_id = -1
 
-                        # get info out of result and turn into dict
-                        result = clean_result(result, season, event)
-                        result_id = insert_result(result, season, event) # dont need to pass season and event here
-                        insert_athlete_result(athlete_id, result_id) # maintain relationship
-                        event_id = insert_event(event)
-                        insert_result_event(result_id, event_id)
+                        result = clean_result(result, season, event) # get info out of result and turn into dict
+                        check_event = event_exists(event)
+                        if not (check_event.exists):
+                            event_id = insert_event(event)
+                        else:
+                            event_id = check_event.event_id
+                        # insert_result_event(result_id, check_event['event_id'])
                         # get info out of result and turn into dict
                         meet_data = clean_meet(result, data['athlete'])
 
-                        if not (meet_exists()):
+                        check_meet = meet_exists(meet_data['name'], meet_data['date'])
+                        if not (check_meet.exists):
                             meet_id = insert_meet(meet_data)
-                            insert_result_meet(result_id, meet_id)
+                            # insert_result_meet(result_id, meet_id)
                             insert_meet_school(meet_id, school_id)
+                        else:
+                            meet_id = check_meet.meet_id
+
+
+
+                        result_id = insert_result(result, season, event, event_id, meet_id) # dont need to pass season and event here
+                        insert_athlete_result(athlete_id, result_id) # maintain relationship
 
                     result_index = 1
                     result = []
@@ -731,6 +873,8 @@ def scrape_result_table (soup):
     # set a to keep track of which link we're on
     link_index = 0
     for athlete_result in table:
+        # only store as many athletes as specified so things dont get out of hand
+        # set to any negative number to run scrape of full site
 
 
         # pull text out of tag
@@ -765,6 +909,11 @@ def scrape_result_table (soup):
             # get meet of mark and pass all data on
             if result_index%9 == 8:
 
+                if(athletes_stored == int(sys.argv[2])):
+                    quit("", True)
+
+                athletes_stored += 1
+
                 data.update({'grade': grade,'athlete': athlete, 'athlete_link': athlete_link, 'school_link': school_link, 'school': school})
 
                 # check if athlete already exists in database before
@@ -772,7 +921,8 @@ def scrape_result_table (soup):
 
                 debug_length = len("Scraping " + athlete + " ")
                 debug_width = 65 - debug_length
-                if not (athlete_exists(data)):
+                check_athlete = athlete_exists(data['athlete'], data['grade'], data['school'])
+                if not (check_athlete.exists):
                     try:
                         school_id = -1
                         athlete_id = insert_athlete(data)

@@ -10,31 +10,6 @@ CREATE TABLE Athletes(
   Grade ENUM('?','9','10','11','12','17-18','Fr','So','Jr','Sr','Freshman', 'Sophomore','Junior','Senior') NOT NULL
 ) AUTO_INCREMENT = 1;
 
-# Stores information about individual Results
-CREATE TABLE Results(
-  ResultID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  Position INT NOT NULL,
-  TimeMark TIME(3),       #for running events (3 for millisecond precision)
-  DistanceMarkInches DECIMAL(5,2) NOT NULL, #2 after . 3 before #for field events (storing as inches to easily convert back while also maintaining comparator)
-  PR boolean NOT NULL,
-  SR boolean NOT NULL,
-  Wind DECIMAL(2,1) NOT NULL,
-  Sport ENUM('XC','TF') NOT NULL,
-  Season VARCHAR(100) NOT NULL,
-  HandTime BOOLEAN NOT NULL,
-  Converted BOOLEAN NOT NULL,
-  DQ BOOLEAN NOT NULL, #Make this boolean block an enum, only need booleans if every boolean combo is possible
-  DNF BOOLEAN NOT NULL,
-  DNS BOOLEAN NOT NULL,
-  SCR BOOLEAN NOT NULL,
-  FS BOOLEAN NOT NULL,
-  NT BOOLEAN NOT NULL,
-  ND BOOLEAN NOT NULL,
-  NM BOOLEAN NOT NULL,
-  NH BOOLEAN NOT NULL,
-  FOUL BOOLEAN NOT NULL
-) AUTO_INCREMENT = 1;
-
 # Stores information about individual Schools
 CREATE TABLE Schools(
   SchoolID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -56,6 +31,26 @@ CREATE TABLE Meets(
 CREATE TABLE Events(
   EventID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   Name VARCHAR(100)
+) AUTO_INCREMENT = 1;
+
+# Stores information about individual Results
+CREATE TABLE Results(
+  ResultID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  Position INT NOT NULL,
+  TimeMark TIME(3),       #for running events (3 for millisecond precision)
+  DistanceMarkInches DECIMAL(5,2) NOT NULL, #2 after . 3 before #for field events (storing as inches to easily convert back while also maintaining comparator)
+  PR boolean NOT NULL,
+  SR boolean NOT NULL,
+  Wind DECIMAL(2,1) NOT NULL,
+  Sport ENUM('XC','TF') NOT NULL,
+  Season VARCHAR(100) NOT NULL,
+  HandTime BOOLEAN NOT NULL,
+  Converted BOOLEAN NOT NULL,
+  MarkType ENUM('DQ', 'DNF', 'DNS', 'SCR', 'FS', 'NT', 'ND', 'NM', 'NH', 'FOUL', 'LEGAL') NOT NULL,
+  EventID INT NOT NULL,
+  MeetID INT NOT NULL,
+  FOREIGN KEY (EventID) REFERENCES Events(EventID),
+  FOREIGN KEY (MeetID) REFERENCES Meets(MeetID)
 ) AUTO_INCREMENT = 1;
 
 #####################
@@ -89,21 +84,3 @@ CREATE TABLE Meets_Schools(
   FOREIGN KEY (MeetID) REFERENCES Meets(MeetID),
   FOREIGN KEY (SchoolID) REFERENCES Schools(SchoolID)
 );
-
-# Maintains the Many-to-One relationship between Results and Events
-CREATE TABLE Results_Events(
-  ResultID INT NOT NULL PRIMARY KEY,
-  EventID INT NOT NULL,
-  FOREIGN KEY (ResultID) REFERENCES Results(ResultID),
-  FOREIGN KEY (EventID) REFERENCES Events(EventID)
-);
-
-# Maintains the Many-to-One relationship between Results and Meets (fix foreign keys)
-CREATE TABLE Results_Meets(
-  ResultID INT NOT NULL PRIMARY KEY,
-  MeetID INT NOT NULL,
-  FOREIGN KEY (ResultID) REFERENCES Results(ResultID),
-  FOREIGN KEY (MeetID) REFERENCES Meets(MeetID)
-);
-
-
