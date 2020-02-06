@@ -19,13 +19,10 @@ var athleteRouter = require('./routes/athletes');
 
 //Configure Express
 require('./db/database');
-app.use(parser.json());
+//app.use(parser.json());
 //app.use(logger('dev'));
 
 app.use('/athletes', athleteRouter);
-
-
-
 
 
 // Configure Server to Listen on Port 3000

@@ -9,7 +9,8 @@ var athleteRouter = express.Router();
 //GET Route - fetches ALL Athletes
 athleteRouter.get('/all', athleteController.getAllAthletes);
 athleteRouter.get('/name/:name', athleteController.getAthleteByName);
-athleteRouter.get('/school/:school', athleteController.getAthleteBySchool);
+//change to get param syntax
+//athleteRouter.get('/school/:school', athleteController.getAthleteBySchool);
 
 module.exports = athleteRouter;
 

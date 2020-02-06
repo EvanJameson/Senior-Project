@@ -14,7 +14,7 @@ struct AthleteDetailHeader: View {
     
     var body: some View {
         HStack {
-            CircleImage(image: Image(athlete.school.lowercased()), wh: 100)
+            //CircleImage(image: Image(athlete.school.lowercased()), wh: 100)
 
             
             VStack {
@@ -28,7 +28,7 @@ struct AthleteDetailHeader: View {
                 HStack {
                     Text(athlete.grade)
                     Spacer()
-                    Text(athlete.school)
+                    //Text(athlete.school)
                 }
                 .padding()
                     
@@ -39,7 +39,7 @@ struct AthleteDetailHeader: View {
 
 struct AthleteDetailHeader_Previews: PreviewProvider {
     static var previews: some View {
-        let temp = Athlete(tf: nil, xc: nil, name: "Evan Jameson", school: "CPSLO", grade: "SR")
+        let temp = Athlete(id: 0, name: "Evan Jameson", gender: "Male", grade: "SR")
         
         return AthleteDetailHeader(athlete: temp)
     }

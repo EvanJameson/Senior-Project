@@ -1,20 +1,23 @@
 'use strict';
 
-var mongoose = require('mongoose');
+var mysql = require('mysql')
+var connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: '*localtesting',
+  database: 'resultsDB'
+  }
+)
 
-const host = 'localhost';
-
-const projectName = 'AthleteDB';
-
-mongoose.connect('mongodb://' + host + '/' + projectName, {
-   useNewUrlParser: true,
-   useUnifiedTopology: true
- }, function(err) {
+connection.connect(function (err) {
   if(err) {
-    console.log('Failed connecting to MongoDB.');
-  }
-  else {
-    console.log('Successfully connected to MongoDB!');
-  }
+      console.log('Failed connecting to MySQL.');
+    }
+    else {
+      console.log('Successfully connected to MySQL!');
+    }
 });
 
+module.exports = connection
+
+//connection.end()

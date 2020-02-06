@@ -15,8 +15,8 @@ struct SearchRow: View {
     
     var body: some View {
         HStack{
-            CircleImage(image: Image(athlete.school.lowercased()), wh: 50)
-                .padding(.leading, -7)
+            //CircleImage(image: Image(athlete.school.lowercased()), wh: 50)
+                //.padding(.leading, -7)
             
             //placeholder icons to add some color
             Text("TF")
@@ -30,7 +30,7 @@ struct SearchRow: View {
                 Text(athlete.name)
                     .fontWeight(.bold)
                 Spacer()
-                Text(athlete.school)
+                //Text(athlete.school)
             }
         }
     .padding()
@@ -40,12 +40,12 @@ struct SearchRow: View {
 struct SearchRow_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            SearchRow(athlete: Athlete(tf: nil, xc: nil, name: "Evan Jameson", school: "Cal Poly", grade: "12"))
+            SearchRow(athlete: Athlete(id: 0, name: "Evan Jameson", gender: "Male", grade: "12"))
                 .previewLayout(.fixed(width: 300, height: 80))
                 .environment(\.colorScheme, .light)
             
-            SearchRow(athlete: Athlete(tf: nil, xc: nil, name: "Evan Jameson", school: "CPSLO", grade: "12"))
-                .previewLayout(.fixed(width: 300, height: 80))
+//            SearchRow(athlete: Athlete(tf: nil, xc: nil, name: "Evan Jameson", school: "CPSLO", grade: "12"))
+//                .previewLayout(.fixed(width: 300, height: 80))
                 //.environment(\.colorScheme, .dark) ??
         }
     }

@@ -8,44 +8,42 @@
 
 import SwiftUI
 // Hashable ?
-struct Wrapper: Codable, Identifiable, Hashable {
-    let id: Int
+struct Wrapper: Codable, Hashable {
+    //let id: Int
     
     let athletes: [Athlete]
 }
 
-struct Athlete: Codable, Hashable {
-    let tf: track?
-    let xc: cross?
+struct Athlete: Codable, Identifiable, Hashable {
+    let id: Int
     let name: String
-    let school: String
+    let gender: String
     let grade: String
     
     enum CodingKeys: String, CodingKey{
-        case tf = "TF"
-        case xc = "XC"
+        case id = "AthleteID"
         case name = "Name"
-        case school = "School"
+        case gender = "Gender"
         case grade = "Grade"
     }
 }
 
-struct track: Codable, Hashable {
-    let records: String //Placeholder
-    let results: String //Placeholder
-    
-    enum CodingKeys: String, CodingKey{
-        case records = "Records"
-        case results = "Results"
-    }
-}
-
-struct cross: Codable, Hashable {
-    let records: String //Placeholder
-    let results: String //Placeholder
-    
-    enum CodingKeys: String, CodingKey{
-        case records = "Records"
-        case results = "Results"
-    }
-}
+//struct track: Codable, Hashable {
+//    let records: String //Placeholder
+//    let results: String //Placeholder
+//
+//    enum CodingKeys: String, CodingKey{
+//        case records = "Records"
+//        case results = "Results"
+//    }
+//}
+//
+//struct cross: Codable, Hashable {
+//    let records: String //Placeholder
+//    let results: String //Placeholder
+//
+//    enum CodingKeys: String, CodingKey{
+//        case records = "Records"
+//        case results = "Results"
+//    }
+//}

@@ -32,7 +32,7 @@ struct AthleteDetail: View {
 
 struct AthleteDetail_Previews: PreviewProvider {
     static var previews: some View {
-        let temp = Athlete(tf: nil, xc: nil, name: "Evan Jameson", school: "CPSLO", grade: "SR")
+        let temp = Athlete(id: 1, name: "Evan Jameson", gender: "Male", grade: "SR")
         
         return AthleteDetail(athlete: temp)
     }
