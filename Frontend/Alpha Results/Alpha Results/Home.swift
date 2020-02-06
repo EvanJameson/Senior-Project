@@ -9,32 +9,45 @@
 import SwiftUI
 
 struct Home: View {
+    @EnvironmentObject var userData: UserData
+    
     var body: some View {
-        NavigationView{
+        //NavigationView{
             TabView {
-                Text("Home").tabItem {
+                NavigationView{
+                    Text("Home")
+                    .navigationBarTitle("Home")
+                }
+                .tabItem {
                     VStack {
                         Image("timer")
                         Text("Home")
                     }
                     
                 }
-                Text("Rankings").tabItem {
+                
+                NavigationView{
+                    Text("Rankings")
+                    .navigationBarTitle("Rankings")
+                }
+                .tabItem {
                     VStack {
                         Image("podium")
                         Text("Rankings")
                     }
-                    
                 }
-                SearchList().tabItem {
+                
+                NavigationView{
+                    SearchList()
+                    .navigationBarTitle("Search")
+                }
+                .tabItem {
                     VStack {
                         Image("search")
                         Text("Search")
                     }
-                    
-                }
+                }  
             }
-        }
     }
 }
 

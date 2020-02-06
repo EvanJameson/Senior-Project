@@ -9,6 +9,9 @@
 import SwiftUI
 
 struct ToggleIndex: View {
+    
+    @EnvironmentObject var userData: UserData
+    
     @State var isOn: Bool = false
     @State var index: Int = 0
     @State var draggedOffset = CGSize.zero
@@ -45,17 +48,19 @@ struct ToggleIndex: View {
                 .offset(x: -119, y: 0)
                 .onTapGesture {
                     self.index = 0
-                    
+                    self.userData.searchIndex = "Athletes"
                 }
             Text("Meets")
                 .offset(x: 0, y: 0)
                 .onTapGesture {
                     self.index = 1
+                    self.userData.searchIndex = "Meets"
                 }
             Text("Schools")
                 .offset(x: 120, y: 0)
                 .onTapGesture {
                     self.index = 2
+                    self.userData.searchIndex = "Schools"
                 }
             
         }

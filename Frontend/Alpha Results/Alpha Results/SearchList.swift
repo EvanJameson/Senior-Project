@@ -13,77 +13,86 @@ import Foundation
 
 struct SearchList: View {
     
+    @EnvironmentObject var userData: UserData
+    
     @State private var searchText = ""
+    @State private var ngrok = "https://cdbf9eab.ngrok.io"
+    @State private var index = ""
     @State private var showCancelButton: Bool = false
     
     @State private var athletes =  Wrapper(athletes: [Athlete(id: 0 , name: "", gender: "", grade: "")])
     @State private var searched: Bool = false
     
-var body: some View {
-    VStack{
-        HStack{
+    var body: some View {
+        VStack{
             HStack{
-                Image(systemName: "magnifyingglass")
+                HStack{
+                    Image(systemName: "magnifyingglass")
 
-                TextField("search", text: $searchText, onEditingChanged: { isEditing in
-                    self.showCancelButton = true
+                    TextField("search", text: $searchText, onEditingChanged: { isEditing in
+                        self.showCancelButton = true
 
-                }, onCommit: {
-                    print("onCommit")
-                    search(searchText: self.searchText){
-                        (res, error) in
-                        self.athletes = res!
-                    }
-                    self.searched = true
-                }).foregroundColor(.primary)
-                  .keyboardType(.default) //Doesn't have "Done" key :(
-                Button(action: {
-                    self.searchText = ""
-                }) {
-                    Image(systemName: "xmark.circle.fill").opacity(searchText == "" ? 0 : 1)
-                }
-            }
-            .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
-                .foregroundColor(.secondary)
-                .background(Color(.secondarySystemBackground))
-                .cornerRadius(10.0)
-                if showCancelButton  {
-                    Button("Cancel") {
-                            UIApplication.shared.endEditing(true) // this must be placed before the other commands here
-                            self.searchText = ""
-                            self.showCancelButton = false
-                    }
-                    .foregroundColor(Color(.systemBlue))
-                }
-            }
-            .padding(.horizontal)
-            .navigationBarHidden(showCancelButton) // .animation(.default) // animation does not work properly
-            
-            //add unique toggle slider here to switch filter index
-            ToggleIndex()
-        
-            if(searched){
-                List {
-                    // Filtered list of names
-//                        ForEach(self.athletes.athletes.filter{$0.name.hasPrefix(searchText) || searchText == ""}, id:\.self) {athlete in
-//                            NavigationLink(destination: AthleteDetail(athlete: athlete)){
-//                                SearchRow(athlete: athlete)
-//                            }
-//                        }
-                    ForEach(self.athletes.athletes, id:\.self) {athlete in
-                        
-                        NavigationLink(destination: AthleteDetail(athlete: athlete)){
-                            SearchRow(athlete: athlete)
+                    }, onCommit: {
+                        print("onCommit")
+                        print(self.userData.searchIndex)
+                        if (self.userData.searchIndex == "Athletes"){
+                            self.index = "/athletes/name/"
+                            search(searchText: self.searchText){
+                                (res, error) in
+                                self.athletes = res!
+                            }
                         }
+                        else if (self.userData.searchIndex == "Meets"){
+                            self.index = "/meets/name/"
+                        }
+                        else if (self.userData.searchIndex == "Schools"){
+                            self.index = "/athletes/name/"
+                        }
+                        
+                        self.searched = true
+                    }).foregroundColor(.primary)
+                      .keyboardType(.default) //Doesn't have "Done" key :(
+                    Button(action: {
+                        self.searchText = ""
+                    }) {
+                        Image(systemName: "xmark.circle.fill").opacity(searchText == "" ? 0 : 1)
                     }
-                    
                 }
-                .navigationBarTitle(Text("Search"))
-                .resignKeyboardOnDragGesture()
+                .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
+                    .foregroundColor(.secondary)
+                    .background(Color(.secondarySystemBackground))
+                    .cornerRadius(10.0)
+                    if showCancelButton  {
+                        Button("Cancel") {
+                                UIApplication.shared.endEditing(true) // this must be placed before the other commands here
+                                self.searchText = ""
+                                self.showCancelButton = false
+                        }
+                        .foregroundColor(Color(.systemBlue))
+                    }
+                }
+                .padding(.horizontal)
+                .navigationBarHidden(showCancelButton) // .animation(.default) // animation does not work properly
+                
+                //add unique toggle slider here to switch filter index
+                ToggleIndex()
+            
+                if(searched){
+                    List {
+                        ForEach(self.athletes.athletes, id:\.self) {athlete in
+                            
+                            NavigationLink(destination: AthleteDetail(athlete: athlete)){
+                                SearchRow(athlete: athlete)
+                            }
+                        }
+                        
+                    }
+                    //.navigationBarTitle(Text("Search"))
+                    .resignKeyboardOnDragGesture()
+                }
+                Spacer()
             }
-            Spacer()
         }
-    }
 }
 
 // performs search of DB on commit
@@ -112,13 +121,13 @@ private func search(searchText: String, completionHandler: @escaping (Wrapper?, 
                 let decoder = JSONDecoder()
                 let qRes = try decoder.decode([Athlete].self, from: data)
                 for value in qRes{
-                    print (value)
-                    print ("name: " + value.name)
+                    //print (value)
+                    //print ("name: " + value.name)
                     let ath = Athlete(id: value.id, name: value.name, gender: value.gender, grade: value.grade)
                     res_list.append(ath)
                 }
                 res_final = Wrapper(athletes: res_list)
-                print("Yes")
+                //print("Yes")
                 completionHandler(res_final, nil)
                 
             }

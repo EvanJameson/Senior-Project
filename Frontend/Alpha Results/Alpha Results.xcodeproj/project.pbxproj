@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7430B26D23EBC6AB002873C4 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7430B26C23EBC6AB002873C4 /* UserData.swift */; };
 		7441D4CB237F1E0F00CAA1A1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7441D4CA237F1E0F00CAA1A1 /* AppDelegate.swift */; };
 		7441D4CD237F1E0F00CAA1A1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7441D4CC237F1E0F00CAA1A1 /* SceneDelegate.swift */; };
 		7441D4D0237F1E0F00CAA1A1 /* Alpha_Results.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7441D4CE237F1E0F00CAA1A1 /* Alpha_Results.xcdatamodeld */; };
@@ -25,6 +26,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7430B26C23EBC6AB002873C4 /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
 		7441D4C7237F1E0F00CAA1A1 /* Alpha Results.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Alpha Results.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7441D4CA237F1E0F00CAA1A1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7441D4CC237F1E0F00CAA1A1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -74,6 +76,7 @@
 		7441D4C9237F1E0F00CAA1A1 /* Alpha Results */ = {
 			isa = PBXGroup;
 			children = (
+				7430B26C23EBC6AB002873C4 /* UserData.swift */,
 				7441D4CA237F1E0F00CAA1A1 /* AppDelegate.swift */,
 				7441D4CC237F1E0F00CAA1A1 /* SceneDelegate.swift */,
 				7441D4D1237F1E0F00CAA1A1 /* ContentView.swift */,
@@ -189,6 +192,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7430B26D23EBC6AB002873C4 /* UserData.swift in Sources */,
 				7441D4CB237F1E0F00CAA1A1 /* AppDelegate.swift in Sources */,
 				7441D4CD237F1E0F00CAA1A1 /* SceneDelegate.swift in Sources */,
 				7441D4EC2381F7A900CAA1A1 /* SearchList.swift in Sources */,

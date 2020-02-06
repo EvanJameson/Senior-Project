@@ -16,6 +16,8 @@ app.get('/', (req, res) => {
 
 //Link Routes
 var athleteRouter = require('./routes/athletes');
+var schoolRouter = require('./routes/schools');
+var meetRouter = require('./routes/meets');
 
 //Configure Express
 require('./db/database');
@@ -23,6 +25,8 @@ require('./db/database');
 //app.use(logger('dev'));
 
 app.use('/athletes', athleteRouter);
+app.use('/schools', schoolRouter);
+app.use('/meets', meetRouter);
 
 
 // Configure Server to Listen on Port 3000

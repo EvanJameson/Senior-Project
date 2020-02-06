@@ -11,7 +11,7 @@ import SwiftUI
 
 
 struct AthleteDetail: View {
-    
+    @EnvironmentObject var userData: UserData
     @State var athlete: Athlete
     
     var body: some View {
