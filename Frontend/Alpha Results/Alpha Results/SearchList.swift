@@ -20,7 +20,10 @@ struct SearchList: View {
     @State private var index = ""
     @State private var showCancelButton: Bool = false
     
-    @State private var athletes =  Wrapper(athletes: [Athlete(id: 0 , name: "", gender: "", grade: "")])
+    @State private var athletes =  [Athlete(id: 0 , name: "", gender: "", grade: "")]
+    @State private var meets = [Meet(id: 0, name: "", day: "", sport: "")]
+    @State private var schools = [School(id: 0, name: "", mascot: "", city: "", state: "")]
+    
     @State private var searched: Bool = false
     
     var body: some View {
@@ -37,16 +40,24 @@ struct SearchList: View {
                         print(self.userData.searchIndex)
                         if (self.userData.searchIndex == "Athletes"){
                             self.index = "/athletes/name/"
-                            search(searchText: self.searchText){
+                            athleteSearch(searchText: self.searchText, searchIndex: self.index, ngrok: self.ngrok){
                                 (res, error) in
                                 self.athletes = res!
                             }
                         }
                         else if (self.userData.searchIndex == "Meets"){
                             self.index = "/meets/name/"
+                            meetSearch(searchText: self.searchText, searchIndex: self.index, ngrok: self.ngrok){
+                                (res, error) in
+                                self.meets = res!
+                            }
                         }
                         else if (self.userData.searchIndex == "Schools"){
-                            self.index = "/athletes/name/"
+                            self.index = "/schools/name/"
+                            schoolSearch(searchText: self.searchText, searchIndex: self.index, ngrok: self.ngrok){
+                                (res, error) in
+                                self.schools = res!
+                            }
                         }
                         
                         self.searched = true
@@ -79,10 +90,27 @@ struct SearchList: View {
             
                 if(searched){
                     List {
-                        ForEach(self.athletes.athletes, id:\.self) {athlete in
-                            
-                            NavigationLink(destination: AthleteDetail(athlete: athlete)){
-                                SearchRow(athlete: athlete)
+                        if (self.userData.searchIndex == "Athletes"){
+                            ForEach(self.athletes, id:\.self) {athlete in
+                                NavigationLink(destination: AthleteDetail(athlete: athlete)){
+                                    SearchRow(athlete: athlete)
+                                }
+                            }
+                        }
+                        else if (self.userData.searchIndex == "Meets"){
+                            ForEach(self.meets, id:\.self) {meet in
+//                                NavigationLink(destination: MeetDetail(athlete: athlete)){
+//                                    SearchRow(athlete: athlete)
+//                                }
+                                SearchRow(athlete: Athlete(id: 0, name: meet.name, gender: "", grade: ""))
+                            }
+                        }
+                        else if (self.userData.searchIndex == "Schools"){
+                            ForEach(self.schools, id:\.self) {school in
+    //                                NavigationLink(destination: MeetDetail(athlete: athlete)){
+    //                                    SearchRow(athlete: athlete)
+    //                                }
+                                SearchRow(athlete: Athlete(id: 0, name: school.name, gender: "", grade: ""))
                             }
                         }
                         
@@ -97,39 +125,82 @@ struct SearchList: View {
 
 // performs search of DB on commit
 // parses data thats returned and returns array of athletes
-private func search(searchText: String, completionHandler: @escaping (Wrapper?, Error?) -> Void){
+private func athleteSearch(searchText: String, searchIndex: String, ngrok: String, completionHandler: @escaping ([Athlete]?, Error?) -> Void){
     let session = URLSession(configuration: .default, delegate: nil, delegateQueue: .main)
-    
-    // temp url created by ngrok
-    let ngrok = "https://cdbf9eab.ngrok.io"
-    
-    // TODO: implement a filtering method to change search index
-    let index = "/athletes/name/"
     let newSearchText = searchText.replacingOccurrences(of: " ", with: "%20", options: .literal, range: nil)
-
     var res_list: [Athlete] = []
-    var res_final = Wrapper(athletes: [Athlete(id: 0 , name: "PlaceHolder", gender: "", grade: "")])
     
     // HTTP Request
-    let url = URL(string: ngrok + index + newSearchText)!
+    let url = URL(string: ngrok + searchIndex + newSearchText)!
     let task = session.dataTask(with: url, completionHandler: { (receivedData: Data?, response: URLResponse?, error: Error?) -> Void in
         // Parse the data in the response and use it
         if let data = receivedData {
             do{
-                
-                
                 let decoder = JSONDecoder()
                 let qRes = try decoder.decode([Athlete].self, from: data)
                 for value in qRes{
-                    //print (value)
-                    //print ("name: " + value.name)
                     let ath = Athlete(id: value.id, name: value.name, gender: value.gender, grade: value.grade)
                     res_list.append(ath)
                 }
-                res_final = Wrapper(athletes: res_list)
-                //print("Yes")
-                completionHandler(res_final, nil)
-                
+                completionHandler(res_list, nil)
+            }
+            catch {
+                print(error)
+            }
+        }
+    })
+    task.resume()
+
+    return
+}
+
+private func meetSearch(searchText: String, searchIndex: String, ngrok: String, completionHandler: @escaping ([Meet]?, Error?) -> Void){
+    let session = URLSession(configuration: .default, delegate: nil, delegateQueue: .main)
+    let newSearchText = searchText.replacingOccurrences(of: " ", with: "%20", options: .literal, range: nil)
+    var res_list: [Meet] = []
+    
+    // HTTP Request
+    let url = URL(string: ngrok + searchIndex + newSearchText)!
+    let task = session.dataTask(with: url, completionHandler: { (receivedData: Data?, response: URLResponse?, error: Error?) -> Void in
+        // Parse the data in the response and use it
+        if let data = receivedData {
+            do{
+                let decoder = JSONDecoder()
+                let qRes = try decoder.decode([Meet].self, from: data)
+                for value in qRes{
+                    let met = Meet(id: value.id, name: value.name, day: value.day, sport: value.sport)
+                    res_list.append(met)
+                }
+                completionHandler(res_list, nil)
+            }
+            catch {
+                print(error)
+            }
+        }
+    })
+    task.resume()
+
+    return
+}
+
+private func schoolSearch(searchText: String, searchIndex: String, ngrok: String, completionHandler: @escaping ([School]?, Error?) -> Void){
+    let session = URLSession(configuration: .default, delegate: nil, delegateQueue: .main)
+    let newSearchText = searchText.replacingOccurrences(of: " ", with: "%20", options: .literal, range: nil)
+    var res_list: [School] = []
+    
+    // HTTP Request
+    let url = URL(string: ngrok + searchIndex + newSearchText)!
+    let task = session.dataTask(with: url, completionHandler: { (receivedData: Data?, response: URLResponse?, error: Error?) -> Void in
+        // Parse the data in the response and use it
+        if let data = receivedData {
+            do{
+                let decoder = JSONDecoder()
+                let qRes = try decoder.decode([School].self, from: data)
+                for value in qRes{
+                    let sch = School(id: value.id, name: value.name, mascot: value.mascot, city: value.city, state: value.state)
+                    res_list.append(sch)
+                }
+                completionHandler(res_list, nil)
             }
             catch {
                 print(error)

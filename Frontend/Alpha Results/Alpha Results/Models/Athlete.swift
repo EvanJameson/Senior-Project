@@ -8,11 +8,11 @@
 
 import SwiftUI
 // Hashable ?
-struct Wrapper: Codable, Hashable {
-    //let id: Int
-    
-    let athletes: [Athlete]
-}
+//struct Wrapper: Codable, Hashable {
+//    //let id: Int
+//
+//    let athletes: [Athlete]
+//}
 
 struct Athlete: Codable, Identifiable, Hashable {
     let id: Int
@@ -28,22 +28,3 @@ struct Athlete: Codable, Identifiable, Hashable {
     }
 }
 
-//struct track: Codable, Hashable {
-//    let records: String //Placeholder
-//    let results: String //Placeholder
-//
-//    enum CodingKeys: String, CodingKey{
-//        case records = "Records"
-//        case results = "Results"
-//    }
-//}
-//
-//struct cross: Codable, Hashable {
-//    let records: String //Placeholder
-//    let results: String //Placeholder
-//
-//    enum CodingKeys: String, CodingKey{
-//        case records = "Records"
-//        case results = "Results"
-//    }
-//}
