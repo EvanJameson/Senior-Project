@@ -7,12 +7,6 @@
 //
 
 import SwiftUI
-// Hashable ?
-//struct Wrapper: Codable, Hashable {
-//    //let id: Int
-//
-//    let athletes: [Athlete]
-//}
 
 struct Athlete: Codable, Identifiable, Hashable {
     let id: Int

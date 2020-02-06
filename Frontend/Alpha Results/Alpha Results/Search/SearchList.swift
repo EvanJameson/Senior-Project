@@ -20,6 +20,7 @@ struct SearchList: View {
     @State private var index = ""
     @State private var showCancelButton: Bool = false
     
+    @State private var athleteSchools = [AthleteSchool(id: 0 , aname: "", gender: "", grade: "", sid: 0, sname: "", mascot: "", city: "", state: "")]
     @State private var athletes =  [Athlete(id: 0 , name: "", gender: "", grade: "")]
     @State private var meets = [Meet(id: 0, name: "", day: "", sport: "")]
     @State private var schools = [School(id: 0, name: "", mascot: "", city: "", state: "")]
@@ -42,7 +43,7 @@ struct SearchList: View {
                             self.index = "/athletes/name/"
                             athleteSearch(searchText: self.searchText, searchIndex: self.index, ngrok: self.ngrok){
                                 (res, error) in
-                                self.athletes = res!
+                                self.athleteSchools = res!
                             }
                         }
                         else if (self.userData.searchIndex == "Meets"){
@@ -91,10 +92,11 @@ struct SearchList: View {
                 if(searched){
                     List {
                         if (self.userData.searchIndex == "Athletes"){
-                            ForEach(self.athletes, id:\.self) {athlete in
+                            ForEach(self.athleteSchools, id:\.self) {athlete in
                                 NavigationLink(destination: AthleteDetail(athlete: athlete)){
-                                    SearchRow(athlete: athlete)
+                                    AthleteRow(athlete: athlete)
                                 }
+                                //AthleteRow(athlete: athlete)
                             }
                         }
                         else if (self.userData.searchIndex == "Meets"){
@@ -102,7 +104,7 @@ struct SearchList: View {
 //                                NavigationLink(destination: MeetDetail(athlete: athlete)){
 //                                    SearchRow(athlete: athlete)
 //                                }
-                                SearchRow(athlete: Athlete(id: 0, name: meet.name, gender: "", grade: ""))
+                                MeetRow(meet: meet)
                             }
                         }
                         else if (self.userData.searchIndex == "Schools"){
@@ -110,7 +112,7 @@ struct SearchList: View {
     //                                NavigationLink(destination: MeetDetail(athlete: athlete)){
     //                                    SearchRow(athlete: athlete)
     //                                }
-                                SearchRow(athlete: Athlete(id: 0, name: school.name, gender: "", grade: ""))
+                                SchoolRow(school: school)
                             }
                         }
                         
@@ -125,10 +127,10 @@ struct SearchList: View {
 
 // performs search of DB on commit
 // parses data thats returned and returns array of athletes
-private func athleteSearch(searchText: String, searchIndex: String, ngrok: String, completionHandler: @escaping ([Athlete]?, Error?) -> Void){
+private func athleteSearch(searchText: String, searchIndex: String, ngrok: String, completionHandler: @escaping ([AthleteSchool]?, Error?) -> Void){
     let session = URLSession(configuration: .default, delegate: nil, delegateQueue: .main)
     let newSearchText = searchText.replacingOccurrences(of: " ", with: "%20", options: .literal, range: nil)
-    var res_list: [Athlete] = []
+    var res_list: [AthleteSchool] = []
     
     // HTTP Request
     let url = URL(string: ngrok + searchIndex + newSearchText)!
@@ -137,9 +139,9 @@ private func athleteSearch(searchText: String, searchIndex: String, ngrok: Strin
         if let data = receivedData {
             do{
                 let decoder = JSONDecoder()
-                let qRes = try decoder.decode([Athlete].self, from: data)
+                let qRes = try decoder.decode([AthleteSchool].self, from: data)
                 for value in qRes{
-                    let ath = Athlete(id: value.id, name: value.name, gender: value.gender, grade: value.grade)
+                    let ath = AthleteSchool(id: value.id, aname: value.aname, gender: value.gender, grade: value.grade, sid: value.sid, sname: value.sname, mascot: value.mascot, city: value.city, state: value.state)
                     res_list.append(ath)
                 }
                 completionHandler(res_list, nil)

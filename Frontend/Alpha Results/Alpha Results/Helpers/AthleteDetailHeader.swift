@@ -10,24 +10,29 @@ import SwiftUI
 
 struct AthleteDetailHeader: View {
     
-    @State var athlete: Athlete
+    @State var athlete: AthleteSchool
     
     var body: some View {
         HStack {
-            //CircleImage(image: Image(athlete.school.lowercased()), wh: 100)
+            CircleImage(image: Image(athlete.sname.lowercased()), wh: 100)
+            .padding(.leading, 7)
 
             
             VStack {
                 HStack {
-                    Spacer()
-                    Text(athlete.name)
+                    
+                    Text(athlete.aname)
                         .font(.title)
                         .fontWeight(.bold)
                         .padding()
+                    Spacer()
                 }
                 HStack {
-                    Text(athlete.grade)
+                    Text(athlete.sname)
                     Spacer()
+                    Text(athlete.grade)
+                    
+                    //Spacer()
                     //Text(athlete.school)
                 }
                 .padding()
@@ -39,7 +44,7 @@ struct AthleteDetailHeader: View {
 
 struct AthleteDetailHeader_Previews: PreviewProvider {
     static var previews: some View {
-        let temp = Athlete(id: 0, name: "Evan Jameson", gender: "Male", grade: "SR")
+        let temp = AthleteSchool(id: 0, aname: "Evan Jameson", gender: "Male", grade: "SR", sid: 0, sname: "Cal Poly", mascot: "Mustangs", city: "San Luis Obispo", state: "CA")
         
         return AthleteDetailHeader(athlete: temp)
     }

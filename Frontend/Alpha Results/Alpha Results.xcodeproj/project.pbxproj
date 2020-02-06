@@ -25,6 +25,12 @@
 		7441D4EE238264C000CAA1A1 /* AthleteDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7441D4ED238264BF00CAA1A1 /* AthleteDetail.swift */; };
 		7441D4F023826D6F00CAA1A1 /* ToggleIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7441D4EF23826D6F00CAA1A1 /* ToggleIndex.swift */; };
 		7489AF652383547100CA9DCB /* AthleteDetailHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7489AF642383547100CA9DCB /* AthleteDetailHeader.swift */; };
+		7497DEEE23EC8A9100F3F5DD /* AthleteRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7497DEED23EC8A9100F3F5DD /* AthleteRow.swift */; };
+		7497DEF023EC8A9B00F3F5DD /* MeetRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7497DEEF23EC8A9B00F3F5DD /* MeetRow.swift */; };
+		7497DEF223EC8AA400F3F5DD /* SchoolRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7497DEF123EC8AA400F3F5DD /* SchoolRow.swift */; };
+		7497DEF423EC8DD700F3F5DD /* AthleteSchool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7497DEF323EC8DD700F3F5DD /* AthleteSchool.swift */; };
+		7497DEF723ECA28A00F3F5DD /* SchoolDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7497DEF623ECA28A00F3F5DD /* SchoolDetail.swift */; };
+		7497DEF923ECA29600F3F5DD /* MeetDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7497DEF823ECA29600F3F5DD /* MeetDetail.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +54,12 @@
 		7441D4ED238264BF00CAA1A1 /* AthleteDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AthleteDetail.swift; sourceTree = "<group>"; };
 		7441D4EF23826D6F00CAA1A1 /* ToggleIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleIndex.swift; sourceTree = "<group>"; };
 		7489AF642383547100CA9DCB /* AthleteDetailHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AthleteDetailHeader.swift; sourceTree = "<group>"; };
+		7497DEED23EC8A9100F3F5DD /* AthleteRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AthleteRow.swift; sourceTree = "<group>"; };
+		7497DEEF23EC8A9B00F3F5DD /* MeetRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetRow.swift; sourceTree = "<group>"; };
+		7497DEF123EC8AA400F3F5DD /* SchoolRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolRow.swift; sourceTree = "<group>"; };
+		7497DEF323EC8DD700F3F5DD /* AthleteSchool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AthleteSchool.swift; sourceTree = "<group>"; };
+		7497DEF623ECA28A00F3F5DD /* SchoolDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolDetail.swift; sourceTree = "<group>"; };
+		7497DEF823ECA29600F3F5DD /* MeetDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetDetail.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,10 +97,8 @@
 				7441D4CC237F1E0F00CAA1A1 /* SceneDelegate.swift */,
 				7441D4D1237F1E0F00CAA1A1 /* ContentView.swift */,
 				7441D4E1237F255D00CAA1A1 /* Home.swift */,
-				7441D4E3237F266000CAA1A1 /* SearchRow.swift */,
-				7441D4EB2381F7A900CAA1A1 /* SearchList.swift */,
-				7441D4ED238264BF00CAA1A1 /* AthleteDetail.swift */,
-				7489AF642383547100CA9DCB /* AthleteDetailHeader.swift */,
+				7497DEF523ECA26E00F3F5DD /* Details */,
+				7497DEEC23EC8A6100F3F5DD /* Search */,
 				7441D4E82381E9BC00CAA1A1 /* Models */,
 				7441D4E52381DF8B00CAA1A1 /* Helpers */,
 				7441D4D3237F1E1100CAA1A1 /* Assets.xcassets */,
@@ -111,6 +121,7 @@
 		7441D4E52381DF8B00CAA1A1 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				7489AF642383547100CA9DCB /* AthleteDetailHeader.swift */,
 				7441D4E62381DFA200CAA1A1 /* CircleImage.swift */,
 				7441D4EF23826D6F00CAA1A1 /* ToggleIndex.swift */,
 			);
@@ -123,8 +134,31 @@
 				7441D4E92381E9D900CAA1A1 /* Athlete.swift */,
 				7430B26E23EBD194002873C4 /* School.swift */,
 				7430B27023EBD19D002873C4 /* Meet.swift */,
+				7497DEF323EC8DD700F3F5DD /* AthleteSchool.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		7497DEEC23EC8A6100F3F5DD /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				7441D4EB2381F7A900CAA1A1 /* SearchList.swift */,
+				7441D4E3237F266000CAA1A1 /* SearchRow.swift */,
+				7497DEED23EC8A9100F3F5DD /* AthleteRow.swift */,
+				7497DEEF23EC8A9B00F3F5DD /* MeetRow.swift */,
+				7497DEF123EC8AA400F3F5DD /* SchoolRow.swift */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
+		7497DEF523ECA26E00F3F5DD /* Details */ = {
+			isa = PBXGroup;
+			children = (
+				7441D4ED238264BF00CAA1A1 /* AthleteDetail.swift */,
+				7497DEF623ECA28A00F3F5DD /* SchoolDetail.swift */,
+				7497DEF823ECA29600F3F5DD /* MeetDetail.swift */,
+			);
+			path = Details;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -198,9 +232,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7497DEF723ECA28A00F3F5DD /* SchoolDetail.swift in Sources */,
 				7430B26D23EBC6AB002873C4 /* UserData.swift in Sources */,
 				7441D4CB237F1E0F00CAA1A1 /* AppDelegate.swift in Sources */,
 				7441D4CD237F1E0F00CAA1A1 /* SceneDelegate.swift in Sources */,
+				7497DEF023EC8A9B00F3F5DD /* MeetRow.swift in Sources */,
 				7441D4EC2381F7A900CAA1A1 /* SearchList.swift in Sources */,
 				7441D4E2237F255D00CAA1A1 /* Home.swift in Sources */,
 				7441D4E72381DFA200CAA1A1 /* CircleImage.swift in Sources */,
@@ -208,11 +244,15 @@
 				7430B26F23EBD194002873C4 /* School.swift in Sources */,
 				7441D4E4237F266000CAA1A1 /* SearchRow.swift in Sources */,
 				7430B27123EBD19D002873C4 /* Meet.swift in Sources */,
+				7497DEEE23EC8A9100F3F5DD /* AthleteRow.swift in Sources */,
 				7441D4D0237F1E0F00CAA1A1 /* Alpha_Results.xcdatamodeld in Sources */,
 				7441D4F023826D6F00CAA1A1 /* ToggleIndex.swift in Sources */,
+				7497DEF223EC8AA400F3F5DD /* SchoolRow.swift in Sources */,
 				7441D4EE238264C000CAA1A1 /* AthleteDetail.swift in Sources */,
 				7441D4EA2381E9D900CAA1A1 /* Athlete.swift in Sources */,
 				7489AF652383547100CA9DCB /* AthleteDetailHeader.swift in Sources */,
+				7497DEF923ECA29600F3F5DD /* MeetDetail.swift in Sources */,
+				7497DEF423EC8DD700F3F5DD /* AthleteSchool.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -12,14 +12,18 @@ import SwiftUI
 
 struct AthleteDetail: View {
     @EnvironmentObject var userData: UserData
-    @State var athlete: Athlete
+    @State var athlete: AthleteSchool
     
     var body: some View {
         TabView {
-            List{
-                AthleteDetailHeader(athlete: athlete)
-                Text("Test 1")
+            VStack{
+                AthleteDetailHeader(athlete: athlete)//wont slide up with list...
+                List{
+                    
+                    Text("Test 1")
+                }
             }
+                
             .tabItem { Text("Track & Field") }.tag(1)
             List{
                 AthleteDetailHeader(athlete: athlete)
@@ -27,12 +31,13 @@ struct AthleteDetail: View {
             }
             .tabItem { Text("Cross Country") }.tag(2)
         }
+        
     }
 }
 
 struct AthleteDetail_Previews: PreviewProvider {
     static var previews: some View {
-        let temp = Athlete(id: 1, name: "Evan Jameson", gender: "Male", grade: "SR")
+        let temp = AthleteSchool(id: 0, aname: "Evan Jameson", gender: "Male", grade: "SR", sid: 0, sname: "Cal Poly", mascot: "Mustangs", city: "San Luis Obispo", state: "CA")
         
         return AthleteDetail(athlete: temp)
     }
