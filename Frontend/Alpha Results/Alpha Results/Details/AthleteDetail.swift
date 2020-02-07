@@ -17,10 +17,13 @@ struct AthleteDetail: View {
     var body: some View {
         TabView {
             VStack{
-                AthleteDetailHeader(athlete: athlete)//wont slide up with list...
                 List{
+                    AthleteDetailHeader(athlete: athlete)
                     
-                    Text("Test 1")
+                    Text("Personal Records")
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .padding(.top)
                 }
             }
                 
