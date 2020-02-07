@@ -13,31 +13,41 @@ struct AthleteDetailHeader: View {
     @State var athlete: AthleteSchool
     
     var body: some View {
+        VStack{
         HStack {
-            CircleImage(image: Image(athlete.sname.lowercased()), wh: 100)
+            CircleImage(image: Image(athlete.sname.lowercased()), wh: 75)
             .padding(.leading, 7)
 
             
             VStack {
                 HStack {
                     
-                    Text(athlete.aname)
+                    Text(athlete.sname)
                         .font(.title)
                         .fontWeight(.bold)
-                        .padding()
+                        .padding(.horizontal)
                     Spacer()
                 }
-                HStack {
-                    Text(athlete.sname)
+                
+                HStack{
+                    Text(athlete.mascot)
                     Spacer()
-                    Text(athlete.grade)
-                    
-                    //Spacer()
-                    //Text(athlete.school)
                 }
-                .padding()
+                .padding(.horizontal)
+                
                     
             }
+            
+        }
+            HStack {
+                Text(athlete.city)
+                Spacer()
+                Text(athlete.state)
+                
+                //Spacer()
+                //Text(athlete.school)
+            }
+            .padding(.horizontal)
         }
     }
 }

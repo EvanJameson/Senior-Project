@@ -15,25 +15,20 @@ struct AthleteDetail: View {
     @State var athlete: AthleteSchool
     
     var body: some View {
-        TabView {
-            VStack{
-                List{
-                    AthleteDetailHeader(athlete: athlete)
-                    
-                    Text("Personal Records")
-                        .font(.title)
-                        .fontWeight(.bold)
-                        .padding(.top)
-                }
-            }
-                
-            .tabItem { Text("Track & Field") }.tag(1)
+        //NavigationView{
             List{
                 AthleteDetailHeader(athlete: athlete)
-                Text("Test 2")
+                
+                Text("Personal Records")
+                    .font(.title)
+                    .fontWeight(.bold)
+                    .padding(.top)
+                
+                    .navigationBarTitle(athlete.aname)
+                    .navigationBarItems(trailing: Button(action: {}, label: {Image(systemName: "bookmark")}))
             }
-            .tabItem { Text("Cross Country") }.tag(2)
-        }
+        
+        //}
         
     }
 }
