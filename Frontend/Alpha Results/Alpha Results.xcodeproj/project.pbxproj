@@ -24,6 +24,7 @@
 		7441D4EC2381F7A900CAA1A1 /* SearchList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7441D4EB2381F7A900CAA1A1 /* SearchList.swift */; };
 		7441D4EE238264C000CAA1A1 /* AthleteDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7441D4ED238264BF00CAA1A1 /* AthleteDetail.swift */; };
 		7441D4F023826D6F00CAA1A1 /* ToggleIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7441D4EF23826D6F00CAA1A1 /* ToggleIndex.swift */; };
+		746D161723F0CBC900912BD1 /* ScrollBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746D161623F0CBC900912BD1 /* ScrollBox.swift */; };
 		7489AF652383547100CA9DCB /* AthleteDetailHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7489AF642383547100CA9DCB /* AthleteDetailHeader.swift */; };
 		7497DEEE23EC8A9100F3F5DD /* AthleteRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7497DEED23EC8A9100F3F5DD /* AthleteRow.swift */; };
 		7497DEF023EC8A9B00F3F5DD /* MeetRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7497DEEF23EC8A9B00F3F5DD /* MeetRow.swift */; };
@@ -31,6 +32,9 @@
 		7497DEF423EC8DD700F3F5DD /* AthleteSchool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7497DEF323EC8DD700F3F5DD /* AthleteSchool.swift */; };
 		7497DEF723ECA28A00F3F5DD /* SchoolDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7497DEF623ECA28A00F3F5DD /* SchoolDetail.swift */; };
 		7497DEF923ECA29600F3F5DD /* MeetDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7497DEF823ECA29600F3F5DD /* MeetDetail.swift */; };
+		749F4CD623F32310007FE423 /* LargeScrollBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749F4CD523F32310007FE423 /* LargeScrollBox.swift */; };
+		749F4CD823F33473007FE423 /* SmallScrollBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749F4CD723F33473007FE423 /* SmallScrollBox.swift */; };
+		749F4CDA23F345F5007FE423 /* PageScroll.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749F4CD923F345F5007FE423 /* PageScroll.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,6 +57,7 @@
 		7441D4EB2381F7A900CAA1A1 /* SearchList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchList.swift; sourceTree = "<group>"; };
 		7441D4ED238264BF00CAA1A1 /* AthleteDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AthleteDetail.swift; sourceTree = "<group>"; };
 		7441D4EF23826D6F00CAA1A1 /* ToggleIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleIndex.swift; sourceTree = "<group>"; };
+		746D161623F0CBC900912BD1 /* ScrollBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollBox.swift; sourceTree = "<group>"; wrapsLines = 1; };
 		7489AF642383547100CA9DCB /* AthleteDetailHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AthleteDetailHeader.swift; sourceTree = "<group>"; };
 		7497DEED23EC8A9100F3F5DD /* AthleteRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AthleteRow.swift; sourceTree = "<group>"; };
 		7497DEEF23EC8A9B00F3F5DD /* MeetRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetRow.swift; sourceTree = "<group>"; };
@@ -60,6 +65,9 @@
 		7497DEF323EC8DD700F3F5DD /* AthleteSchool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AthleteSchool.swift; sourceTree = "<group>"; };
 		7497DEF623ECA28A00F3F5DD /* SchoolDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolDetail.swift; sourceTree = "<group>"; };
 		7497DEF823ECA29600F3F5DD /* MeetDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetDetail.swift; sourceTree = "<group>"; };
+		749F4CD523F32310007FE423 /* LargeScrollBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeScrollBox.swift; sourceTree = "<group>"; };
+		749F4CD723F33473007FE423 /* SmallScrollBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallScrollBox.swift; sourceTree = "<group>"; };
+		749F4CD923F345F5007FE423 /* PageScroll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageScroll.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +132,10 @@
 				7489AF642383547100CA9DCB /* AthleteDetailHeader.swift */,
 				7441D4E62381DFA200CAA1A1 /* CircleImage.swift */,
 				7441D4EF23826D6F00CAA1A1 /* ToggleIndex.swift */,
+				746D161623F0CBC900912BD1 /* ScrollBox.swift */,
+				749F4CD523F32310007FE423 /* LargeScrollBox.swift */,
+				749F4CD723F33473007FE423 /* SmallScrollBox.swift */,
+				749F4CD923F345F5007FE423 /* PageScroll.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -236,17 +248,21 @@
 				7430B26D23EBC6AB002873C4 /* UserData.swift in Sources */,
 				7441D4CB237F1E0F00CAA1A1 /* AppDelegate.swift in Sources */,
 				7441D4CD237F1E0F00CAA1A1 /* SceneDelegate.swift in Sources */,
+				746D161723F0CBC900912BD1 /* ScrollBox.swift in Sources */,
 				7497DEF023EC8A9B00F3F5DD /* MeetRow.swift in Sources */,
 				7441D4EC2381F7A900CAA1A1 /* SearchList.swift in Sources */,
 				7441D4E2237F255D00CAA1A1 /* Home.swift in Sources */,
+				749F4CD823F33473007FE423 /* SmallScrollBox.swift in Sources */,
 				7441D4E72381DFA200CAA1A1 /* CircleImage.swift in Sources */,
 				7441D4D2237F1E0F00CAA1A1 /* ContentView.swift in Sources */,
 				7430B26F23EBD194002873C4 /* School.swift in Sources */,
 				7441D4E4237F266000CAA1A1 /* SearchRow.swift in Sources */,
+				749F4CD623F32310007FE423 /* LargeScrollBox.swift in Sources */,
 				7430B27123EBD19D002873C4 /* Meet.swift in Sources */,
 				7497DEEE23EC8A9100F3F5DD /* AthleteRow.swift in Sources */,
 				7441D4D0237F1E0F00CAA1A1 /* Alpha_Results.xcdatamodeld in Sources */,
 				7441D4F023826D6F00CAA1A1 /* ToggleIndex.swift in Sources */,
+				749F4CDA23F345F5007FE423 /* PageScroll.swift in Sources */,
 				7497DEF223EC8AA400F3F5DD /* SchoolRow.swift in Sources */,
 				7441D4EE238264C000CAA1A1 /* AthleteDetail.swift in Sources */,
 				7441D4EA2381E9D900CAA1A1 /* Athlete.swift in Sources */,
