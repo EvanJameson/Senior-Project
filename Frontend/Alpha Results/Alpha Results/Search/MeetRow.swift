@@ -20,6 +20,14 @@ struct MeetRow: View {
 //                .padding(.leading, -7)
             
             //sport icon to add some color
+
+            VStack(alignment: .leading){
+                Text(meet.name)
+                    .fontWeight(.bold)
+                Spacer()
+                Text(dayFormatter(day: meet.day))
+            }
+            Spacer()
             if (meet.sport == "TF"){
                 Text("TF")
                     .fontWeight(.bold)
@@ -29,15 +37,6 @@ struct MeetRow: View {
                 Text("XC")
                     .fontWeight(.bold)
                     .foregroundColor(xcColor)
-            }
-            
-            
-            Spacer()
-            VStack(alignment: .trailing){
-                Text(meet.name)
-                    .fontWeight(.bold)
-                Spacer()
-                Text(meet.day)
             }
         }
     .padding()

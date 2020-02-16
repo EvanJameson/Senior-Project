@@ -16,7 +16,7 @@ struct SearchList: View {
     @EnvironmentObject var userData: UserData
     
     @State private var searchText = ""
-    @State private var ngrok = "https://a829e5c9.ngrok.io"
+    @State private var ngrok = "https://089cfda0.ngrok.io"
     @State private var index = ""
     @State private var showCancelButton: Bool = false
     
@@ -212,7 +212,7 @@ struct SearchList: View {
                 
                 
                 Spacer()
-             }.animation(.easeInOut)
+        }.animation(.easeInOut(duration: 0.2))
         }
 }
 

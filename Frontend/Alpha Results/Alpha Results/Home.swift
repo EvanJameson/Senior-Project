@@ -270,7 +270,7 @@ struct Home: View {
                         Image("search")
                         Text("Search")
                     }
-                }  
+                }
             }
     
     }

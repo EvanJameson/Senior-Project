@@ -16,14 +16,14 @@ struct MeetDetailHeader: View {
         HStack{
             VStack(alignment: .leading){
                
-                Text(meet.day)// + ", " + school.state)
+                Text(dayFormatter(day: meet.day))// + ", " + school.state)
                     .font(.subheadline)
                     .foregroundColor(.gray)
                 Text(meet.name)
                     .font(.title)
                     .fontWeight(.bold)
-                Text("Sccc")
-                    .font(.subheadline)
+//                Text("Sccc")
+//                    .font(.subheadline)
                         
             }
             Spacer()
@@ -32,4 +32,24 @@ struct MeetDetailHeader: View {
         .padding(.leading)
         
     }
+}
+
+func dayFormatter(day: String) -> String {
+    let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+    
+    var start = day.index(day.startIndex, offsetBy: 8)
+    var end = day.index(day.startIndex, offsetBy: 10)
+    var range = start..<end
+    let newDay = String(day[range])
+    
+    start = day.index(day.startIndex, offsetBy: 5)
+    end = day.index(day.startIndex, offsetBy: 7)
+    range = start..<end
+    let month = String(day[range])
+    let newMonth = months[(Int(month)! - 1)]
+    
+    let newYear = String(day.prefix(4))
+    let newDate = newMonth + " " + newDay + ", " + newYear
+    
+    return newDate
 }

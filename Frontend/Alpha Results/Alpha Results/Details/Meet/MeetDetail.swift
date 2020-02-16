@@ -19,7 +19,7 @@ struct MeetDetail: View {
             Picker(selection: self.$index.animation(.spring(response: 0.55, dampingFraction: 1, blendDuration: 0)), label: Text(""),content: {
                  Text("Results").tag(0)
                  Text("Schools").tag(1)
-                 Text("Score").tag(2)
+                 Text("Scores").tag(2)
                  Text("Search").tag(3)
              })
              .pickerStyle(SegmentedPickerStyle())

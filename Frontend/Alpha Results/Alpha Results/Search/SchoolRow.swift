@@ -17,19 +17,21 @@ struct SchoolRow: View {
 //            CircleImage(image: Image(athlete.sname.lowercased()), wh: 50)
 //                .padding(.leading, -7)
             
+            
+            
+            VStack(alignment: .leading){
+                Text(school.name)
+                    .fontWeight(.bold)
+                Spacer()
+                Text(school.mascot)
+            }
+            Spacer()
             VStack(alignment: .trailing){
                 Text(school.city)
                     
                 Spacer()
                 Text(school.state)
                 .fontWeight(.bold)
-            }
-            Spacer()
-            VStack(alignment: .trailing){
-                Text(school.name)
-                    .fontWeight(.bold)
-                Spacer()
-                Text(school.mascot)
             }
         }
     .padding()
