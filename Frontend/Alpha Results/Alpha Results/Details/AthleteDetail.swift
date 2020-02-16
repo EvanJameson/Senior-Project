@@ -8,28 +8,40 @@
 
 import SwiftUI
 
-
-
 struct AthleteDetail: View {
     @EnvironmentObject var userData: UserData
     @State var athlete: AthleteSchool
+    @State var index: Int = 0
     
     var body: some View {
         //NavigationView{
-            List{
-                AthleteDetailHeader(athlete: athlete)
-                
-                Text("Personal Records")
-                    .font(.title)
-                    .fontWeight(.bold)
-                    .padding(.top)
-                
-                    .navigationBarTitle(athlete.aname)
-                    .navigationBarItems(trailing: Button(action: {}, label: {Image(systemName: "bookmark")}))
-            }
+        VStack{
+            AthleteDetailHeader(athlete: self.athlete)
+            Picker(selection: self.$index.animation(.spring(response: 0.55, dampingFraction: 1, blendDuration: 0)), label: Text(""),content: {
+                Text("All Results").tag(0)
+                Text("Season Bests").tag(1)
+                Text("Rankings").tag(2)
+            })
+            .pickerStyle(SegmentedPickerStyle())
+            .padding(.horizontal)
+            LabeledScroll(index: $index, pages:
+//                (1..<4).map {index in
+//                LargeScrollBox(id: index,image: Image("\(index)"))
+//
+//            }
+                [
+                    AthleteInfo(id: 0, dataIndex: "Results"),
+                    AthleteInfo(id: 1, dataIndex: "Records"),
+                    AthleteInfo(id: 2, dataIndex: "Rankings")
+                ]
+            )
+            
+            
+            
         
-        //}
-        
+        }
+        .navigationBarTitle("Athlete", displayMode: .inline)
+        .navigationBarItems(trailing: Button(action: {}, label: {Image(systemName: "bookmark")}))
     }
 }
 

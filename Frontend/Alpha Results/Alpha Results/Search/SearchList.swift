@@ -16,16 +16,24 @@ struct SearchList: View {
     @EnvironmentObject var userData: UserData
     
     @State private var searchText = ""
-    @State private var ngrok = "https://cdbf9eab.ngrok.io"
+    @State private var ngrok = "https://2fb1454e.ngrok.io"
     @State private var index = ""
     @State private var showCancelButton: Bool = false
     
-    @State private var athleteSchools = [AthleteSchool(id: 0 , aname: "", gender: "", grade: "", sid: 0, sname: "", mascot: "", city: "", state: "")]
+    @State private var athleteSchools: [AthleteSchool] = []//= [AthleteSchool(id: 0 , aname: "", gender: "", grade: "", sid: 0, sname: "", mascot: "", city: "", state: "")]
     @State private var athletes =  [Athlete(id: 0 , name: "", gender: "", grade: "")]
-    @State private var meets = [Meet(id: 0, name: "", day: "", sport: "")]
-    @State private var schools = [School(id: 0, name: "", mascot: "", city: "", state: "")]
+    @State private var meets: [Meet] = [] //= [Meet(id: 0, name: "", day: "", sport: "")]
+    @State private var schools: [School] = [] //= [School(id: 0, name: "", mascot: "", city: "", state: "")]
     
-    @State private var searched: Bool = false
+    @State private var athleteSearched: Bool = false
+    @State private var meetSearched: Bool = false
+    @State private var schoolSearched: Bool = false
+    
+    @State private var index1 = 0
+    @State private var indices = ["Athletes", "Meets", "Schools"]
+    @State private var searchIndex = ""
+    
+    @State private var shouldAnimate = false
     
     var body: some View {
         VStack{
@@ -35,37 +43,84 @@ struct SearchList: View {
 
                     TextField("search", text: $searchText, onEditingChanged: { isEditing in
                         self.showCancelButton = true
+//                        if(self.searchText == "" && (self.athleteSchools.count > 0 && self.searchIndex == "Athletes")){
+//                            self.athleteSchools = []
+//                            self.athleteSearched = false
+//                        }
+//
+//                        if(self.searchText == "" && (self.meets.count > 0 && self.searchIndex == "Meets")){
+//                            self.meets = []
+//                            self.meetSearched = false
+//                        }
+//
+//                        if(self.searchText == "" && (self.schools.count > 0 && self.searchIndex == "Schools")){
+//                            self.schools = []
+//                            self.schoolSearched = false
+//                        }
 
                     }, onCommit: {
+                        self.shouldAnimate = true
                         print("onCommit")
                         print(self.userData.searchIndex)
-                        if (self.userData.searchIndex == "Athletes"){
+                        if (self.searchIndex == "Athletes"){
                             self.index = "/athletes/name/"
+                            self.athleteSearched = true
                             athleteSearch(searchText: self.searchText, searchIndex: self.index, ngrok: self.ngrok){
                                 (res, error) in
                                 self.athleteSchools = res!
                             }
                         }
-                        else if (self.userData.searchIndex == "Meets"){
+                        else if (self.searchIndex == "Meets"){
                             self.index = "/meets/name/"
+                            self.meetSearched = true
                             meetSearch(searchText: self.searchText, searchIndex: self.index, ngrok: self.ngrok){
                                 (res, error) in
                                 self.meets = res!
                             }
                         }
-                        else if (self.userData.searchIndex == "Schools"){
+                        else if (self.searchIndex == "Schools"){
                             self.index = "/schools/name/"
+                            self.schoolSearched = true
                             schoolSearch(searchText: self.searchText, searchIndex: self.index, ngrok: self.ngrok){
                                 (res, error) in
                                 self.schools = res!
                             }
                         }
                         
-                        self.searched = true
-                    }).foregroundColor(.primary)
-                      .keyboardType(.default) //Doesn't have "Done" key :(
+                        if((self.athleteSchools.count > 0 && self.searchIndex == "Athletes")){
+                            self.athleteSchools = []
+                            self.athleteSearched = true
+                        }
+
+                        if((self.meets.count > 0 && self.searchIndex == "Meets")){
+                            self.meets = []
+                            self.meetSearched = true
+                        }
+
+                        if((self.schools.count > 0 && self.searchIndex == "Schools")){
+                            self.schools = []
+                            self.schoolSearched = true
+                        }
+                        
+                    }
+                    ).foregroundColor(.primary)
+                      .keyboardType(.default)
                     Button(action: {
                         self.searchText = ""
+                        if(self.searchText == "" && (self.athleteSchools.count > 0 && self.searchIndex == "Athletes")){
+                            self.athleteSchools = []
+                            self.athleteSearched = false
+                        }
+
+                        if(self.searchText == "" && (self.meets.count > 0 && self.searchIndex == "Meets")){
+                            self.meets = []
+                            self.meetSearched = false
+                        }
+
+                        if(self.searchText == "" && (self.schools.count > 0 && self.searchIndex == "Schools")){
+                            self.schools = []
+                            self.schoolSearched = false
+                        }
                     }) {
                         Image(systemName: "xmark.circle.fill").opacity(searchText == "" ? 0 : 1)
                     }
@@ -84,42 +139,91 @@ struct SearchList: View {
                     }
                 }
                 .padding(.horizontal)
-                .navigationBarHidden(showCancelButton) // .animation(.default) // animation does not work properly
+                .navigationBarHidden(showCancelButton)//.animation(.easeInOut) // animation does not work properly
                 
                 //add unique toggle slider here to switch filter index
-                ToggleIndex()
+                //ToggleIndex()
+            Picker(selection: self.$index1.animation(.spring(response: 0.55, dampingFraction: 1, blendDuration: 0)) , label: Text(""),content: {
+                    Text("Athletes").tag(0)
+                    Text("Meets").tag(1)
+                    Text("Schools").tag(2)
+                })
+                .onReceive([self.index1].publisher.first()) { (value) in
+                    //self.toggleIndex(ind: value)
+                    
+                    self.searchIndex = self.indices[value]
+                    print("Value: " + String(value) + "\nIndex: " + self.indices[value] + "\nSearchIndex: " + self.searchIndex + "\n")
+                    
+                    //print(self.index)
+                }
+                .pickerStyle(SegmentedPickerStyle())
+                .padding(.horizontal)
             
-                if(searched){
-                    List {
-                        if (self.userData.searchIndex == "Athletes"){
+                
+            
+                if(athleteSearched && (self.athleteSchools.count == 0 && self.searchIndex == "Athletes")){
+                    Spacer()
+                    ActivityIndicator(shouldAnimate: self.$shouldAnimate)
+                }
+                if(meetSearched && (self.meets.count == 0 && self.searchIndex == "Meets")){
+                    Spacer()
+                    ActivityIndicator(shouldAnimate: self.$shouldAnimate)
+                }
+                if(schoolSearched && (self.schools.count == 0 && self.searchIndex == "Schools")){
+                    Spacer()
+                    ActivityIndicator(shouldAnimate: self.$shouldAnimate)
+                }
+                if((self.athleteSchools.count > 0)){
+                    
+                        if (self.searchIndex == "Athletes"){
+                            List {
                             ForEach(self.athleteSchools, id:\.self) {athlete in
                                 NavigationLink(destination: AthleteDetail(athlete: athlete)){
                                     AthleteRow(athlete: athlete)
                                 }
-                                //AthleteRow(athlete: athlete)
                             }
-                        }
-                        else if (self.userData.searchIndex == "Meets"){
+                        }.resignKeyboardOnDragGesture()
+                            .listStyle(PlainListStyle())
+                    }
+                    
+                    
+                }
+                if((self.meets.count > 0)){
+                    
+                        if (self.searchIndex == "Meets"){
+                            List{
                             ForEach(self.meets, id:\.self) {meet in
 //                                NavigationLink(destination: MeetDetail(athlete: athlete)){
 //                                    SearchRow(athlete: athlete)
 //                                }
                                 MeetRow(meet: meet)
                             }
-                        }
-                        else if (self.userData.searchIndex == "Schools"){
+                        }.resignKeyboardOnDragGesture()
+                            .listStyle(PlainListStyle())
+                    }
+                    
+                }
+                if((self.schools.count > 0)){
+                    
+                        if (self.searchIndex == "Schools"){
+                            List{
                             ForEach(self.schools, id:\.self) {school in
     //                                NavigationLink(destination: MeetDetail(athlete: athlete)){
     //                                    SearchRow(athlete: athlete)
     //                                }
                                 SchoolRow(school: school)
                             }
-                        }
+                        }.resignKeyboardOnDragGesture()
+                            .listStyle(PlainListStyle())
                         
                     }
-                    //.navigationBarTitle(Text("Search"))
-                    .resignKeyboardOnDragGesture()
+                    
                 }
+                else{Text("")}
+                    //.navigationBarTitle(Text("Search"))
+                    
+                
+                
                 Spacer()
             }
         }
@@ -214,16 +318,16 @@ private func schoolSearch(searchText: String, searchIndex: String, ngrok: String
     return
 }
 
-struct SearchList_Previews: PreviewProvider {
-    static var previews: some View {
-        Group {
-            SearchList()
-                .environment(\.colorScheme, .light)
-            SearchList()
-                .environment(\.colorScheme, .dark)
-        }
-    }
-}
+//struct SearchList_Previews: PreviewProvider {
+//    static var previews: some View {
+//        Group {
+//            SearchList()
+//                .environment(\.colorScheme, .light)
+//            SearchList()
+//                .environment(\.colorScheme, .dark)
+//        }
+//    }
+//}
 
 // helpers for
 
@@ -253,3 +357,19 @@ extension View {
     }
 }
 
+struct ActivityIndicator: UIViewRepresentable {
+    @Binding var shouldAnimate: Bool
+    
+    func makeUIView(context: Context) -> UIActivityIndicatorView {
+        return UIActivityIndicatorView()
+    }
+
+    func updateUIView(_ uiView: UIActivityIndicatorView,
+                      context: Context) {
+        if self.shouldAnimate {
+            uiView.startAnimating()
+        } else {
+            uiView.stopAnimating()
+        }
+    }
+}

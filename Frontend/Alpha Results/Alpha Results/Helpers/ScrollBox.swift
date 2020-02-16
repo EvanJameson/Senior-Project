@@ -28,7 +28,7 @@ struct ScrollBox: View {
                 .fontWeight(.bold)
                 .foregroundColor(col)
             
-            Text("May 23, 2020'")
+            Text("May 23, 2020")
             .font(.subheadline)
                 .foregroundColor(.gray)
             

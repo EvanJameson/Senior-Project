@@ -13,41 +13,39 @@ struct AthleteDetailHeader: View {
     @State var athlete: AthleteSchool
     
     var body: some View {
-        VStack{
-        HStack {
-            CircleImage(image: Image(athlete.sname.lowercased()), wh: 75)
-            .padding(.leading, 7)
-
-            
-            VStack {
-                HStack {
-                    
-                    Text(athlete.sname)
-                        .font(.title)
-                        .fontWeight(.bold)
-                        .padding(.horizontal)
-                    Spacer()
-                }
+        VStack(){
+            HStack{
+                Text(athlete.aname)
+                .font(.title)
+                .fontWeight(.bold)
                 
-                HStack{
-                    Text(athlete.mascot)
-                    Spacer()
-                }
-                .padding(.horizontal)
-                
-                    
-            }
-            
-        }
-            HStack {
-                Text(athlete.city)
                 Spacer()
-                Text(athlete.state)
                 
-                //Spacer()
-                //Text(athlete.school)
+                Text(athlete.grade)
+                .font(.title)
+                .fontWeight(.bold)
+            }.padding()
+        HStack{
+            NavigationLink(destination: SchoolDetail()){
+                
+                    VStack(alignment: .leading){
+                        
+                        Text(athlete.sname)
+                        //.font(.title)
+                        //.fontWeight(.bold)
+                        Text(athlete.mascot)
+                    }
             }
-            .padding(.horizontal)
+                    Spacer()
+                    VStack(alignment: .trailing){
+                        
+                        Text(athlete.state)
+                        Text(athlete.city)
+                            //.padding(.top, 4)
+                    }
+                }.padding(.horizontal)
+            
+
         }
     }
 }

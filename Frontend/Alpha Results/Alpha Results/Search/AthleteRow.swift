@@ -16,7 +16,7 @@ struct AthleteRow: View {
     var body: some View {
         HStack{
             //Make this some random generated color thing
-            CircleImage(image: Image(athlete.sname.lowercased()), wh: 50)
+            CircleImage(image: Image(String(Int.random(in: 1..<5))), wh: 50)
                 .padding(.leading, -7)
             
             //placeholder icons to add some color

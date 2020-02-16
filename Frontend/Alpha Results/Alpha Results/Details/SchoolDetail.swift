@@ -6,4 +6,10 @@
 //  Copyright © 2020 Evan Jameson. All rights reserved.
 //
 
-import Foundation
+import SwiftUI
+
+struct SchoolDetail: View {
+    var body: some View {
+        Text("Hi")
+    }
+}
