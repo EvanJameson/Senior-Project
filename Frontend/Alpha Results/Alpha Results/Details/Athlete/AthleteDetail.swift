@@ -25,10 +25,6 @@ struct AthleteDetail: View {
             .pickerStyle(SegmentedPickerStyle())
             .padding(.horizontal)
             LabeledScroll(index: $index, pages:
-//                (1..<4).map {index in
-//                LargeScrollBox(id: index,image: Image("\(index)"))
-//
-//            }
                 [
                     AthleteInfo(id: 0, dataIndex: "Results"),
                     AthleteInfo(id: 1, dataIndex: "Records"),
@@ -42,6 +38,7 @@ struct AthleteDetail: View {
         }
         .navigationBarTitle("Athlete", displayMode: .inline)
         .navigationBarItems(trailing: Button(action: {}, label: {Image(systemName: "bookmark")}))
+        
     }
 }
 
@@ -52,3 +49,5 @@ struct AthleteDetail_Previews: PreviewProvider {
         return AthleteDetail(athlete: temp)
     }
 }
+
+

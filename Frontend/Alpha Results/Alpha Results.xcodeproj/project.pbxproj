@@ -7,9 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7411B0B923F8CB7900FD77FD /* SchoolInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7411B0B823F8CB7900FD77FD /* SchoolInfo.swift */; };
+		7411B0BE23F8DE2400FD77FD /* MeetDetailHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7411B0BD23F8DE2400FD77FD /* MeetDetailHeader.swift */; };
+		7411B0C023F8DE3200FD77FD /* MeetInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7411B0BF23F8DE3200FD77FD /* MeetInfo.swift */; };
 		7430B26D23EBC6AB002873C4 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7430B26C23EBC6AB002873C4 /* UserData.swift */; };
 		7430B26F23EBD194002873C4 /* School.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7430B26E23EBD194002873C4 /* School.swift */; };
 		7430B27123EBD19D002873C4 /* Meet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7430B27023EBD19D002873C4 /* Meet.swift */; };
+		743BC84323F8C0C7004014D0 /* SchoolDetailHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 743BC84223F8C0C7004014D0 /* SchoolDetailHeader.swift */; };
 		7441D4CB237F1E0F00CAA1A1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7441D4CA237F1E0F00CAA1A1 /* AppDelegate.swift */; };
 		7441D4CD237F1E0F00CAA1A1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7441D4CC237F1E0F00CAA1A1 /* SceneDelegate.swift */; };
 		7441D4D0237F1E0F00CAA1A1 /* Alpha_Results.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7441D4CE237F1E0F00CAA1A1 /* Alpha_Results.xcdatamodeld */; };
@@ -43,9 +47,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7411B0B823F8CB7900FD77FD /* SchoolInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolInfo.swift; sourceTree = "<group>"; };
+		7411B0BD23F8DE2400FD77FD /* MeetDetailHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetDetailHeader.swift; sourceTree = "<group>"; };
+		7411B0BF23F8DE3200FD77FD /* MeetInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetInfo.swift; sourceTree = "<group>"; };
 		7430B26C23EBC6AB002873C4 /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
 		7430B26E23EBD194002873C4 /* School.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = School.swift; sourceTree = "<group>"; };
 		7430B27023EBD19D002873C4 /* Meet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Meet.swift; sourceTree = "<group>"; };
+		743BC84223F8C0C7004014D0 /* SchoolDetailHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolDetailHeader.swift; sourceTree = "<group>"; };
 		7441D4C7237F1E0F00CAA1A1 /* Alpha Results.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Alpha Results.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7441D4CA237F1E0F00CAA1A1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7441D4CC237F1E0F00CAA1A1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -91,6 +99,36 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7411B0BA23F8DCE300FD77FD /* Athlete */ = {
+			isa = PBXGroup;
+			children = (
+				7489AF642383547100CA9DCB /* AthleteDetailHeader.swift */,
+				7441D4ED238264BF00CAA1A1 /* AthleteDetail.swift */,
+				744F93A623F78811003EFD72 /* AthleteInfo.swift */,
+			);
+			path = Athlete;
+			sourceTree = "<group>";
+		};
+		7411B0BB23F8DCFA00FD77FD /* School */ = {
+			isa = PBXGroup;
+			children = (
+				7497DEF623ECA28A00F3F5DD /* SchoolDetail.swift */,
+				743BC84223F8C0C7004014D0 /* SchoolDetailHeader.swift */,
+				7411B0B823F8CB7900FD77FD /* SchoolInfo.swift */,
+			);
+			path = School;
+			sourceTree = "<group>";
+		};
+		7411B0BC23F8DD0A00FD77FD /* Meet */ = {
+			isa = PBXGroup;
+			children = (
+				7497DEF823ECA29600F3F5DD /* MeetDetail.swift */,
+				7411B0BD23F8DE2400FD77FD /* MeetDetailHeader.swift */,
+				7411B0BF23F8DE3200FD77FD /* MeetInfo.swift */,
+			);
+			path = Meet;
+			sourceTree = "<group>";
+		};
 		7441D4BE237F1E0F00CAA1A1 = {
 			isa = PBXGroup;
 			children = (
@@ -140,7 +178,6 @@
 		7441D4E52381DF8B00CAA1A1 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				7489AF642383547100CA9DCB /* AthleteDetailHeader.swift */,
 				7441D4E62381DFA200CAA1A1 /* CircleImage.swift */,
 				7441D4EF23826D6F00CAA1A1 /* ToggleIndex.swift */,
 				746D161623F0CBC900912BD1 /* ScrollBox.swift */,
@@ -188,10 +225,9 @@
 		7497DEF523ECA26E00F3F5DD /* Details */ = {
 			isa = PBXGroup;
 			children = (
-				7441D4ED238264BF00CAA1A1 /* AthleteDetail.swift */,
-				744F93A623F78811003EFD72 /* AthleteInfo.swift */,
-				7497DEF623ECA28A00F3F5DD /* SchoolDetail.swift */,
-				7497DEF823ECA29600F3F5DD /* MeetDetail.swift */,
+				7411B0BA23F8DCE300FD77FD /* Athlete */,
+				7411B0BC23F8DD0A00FD77FD /* Meet */,
+				7411B0BB23F8DCFA00FD77FD /* School */,
 			);
 			path = Details;
 			sourceTree = "<group>";
@@ -273,9 +309,11 @@
 				7482734523F4E98F00397835 /* Settings.swift in Sources */,
 				7441D4CB237F1E0F00CAA1A1 /* AppDelegate.swift in Sources */,
 				744F93A523F5C7E7003EFD72 /* LabeledScroll.swift in Sources */,
+				7411B0BE23F8DE2400FD77FD /* MeetDetailHeader.swift in Sources */,
 				7441D4CD237F1E0F00CAA1A1 /* SceneDelegate.swift in Sources */,
 				746D161723F0CBC900912BD1 /* ScrollBox.swift in Sources */,
 				7482734823F4F2E000397835 /* AccountRow.swift in Sources */,
+				7411B0C023F8DE3200FD77FD /* MeetInfo.swift in Sources */,
 				7497DEF023EC8A9B00F3F5DD /* MeetRow.swift in Sources */,
 				7441D4EC2381F7A900CAA1A1 /* SearchList.swift in Sources */,
 				7441D4E2237F255D00CAA1A1 /* Home.swift in Sources */,
@@ -290,6 +328,7 @@
 				7497DEEE23EC8A9100F3F5DD /* AthleteRow.swift in Sources */,
 				7441D4D0237F1E0F00CAA1A1 /* Alpha_Results.xcdatamodeld in Sources */,
 				7441D4F023826D6F00CAA1A1 /* ToggleIndex.swift in Sources */,
+				743BC84323F8C0C7004014D0 /* SchoolDetailHeader.swift in Sources */,
 				749F4CDA23F345F5007FE423 /* PageScroll.swift in Sources */,
 				7497DEF223EC8AA400F3F5DD /* SchoolRow.swift in Sources */,
 				7441D4EE238264C000CAA1A1 /* AthleteDetail.swift in Sources */,
@@ -297,6 +336,7 @@
 				7489AF652383547100CA9DCB /* AthleteDetailHeader.swift in Sources */,
 				7497DEF923ECA29600F3F5DD /* MeetDetail.swift in Sources */,
 				7497DEF423EC8DD700F3F5DD /* AthleteSchool.swift in Sources */,
+				7411B0B923F8CB7900FD77FD /* SchoolInfo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

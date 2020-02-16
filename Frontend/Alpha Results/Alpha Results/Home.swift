@@ -10,6 +10,7 @@ import SwiftUI
 
 struct Home: View {
     @EnvironmentObject var userData: UserData
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
     
     @State var trail: CGFloat = 27.5
     
@@ -251,7 +252,19 @@ struct Home: View {
                         Settings(showSettings: self.$showSettings)
                         }
                     )
+                    .background(NavigationConfigurator { nc in
+                        if((self.colorScheme) == .light){
+                            nc.navigationBar.barTintColor = .white
+                        }
+                        else if((self.colorScheme) == .dark){
+                            nc.navigationBar.barTintColor = .black
+                        }
+                        
+                        //nc.navigationBar.titleTextAttributes = [.foregroundColor : UIColor.white]
+                    })
+                    //.navigationViewStyle(StackNavigationViewStyle())
                 }
+                    
                 .tabItem {
                     VStack {
                         Image("search")
@@ -273,3 +286,16 @@ struct Home_Previews: PreviewProvider {
 }
 
 
+struct NavigationConfigurator: UIViewControllerRepresentable {
+    var configure: (UINavigationController) -> Void = { _ in }
+
+    func makeUIViewController(context: UIViewControllerRepresentableContext<NavigationConfigurator>) -> UIViewController {
+        UIViewController()
+    }
+    func updateUIViewController(_ uiViewController: UIViewController, context: UIViewControllerRepresentableContext<NavigationConfigurator>) {
+        if let nc = uiViewController.navigationController {
+            self.configure(nc)
+        }
+    }
+
+}

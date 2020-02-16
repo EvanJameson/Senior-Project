@@ -16,7 +16,7 @@ struct SearchList: View {
     @EnvironmentObject var userData: UserData
     
     @State private var searchText = ""
-    @State private var ngrok = "https://2fb1454e.ngrok.io"
+    @State private var ngrok = "https://a829e5c9.ngrok.io"
     @State private var index = ""
     @State private var showCancelButton: Bool = false
     
@@ -43,25 +43,10 @@ struct SearchList: View {
 
                     TextField("search", text: $searchText, onEditingChanged: { isEditing in
                         self.showCancelButton = true
-//                        if(self.searchText == "" && (self.athleteSchools.count > 0 && self.searchIndex == "Athletes")){
-//                            self.athleteSchools = []
-//                            self.athleteSearched = false
-//                        }
-//
-//                        if(self.searchText == "" && (self.meets.count > 0 && self.searchIndex == "Meets")){
-//                            self.meets = []
-//                            self.meetSearched = false
-//                        }
-//
-//                        if(self.searchText == "" && (self.schools.count > 0 && self.searchIndex == "Schools")){
-//                            self.schools = []
-//                            self.schoolSearched = false
-//                        }
-
                     }, onCommit: {
                         self.shouldAnimate = true
-                        print("onCommit")
-                        print(self.userData.searchIndex)
+                        //print("onCommit")
+                        //print(self.userData.searchIndex)
                         if (self.searchIndex == "Athletes"){
                             self.index = "/athletes/name/"
                             self.athleteSearched = true
@@ -152,13 +137,12 @@ struct SearchList: View {
                     //self.toggleIndex(ind: value)
                     
                     self.searchIndex = self.indices[value]
-                    print("Value: " + String(value) + "\nIndex: " + self.indices[value] + "\nSearchIndex: " + self.searchIndex + "\n")
+                    //print("Value: " + String(value) + "\nIndex: " + self.indices[value] + "\nSearchIndex: " + self.searchIndex + "\n")
                     
                     //print(self.index)
                 }
                 .pickerStyle(SegmentedPickerStyle())
                 .padding(.horizontal)
-            
                 
             
                 if(athleteSearched && (self.athleteSchools.count == 0 && self.searchIndex == "Athletes")){
@@ -184,6 +168,7 @@ struct SearchList: View {
                             }
                         }.resignKeyboardOnDragGesture()
                             .listStyle(PlainListStyle())
+                                
                     }
                     
                     
@@ -193,13 +178,14 @@ struct SearchList: View {
                         if (self.searchIndex == "Meets"){
                             List{
                             ForEach(self.meets, id:\.self) {meet in
-//                                NavigationLink(destination: MeetDetail(athlete: athlete)){
-//                                    SearchRow(athlete: athlete)
-//                                }
-                                MeetRow(meet: meet)
+                                NavigationLink(destination: MeetDetail(meet: meet)){
+                                    MeetRow(meet: meet)
+                                }
+                                
                             }
                         }.resignKeyboardOnDragGesture()
                             .listStyle(PlainListStyle())
+                            
                     }
                     
                 }
@@ -208,13 +194,14 @@ struct SearchList: View {
                         if (self.searchIndex == "Schools"){
                             List{
                             ForEach(self.schools, id:\.self) {school in
-    //                                NavigationLink(destination: MeetDetail(athlete: athlete)){
-    //                                    SearchRow(athlete: athlete)
-    //                                }
-                                SchoolRow(school: school)
+                                NavigationLink(destination: SchoolDetail(school: school)){
+                                        SchoolRow(school: school)
+                                    }
+                                
                             }
                         }.resignKeyboardOnDragGesture()
                             .listStyle(PlainListStyle())
+                            
                         
                     }
                     
@@ -225,7 +212,7 @@ struct SearchList: View {
                 
                 
                 Spacer()
-            }
+             }.animation(.easeInOut)
         }
 }
 

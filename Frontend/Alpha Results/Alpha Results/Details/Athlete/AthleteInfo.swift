@@ -31,25 +31,26 @@ struct AthleteInfo: View, Identifiable {
 
 struct AthleteResults: View {
     var body: some View {
-        Text("1")
+        Text("Results")
     }
 }
 
 struct AthleteRecords: View {
     var body: some View {
-        Text("2")
+        Text("Records")
     }
 }
 
 struct AthleteRankings: View {
     var body: some View {
-        Text("3")
+        Text("Rankings")
+        
     }
 }
 
 struct AthleteInfo_Previews: PreviewProvider {
     static var previews: some View {
-        let temp = AthleteSchool(id: 0, aname: "Evan Jameson", gender: "Male", grade: "SR", sid: 0, sname: "Cal Poly", mascot: "Mustangs", city: "San Luis Obispo", state: "CA")
+        //let temp = AthleteSchool(id: 0, aname: "Evan Jameson", gender: "Male", grade: "SR", sid: 0, sname: "Cal Poly", mascot: "Mustangs", city: "San Luis Obispo", state: "CA")
         
         return AthleteInfo(id: 0, dataIndex: "Results")
     }
