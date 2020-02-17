@@ -14,7 +14,6 @@ struct AthleteDetail: View {
     @State var index: Int = 0
     
     var body: some View {
-        //NavigationView{
         VStack{
             AthleteDetailHeader(athlete: self.athlete)
             Picker(selection: self.$index.animation(.spring(response: 0.55, dampingFraction: 1, blendDuration: 0)), label: Text(""),content: {
@@ -31,14 +30,9 @@ struct AthleteDetail: View {
                     AthleteInfo(id: 2, dataIndex: "Rankings")
                 ]
             )
-            
-            
-            
-        
         }
         .navigationBarTitle("Athlete", displayMode: .inline)
         .navigationBarItems(trailing: Button(action: {}, label: {Image(systemName: "bookmark")}))
-        
     }
 }
 

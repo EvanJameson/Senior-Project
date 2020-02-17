@@ -31,13 +31,19 @@ struct AthleteInfo: View, Identifiable {
 
 struct AthleteResults: View {
     var body: some View {
-        Text("Results")
+        ScrollView(.vertical){
+            AllResults(id: 0)
+                .padding(.horizontal)
+        }
     }
 }
 
 struct AthleteRecords: View {
     var body: some View {
-        Text("Records")
+        ScrollView(.vertical){
+            SeasonBests(id: 0)
+                .padding(.horizontal)
+        }
     }
 }
 

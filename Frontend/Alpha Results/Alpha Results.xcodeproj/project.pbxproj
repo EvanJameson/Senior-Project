@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		74005DC823FA3B1000FE6289 /* SeasonBests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74005DC723FA3B1000FE6289 /* SeasonBests.swift */; };
+		74005DCA23FA3FB600FE6289 /* Bests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74005DC923FA3FB600FE6289 /* Bests.swift */; };
+		74005DCD23FA460C00FE6289 /* RaceDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74005DCC23FA460C00FE6289 /* RaceDetail.swift */; };
+		74005DCF23FA472E00FE6289 /* Race.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74005DCE23FA472E00FE6289 /* Race.swift */; };
+		74005DD123FA536300FE6289 /* AllResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74005DD023FA536300FE6289 /* AllResults.swift */; };
+		74005DD523FA539B00FE6289 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74005DD423FA539B00FE6289 /* Result.swift */; };
 		7411B0B923F8CB7900FD77FD /* SchoolInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7411B0B823F8CB7900FD77FD /* SchoolInfo.swift */; };
 		7411B0BE23F8DE2400FD77FD /* MeetDetailHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7411B0BD23F8DE2400FD77FD /* MeetDetailHeader.swift */; };
 		7411B0C023F8DE3200FD77FD /* MeetInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7411B0BF23F8DE3200FD77FD /* MeetInfo.swift */; };
@@ -47,6 +53,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		74005DC723FA3B1000FE6289 /* SeasonBests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeasonBests.swift; sourceTree = "<group>"; };
+		74005DC923FA3FB600FE6289 /* Bests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bests.swift; sourceTree = "<group>"; };
+		74005DCC23FA460C00FE6289 /* RaceDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RaceDetail.swift; sourceTree = "<group>"; };
+		74005DCE23FA472E00FE6289 /* Race.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Race.swift; sourceTree = "<group>"; };
+		74005DD023FA536300FE6289 /* AllResults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllResults.swift; sourceTree = "<group>"; };
+		74005DD423FA539B00FE6289 /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		7411B0B823F8CB7900FD77FD /* SchoolInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolInfo.swift; sourceTree = "<group>"; };
 		7411B0BD23F8DE2400FD77FD /* MeetDetailHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetDetailHeader.swift; sourceTree = "<group>"; };
 		7411B0BF23F8DE3200FD77FD /* MeetInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetInfo.swift; sourceTree = "<group>"; };
@@ -99,12 +111,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		74005DCB23FA45FE00FE6289 /* Race */ = {
+			isa = PBXGroup;
+			children = (
+				74005DCC23FA460C00FE6289 /* RaceDetail.swift */,
+			);
+			path = Race;
+			sourceTree = "<group>";
+		};
 		7411B0BA23F8DCE300FD77FD /* Athlete */ = {
 			isa = PBXGroup;
 			children = (
 				7489AF642383547100CA9DCB /* AthleteDetailHeader.swift */,
 				7441D4ED238264BF00CAA1A1 /* AthleteDetail.swift */,
 				744F93A623F78811003EFD72 /* AthleteInfo.swift */,
+				74005DC723FA3B1000FE6289 /* SeasonBests.swift */,
+				74005DC923FA3FB600FE6289 /* Bests.swift */,
+				74005DD023FA536300FE6289 /* AllResults.swift */,
 			);
 			path = Athlete;
 			sourceTree = "<group>";
@@ -197,6 +220,8 @@
 				7430B26E23EBD194002873C4 /* School.swift */,
 				7430B27023EBD19D002873C4 /* Meet.swift */,
 				7497DEF323EC8DD700F3F5DD /* AthleteSchool.swift */,
+				74005DCE23FA472E00FE6289 /* Race.swift */,
+				74005DD423FA539B00FE6289 /* Result.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -225,6 +250,7 @@
 		7497DEF523ECA26E00F3F5DD /* Details */ = {
 			isa = PBXGroup;
 			children = (
+				74005DCB23FA45FE00FE6289 /* Race */,
 				7411B0BA23F8DCE300FD77FD /* Athlete */,
 				7411B0BC23F8DD0A00FD77FD /* Meet */,
 				7411B0BB23F8DCFA00FD77FD /* School */,
@@ -308,6 +334,8 @@
 				7430B26D23EBC6AB002873C4 /* UserData.swift in Sources */,
 				7482734523F4E98F00397835 /* Settings.swift in Sources */,
 				7441D4CB237F1E0F00CAA1A1 /* AppDelegate.swift in Sources */,
+				74005DCD23FA460C00FE6289 /* RaceDetail.swift in Sources */,
+				74005DD523FA539B00FE6289 /* Result.swift in Sources */,
 				744F93A523F5C7E7003EFD72 /* LabeledScroll.swift in Sources */,
 				7411B0BE23F8DE2400FD77FD /* MeetDetailHeader.swift in Sources */,
 				7441D4CD237F1E0F00CAA1A1 /* SceneDelegate.swift in Sources */,
@@ -324,6 +352,7 @@
 				7430B26F23EBD194002873C4 /* School.swift in Sources */,
 				7441D4E4237F266000CAA1A1 /* SearchRow.swift in Sources */,
 				749F4CD623F32310007FE423 /* LargeScrollBox.swift in Sources */,
+				74005DD123FA536300FE6289 /* AllResults.swift in Sources */,
 				7430B27123EBD19D002873C4 /* Meet.swift in Sources */,
 				7497DEEE23EC8A9100F3F5DD /* AthleteRow.swift in Sources */,
 				7441D4D0237F1E0F00CAA1A1 /* Alpha_Results.xcdatamodeld in Sources */,
@@ -336,7 +365,10 @@
 				7489AF652383547100CA9DCB /* AthleteDetailHeader.swift in Sources */,
 				7497DEF923ECA29600F3F5DD /* MeetDetail.swift in Sources */,
 				7497DEF423EC8DD700F3F5DD /* AthleteSchool.swift in Sources */,
+				74005DC823FA3B1000FE6289 /* SeasonBests.swift in Sources */,
 				7411B0B923F8CB7900FD77FD /* SchoolInfo.swift in Sources */,
+				74005DCF23FA472E00FE6289 /* Race.swift in Sources */,
+				74005DCA23FA3FB600FE6289 /* Bests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
