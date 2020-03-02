@@ -162,7 +162,7 @@ struct SearchList: View {
                         if (self.searchIndex == "Athletes"){
                             List {
                             ForEach(self.athleteSchools, id:\.self) {athlete in
-                                NavigationLink(destination: AthleteDetail(athlete: athlete)){
+                                NavigationLink(destination: AthleteDetail(athlete: athlete).environmentObject(self.userData)){
                                     AthleteRow(athlete: athlete)
                                 }
                             }
@@ -178,7 +178,7 @@ struct SearchList: View {
                         if (self.searchIndex == "Meets"){
                             List{
                             ForEach(self.meets, id:\.self) {meet in
-                                NavigationLink(destination: MeetDetail(meet: meet)){
+                                NavigationLink(destination: MeetDetail(meet: meet).environmentObject(self.userData)){
                                     MeetRow(meet: meet)
                                 }
                                 
@@ -194,7 +194,7 @@ struct SearchList: View {
                         if (self.searchIndex == "Schools"){
                             List{
                             ForEach(self.schools, id:\.self) {school in
-                                NavigationLink(destination: SchoolDetail(school: school)){
+                                NavigationLink(destination: SchoolDetail(school: school).environmentObject(self.userData)){
                                         SchoolRow(school: school)
                                     }
                                 

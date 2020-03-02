@@ -10,6 +10,7 @@ import SwiftUI
 
 struct Settings: View {
     
+    @EnvironmentObject var userData: UserData
     @Binding var showSettings: Bool
     @State private var showContent = false
     
@@ -20,7 +21,7 @@ struct Settings: View {
             
             List{
                 Section(header: ProfileHeader(), footer: ProfileFooter()) {
-                    NavigationLink(destination: AthleteDetail(athlete: self.temp)){
+                    NavigationLink(destination: AthleteDetail(athlete: self.temp).environmentObject(self.userData)){
                         AccountRow()
                             .padding(.leading)
                             .padding(.vertical, 3)

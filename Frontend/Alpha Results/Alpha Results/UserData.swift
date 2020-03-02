@@ -9,6 +9,9 @@
 import SwiftUI
 import Combine
 
-final class UserData: ObservableObject {
+final class UserData: ObservableObject, Identifiable {
+    @Published var id = 0
     @Published var searchIndex = "Athletes"
+    @Published var ngrok = "https://089cfda0.ngrok.io"
+    @Published var athleteResults = ResultsHolder(id: 0)
 }

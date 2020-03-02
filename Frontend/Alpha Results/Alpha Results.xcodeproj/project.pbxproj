@@ -50,6 +50,8 @@
 		749F4CD623F32310007FE423 /* LargeScrollBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749F4CD523F32310007FE423 /* LargeScrollBox.swift */; };
 		749F4CD823F33473007FE423 /* SmallScrollBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749F4CD723F33473007FE423 /* SmallScrollBox.swift */; };
 		749F4CDA23F345F5007FE423 /* PageScroll.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749F4CD923F345F5007FE423 /* PageScroll.swift */; };
+		74F58B56240367F700F7FC1E /* ResultsHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F58B55240367F700F7FC1E /* ResultsHolder.swift */; };
+		74F58B5824037AC900F7FC1E /* ObservableHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F58B5724037AC900F7FC1E /* ObservableHolder.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -98,6 +100,8 @@
 		749F4CD523F32310007FE423 /* LargeScrollBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeScrollBox.swift; sourceTree = "<group>"; };
 		749F4CD723F33473007FE423 /* SmallScrollBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallScrollBox.swift; sourceTree = "<group>"; };
 		749F4CD923F345F5007FE423 /* PageScroll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageScroll.swift; sourceTree = "<group>"; };
+		74F58B55240367F700F7FC1E /* ResultsHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsHolder.swift; sourceTree = "<group>"; };
+		74F58B5724037AC900F7FC1E /* ObservableHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservableHolder.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,9 +129,11 @@
 				7489AF642383547100CA9DCB /* AthleteDetailHeader.swift */,
 				7441D4ED238264BF00CAA1A1 /* AthleteDetail.swift */,
 				744F93A623F78811003EFD72 /* AthleteInfo.swift */,
+				74005DD023FA536300FE6289 /* AllResults.swift */,
 				74005DC723FA3B1000FE6289 /* SeasonBests.swift */,
 				74005DC923FA3FB600FE6289 /* Bests.swift */,
-				74005DD023FA536300FE6289 /* AllResults.swift */,
+				74F58B55240367F700F7FC1E /* ResultsHolder.swift */,
+				74F58B5724037AC900F7FC1E /* ObservableHolder.swift */,
 			);
 			path = Athlete;
 			sourceTree = "<group>";
@@ -332,6 +338,7 @@
 				744F93A323F4F80E003EFD72 /* EditContent.swift in Sources */,
 				7497DEF723ECA28A00F3F5DD /* SchoolDetail.swift in Sources */,
 				7430B26D23EBC6AB002873C4 /* UserData.swift in Sources */,
+				74F58B56240367F700F7FC1E /* ResultsHolder.swift in Sources */,
 				7482734523F4E98F00397835 /* Settings.swift in Sources */,
 				7441D4CB237F1E0F00CAA1A1 /* AppDelegate.swift in Sources */,
 				74005DCD23FA460C00FE6289 /* RaceDetail.swift in Sources */,
@@ -354,6 +361,7 @@
 				749F4CD623F32310007FE423 /* LargeScrollBox.swift in Sources */,
 				74005DD123FA536300FE6289 /* AllResults.swift in Sources */,
 				7430B27123EBD19D002873C4 /* Meet.swift in Sources */,
+				74F58B5824037AC900F7FC1E /* ObservableHolder.swift in Sources */,
 				7497DEEE23EC8A9100F3F5DD /* AthleteRow.swift in Sources */,
 				7441D4D0237F1E0F00CAA1A1 /* Alpha_Results.xcdatamodeld in Sources */,
 				7441D4F023826D6F00CAA1A1 /* ToggleIndex.swift in Sources */,

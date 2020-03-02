@@ -29,7 +29,7 @@ struct AthleteDetail: View {
                     AthleteInfo(id: 1, dataIndex: "Records"),
                     AthleteInfo(id: 2, dataIndex: "Rankings")
                 ]
-            )
+            ).environmentObject(self.userData)
         }
         .navigationBarTitle("Athlete", displayMode: .inline)
         .navigationBarItems(trailing: Button(action: {}, label: {Image(systemName: "bookmark")}))

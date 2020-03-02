@@ -18,7 +18,7 @@ events = ["100 Meters", "100 Meters - Wheelchair", "200 Meters", "400 Meters", "
 db = mysql.connector.connect(
   host="localhost",
   user="root",
-  passwd="A9BX782*",
+  passwd="*localtesting",
   database="resultsDB",
   auth_plugin='mysql_native_password'
 )
@@ -617,12 +617,16 @@ def insert_result(result, season, event, event_id, meet_id):
     global db
     global dbcursor
 
-    insert = "INSERT INTO Results (Position, TimeMark, DistanceMarkInches, Pr, Sr, Wind, Sport, Season, HandTime, Converted, MarkType, EventID, MeetID) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
+    # dirty, noticing this weeks later, just going to save time for now
+    # Clean season line for escape chars
+    season_name = season[19:].strip()
+
+    insert = "INSERT INTO Results (Position, TimeMark, DistanceMarkInches, Pr, Sr, Wind, Sport, SeasonYear, SeasonName, HandTime, Converted, MarkType, EventID, MeetID) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
     vals = ()
     if (result['mark'][0] == "track"):
-        vals = (str(result['pos']), str(result['mark'][1]), "0", result['pr'], result['sr'], str(result['wind']), "TF", season, result['handtime'], result['converted'], result['markType'], event_id, meet_id)
+        vals = (str(result['pos']), str(result['mark'][1]), "0", result['pr'], result['sr'], str(result['wind']), "TF", season, season_name, result['handtime'], result['converted'], result['markType'], event_id, meet_id)
     elif (result['mark'][0] == "field"):
-        vals = (str(result['pos']), "0", str(result['mark'][1]), result['pr'], result['sr'], str(result['wind']), "TF", season, result['handtime'], result['converted'], result['markType'], event_id, meet_id)
+        vals = (str(result['pos']), "0", str(result['mark'][1]), result['pr'], result['sr'], str(result['wind']), "TF", season, season_name, result['handtime'], result['converted'], result['markType'], event_id, meet_id)
 
     # debug_message(event_id, "", False)
 

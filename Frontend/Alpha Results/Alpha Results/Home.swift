@@ -142,7 +142,7 @@ struct Home: View {
                         {
                             Image(systemName: "person.crop.circle").imageScale(.large)
                         }.sheet(isPresented: $showSettings) {
-                            Settings(showSettings: self.$showSettings)
+                            Settings(showSettings: self.$showSettings).environmentObject(self.userData)
                             }
                         )
                 }
@@ -226,7 +226,7 @@ struct Home: View {
                     {
                         Image(systemName: "person.crop.circle").imageScale(.large)
                     }.sheet(isPresented: $showSettings) {
-                        Settings(showSettings: self.$showSettings)
+                        Settings(showSettings: self.$showSettings).environmentObject(self.userData)
                         }
                     )
                 
@@ -240,7 +240,7 @@ struct Home: View {
                 }
                 
                 NavigationView{
-                    SearchList()
+                    SearchList().environmentObject(self.userData)
                     .navigationBarTitle("Search")
                     .navigationBarItems(trailing:
                     Button(action: {
@@ -249,7 +249,7 @@ struct Home: View {
                     {
                         Image(systemName: "person.crop.circle").imageScale(.large)
                     }.sheet(isPresented: $showSettings) {
-                        Settings(showSettings: self.$showSettings)
+                        Settings(showSettings: self.$showSettings).environmentObject(self.userData)
                         }
                     )
                     .background(NavigationConfigurator { nc in
