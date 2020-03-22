@@ -6,6 +6,6 @@ var schoolController = require('../controllers/schools')
 
 var schoolRouter = express.Router();
 
-schoolRouter.get('/name/:name', schoolController.getSchool);
+schoolRouter.get('/:name', schoolController.getSchool);
 
 module.exports = schoolRouter;

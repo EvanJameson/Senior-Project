@@ -1,3 +1,5 @@
+USE resultsDB;
+
 ###############
 ##ENTITY SETS##
 ###############
@@ -38,7 +40,8 @@ CREATE TABLE Results(
   ResultID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   Position INT NOT NULL,
   TimeMark TIME(3),       #for running events (3 for millisecond precision)
-  DistanceMarkInches DECIMAL(5,2) NOT NULL, #2 after . 3 before #for field events (storing as inches to easily convert back while also maintaining comparator)
+  DistanceMark DECIMAL(5,2) NOT NULL, #2 after . 3 before #for field events (storing as inches to easily convert back while also maintaining comparator)
+  MarkString VARCHAR(100) NOT NULL,
   PR boolean NOT NULL,
   SR boolean NOT NULL,
   Wind DECIMAL(2,1) NOT NULL,

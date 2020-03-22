@@ -11,7 +11,6 @@
 		74005DCA23FA3FB600FE6289 /* Bests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74005DC923FA3FB600FE6289 /* Bests.swift */; };
 		74005DCD23FA460C00FE6289 /* RaceDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74005DCC23FA460C00FE6289 /* RaceDetail.swift */; };
 		74005DCF23FA472E00FE6289 /* Race.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74005DCE23FA472E00FE6289 /* Race.swift */; };
-		74005DD123FA536300FE6289 /* AllResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74005DD023FA536300FE6289 /* AllResults.swift */; };
 		74005DD523FA539B00FE6289 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74005DD423FA539B00FE6289 /* Result.swift */; };
 		7411B0B923F8CB7900FD77FD /* SchoolInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7411B0B823F8CB7900FD77FD /* SchoolInfo.swift */; };
 		7411B0BE23F8DE2400FD77FD /* MeetDetailHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7411B0BD23F8DE2400FD77FD /* MeetDetailHeader.swift */; };
@@ -52,6 +51,8 @@
 		749F4CDA23F345F5007FE423 /* PageScroll.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749F4CD923F345F5007FE423 /* PageScroll.swift */; };
 		74F58B56240367F700F7FC1E /* ResultsHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F58B55240367F700F7FC1E /* ResultsHolder.swift */; };
 		74F58B5824037AC900F7FC1E /* ObservableHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F58B5724037AC900F7FC1E /* ObservableHolder.swift */; };
+		74F58B5A2412E09E00F7FC1E /* RecordsHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F58B592412E09E00F7FC1E /* RecordsHolder.swift */; };
+		74F58B5C2412E23200F7FC1E /* Record.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F58B5B2412E23200F7FC1E /* Record.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -59,7 +60,6 @@
 		74005DC923FA3FB600FE6289 /* Bests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bests.swift; sourceTree = "<group>"; };
 		74005DCC23FA460C00FE6289 /* RaceDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RaceDetail.swift; sourceTree = "<group>"; };
 		74005DCE23FA472E00FE6289 /* Race.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Race.swift; sourceTree = "<group>"; };
-		74005DD023FA536300FE6289 /* AllResults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllResults.swift; sourceTree = "<group>"; };
 		74005DD423FA539B00FE6289 /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		7411B0B823F8CB7900FD77FD /* SchoolInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolInfo.swift; sourceTree = "<group>"; };
 		7411B0BD23F8DE2400FD77FD /* MeetDetailHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetDetailHeader.swift; sourceTree = "<group>"; };
@@ -102,6 +102,8 @@
 		749F4CD923F345F5007FE423 /* PageScroll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageScroll.swift; sourceTree = "<group>"; };
 		74F58B55240367F700F7FC1E /* ResultsHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsHolder.swift; sourceTree = "<group>"; };
 		74F58B5724037AC900F7FC1E /* ObservableHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservableHolder.swift; sourceTree = "<group>"; };
+		74F58B592412E09E00F7FC1E /* RecordsHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordsHolder.swift; sourceTree = "<group>"; };
+		74F58B5B2412E23200F7FC1E /* Record.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Record.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,10 +131,10 @@
 				7489AF642383547100CA9DCB /* AthleteDetailHeader.swift */,
 				7441D4ED238264BF00CAA1A1 /* AthleteDetail.swift */,
 				744F93A623F78811003EFD72 /* AthleteInfo.swift */,
-				74005DD023FA536300FE6289 /* AllResults.swift */,
 				74005DC723FA3B1000FE6289 /* SeasonBests.swift */,
 				74005DC923FA3FB600FE6289 /* Bests.swift */,
 				74F58B55240367F700F7FC1E /* ResultsHolder.swift */,
+				74F58B592412E09E00F7FC1E /* RecordsHolder.swift */,
 				74F58B5724037AC900F7FC1E /* ObservableHolder.swift */,
 			);
 			path = Athlete;
@@ -228,6 +230,7 @@
 				7497DEF323EC8DD700F3F5DD /* AthleteSchool.swift */,
 				74005DCE23FA472E00FE6289 /* Race.swift */,
 				74005DD423FA539B00FE6289 /* Result.swift */,
+				74F58B5B2412E23200F7FC1E /* Record.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -343,6 +346,7 @@
 				7441D4CB237F1E0F00CAA1A1 /* AppDelegate.swift in Sources */,
 				74005DCD23FA460C00FE6289 /* RaceDetail.swift in Sources */,
 				74005DD523FA539B00FE6289 /* Result.swift in Sources */,
+				74F58B5C2412E23200F7FC1E /* Record.swift in Sources */,
 				744F93A523F5C7E7003EFD72 /* LabeledScroll.swift in Sources */,
 				7411B0BE23F8DE2400FD77FD /* MeetDetailHeader.swift in Sources */,
 				7441D4CD237F1E0F00CAA1A1 /* SceneDelegate.swift in Sources */,
@@ -353,13 +357,13 @@
 				7441D4EC2381F7A900CAA1A1 /* SearchList.swift in Sources */,
 				7441D4E2237F255D00CAA1A1 /* Home.swift in Sources */,
 				749F4CD823F33473007FE423 /* SmallScrollBox.swift in Sources */,
+				74F58B5A2412E09E00F7FC1E /* RecordsHolder.swift in Sources */,
 				7441D4E72381DFA200CAA1A1 /* CircleImage.swift in Sources */,
 				7441D4D2237F1E0F00CAA1A1 /* ContentView.swift in Sources */,
 				744F93A723F78811003EFD72 /* AthleteInfo.swift in Sources */,
 				7430B26F23EBD194002873C4 /* School.swift in Sources */,
 				7441D4E4237F266000CAA1A1 /* SearchRow.swift in Sources */,
 				749F4CD623F32310007FE423 /* LargeScrollBox.swift in Sources */,
-				74005DD123FA536300FE6289 /* AllResults.swift in Sources */,
 				7430B27123EBD19D002873C4 /* Meet.swift in Sources */,
 				74F58B5824037AC900F7FC1E /* ObservableHolder.swift in Sources */,
 				7497DEEE23EC8A9100F3F5DD /* AthleteRow.swift in Sources */,

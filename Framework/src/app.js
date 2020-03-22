@@ -11,7 +11,7 @@ const app = express();
 
 //default get
 app.get('/', (req, res) => {
-    res.send("Local Host is up, How ya doin?");
+    res.send("Remote Host is up, How ya doin?");
 });
 
 //Link Routes

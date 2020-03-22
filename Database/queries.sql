@@ -1,4 +1,4 @@
-# Queries to test data
+# Queries to test data and setup routes
 
 SELECT * FROM Results;
 SELECT * FROM Athletes;
@@ -8,6 +8,29 @@ SELECT * FROM Events;
 SELECT * FROM Athletes_Results;
 SELECT * FROM Athletes_Schools;
 SELECT * FROM Meets_Schools;
+
+#Need to get result string out :(
+#Get best  time marks for an athlete (best time each year for each event)
+SELECT AM.ResultID, AM.MarkString, ZZ.TimeMark, ZZ.Name, ZZ.SeasonYear
+FROM
+  (SELECT R.ResultID, R.TimeMark, R.MarkString, R.SeasonYear, E.Name
+       FROM Results R, Events E,
+          (SELECT A.AthleteID, AR.ResultID
+           FROM Athletes_Results AR, Athletes A
+           WHERE A.AthleteID = AR.AthleteID and A.AthleteID = 3) RA
+       WHERE RA.ResultID = R.ResultID and R.EventID = E.EventID) AM,
+  (SELECT MIN(AM.TimeMark) as TimeMark, AM.Name, AM.SeasonYear
+  FROM
+      (SELECT R.ResultID, R.TimeMark, R.MarkString, R.SeasonYear, E.Name
+       FROM Results R, Events E,
+          (SELECT A.AthleteID, AR.ResultID
+           FROM Athletes_Results AR, Athletes A
+           WHERE A.AthleteID = AR.AthleteID and A.AthleteID = 3) RA
+       WHERE RA.ResultID = R.ResultID and R.EventID = E.EventID) AM
+  WHERE AM.TimeMark > 0
+  GROUP BY AM.Name, AM.SeasonYear) ZZ
+WHERE ZZ.TimeMark = AM.TimeMark
+;
 
 #Get results for a specific athlete as well as meet
 SELECT R.*, E.Name as EventName FROM Events E,

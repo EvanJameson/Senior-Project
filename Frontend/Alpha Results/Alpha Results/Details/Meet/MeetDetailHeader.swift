@@ -34,8 +34,9 @@ struct MeetDetailHeader: View {
     }
 }
 
+
 func dayFormatter(day: String) -> String {
-    let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+    let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
     
     var start = day.index(day.startIndex, offsetBy: 8)
     var end = day.index(day.startIndex, offsetBy: 10)
@@ -48,8 +49,8 @@ func dayFormatter(day: String) -> String {
     let month = String(day[range])
     let newMonth = months[(Int(month)! - 1)]
     
-    let newYear = String(day.prefix(4))
-    let newDate = newMonth + " " + newDay + ", " + newYear
+    //let newYear = String(day.prefix(4))
+    let newDate = newMonth + " " + newDay// + ", " + newYear
     
     return newDate
 }

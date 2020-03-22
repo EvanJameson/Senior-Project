@@ -16,7 +16,7 @@ struct SearchList: View {
     @EnvironmentObject var userData: UserData
     
     @State private var searchText = ""
-    @State private var ngrok = "https://089cfda0.ngrok.io"
+    @State private var host = "http://ec2-50-18-32-180.us-west-1.compute.amazonaws.com:3000"
     @State private var index = ""
     @State private var showCancelButton: Bool = false
     
@@ -48,25 +48,25 @@ struct SearchList: View {
                         //print("onCommit")
                         //print(self.userData.searchIndex)
                         if (self.searchIndex == "Athletes"){
-                            self.index = "/athletes/name/"
+                            self.index = "/athletes/"
                             self.athleteSearched = true
-                            athleteSearch(searchText: self.searchText, searchIndex: self.index, ngrok: self.ngrok){
+                            athleteSearch(searchText: self.searchText, searchIndex: self.index, host: self.host){
                                 (res, error) in
                                 self.athleteSchools = res!
                             }
                         }
                         else if (self.searchIndex == "Meets"){
-                            self.index = "/meets/name/"
+                            self.index = "/meets/"
                             self.meetSearched = true
-                            meetSearch(searchText: self.searchText, searchIndex: self.index, ngrok: self.ngrok){
+                            meetSearch(searchText: self.searchText, searchIndex: self.index, host: self.host){
                                 (res, error) in
                                 self.meets = res!
                             }
                         }
                         else if (self.searchIndex == "Schools"){
-                            self.index = "/schools/name/"
+                            self.index = "/schools/"
                             self.schoolSearched = true
-                            schoolSearch(searchText: self.searchText, searchIndex: self.index, ngrok: self.ngrok){
+                            schoolSearch(searchText: self.searchText, searchIndex: self.index, host: self.host){
                                 (res, error) in
                                 self.schools = res!
                             }
@@ -124,7 +124,7 @@ struct SearchList: View {
                     }
                 }
                 .padding(.horizontal)
-                .navigationBarHidden(showCancelButton)//.animation(.easeInOut) // animation does not work properly
+                //.navigationBarHidden(showCancelButton)//.animation(.easeInOut) // animation does not work properly
                 
                 //add unique toggle slider here to switch filter index
                 //ToggleIndex()
@@ -197,20 +197,12 @@ struct SearchList: View {
                                 NavigationLink(destination: SchoolDetail(school: school).environmentObject(self.userData)){
                                         SchoolRow(school: school)
                                     }
-                                
                             }
                         }.resignKeyboardOnDragGesture()
                             .listStyle(PlainListStyle())
-                            
-                        
                     }
-                    
                 }
                 else{Text("")}
-                    //.navigationBarTitle(Text("Search"))
-                    
-                
-                
                 Spacer()
         }.animation(.easeInOut(duration: 0.2))
         }
@@ -218,13 +210,13 @@ struct SearchList: View {
 
 // performs search of DB on commit
 // parses data thats returned and returns array of athletes
-private func athleteSearch(searchText: String, searchIndex: String, ngrok: String, completionHandler: @escaping ([AthleteSchool]?, Error?) -> Void){
+private func athleteSearch(searchText: String, searchIndex: String, host: String, completionHandler: @escaping ([AthleteSchool]?, Error?) -> Void){
     let session = URLSession(configuration: .default, delegate: nil, delegateQueue: .main)
     let newSearchText = searchText.replacingOccurrences(of: " ", with: "%20", options: .literal, range: nil)
     var res_list: [AthleteSchool] = []
     
     // HTTP Request
-    let url = URL(string: ngrok + searchIndex + newSearchText)!
+    let url = URL(string: host + searchIndex + newSearchText)!
     let task = session.dataTask(with: url, completionHandler: { (receivedData: Data?, response: URLResponse?, error: Error?) -> Void in
         // Parse the data in the response and use it
         if let data = receivedData {
@@ -247,13 +239,13 @@ private func athleteSearch(searchText: String, searchIndex: String, ngrok: Strin
     return
 }
 
-private func meetSearch(searchText: String, searchIndex: String, ngrok: String, completionHandler: @escaping ([Meet]?, Error?) -> Void){
+private func meetSearch(searchText: String, searchIndex: String, host: String, completionHandler: @escaping ([Meet]?, Error?) -> Void){
     let session = URLSession(configuration: .default, delegate: nil, delegateQueue: .main)
     let newSearchText = searchText.replacingOccurrences(of: " ", with: "%20", options: .literal, range: nil)
     var res_list: [Meet] = []
     
     // HTTP Request
-    let url = URL(string: ngrok + searchIndex + newSearchText)!
+    let url = URL(string: host + searchIndex + newSearchText)!
     let task = session.dataTask(with: url, completionHandler: { (receivedData: Data?, response: URLResponse?, error: Error?) -> Void in
         // Parse the data in the response and use it
         if let data = receivedData {
@@ -276,13 +268,13 @@ private func meetSearch(searchText: String, searchIndex: String, ngrok: String, 
     return
 }
 
-private func schoolSearch(searchText: String, searchIndex: String, ngrok: String, completionHandler: @escaping ([School]?, Error?) -> Void){
+private func schoolSearch(searchText: String, searchIndex: String, host: String, completionHandler: @escaping ([School]?, Error?) -> Void){
     let session = URLSession(configuration: .default, delegate: nil, delegateQueue: .main)
     let newSearchText = searchText.replacingOccurrences(of: " ", with: "%20", options: .literal, range: nil)
     var res_list: [School] = []
     
     // HTTP Request
-    let url = URL(string: ngrok + searchIndex + newSearchText)!
+    let url = URL(string: host + searchIndex + newSearchText)!
     let task = session.dataTask(with: url, completionHandler: { (receivedData: Data?, response: URLResponse?, error: Error?) -> Void in
         // Parse the data in the response and use it
         if let data = receivedData {

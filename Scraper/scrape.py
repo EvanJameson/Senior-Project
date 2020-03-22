@@ -9,6 +9,7 @@ from urllib.request import Request, urlopen
 from bs4 import BeautifulSoup
 from termcolor import colored
 
+event_limit = 200
 athletes_stored = 0
 parse_time_start = time.time()
 # parse_time_stop = time.time()
@@ -18,7 +19,7 @@ events = ["100 Meters", "100 Meters - Wheelchair", "200 Meters", "400 Meters", "
 db = mysql.connector.connect(
   host="localhost",
   user="root",
-  passwd="*localtesting",
+  passwd="*remotepass",
   database="resultsDB",
   auth_plugin='mysql_native_password'
 )
@@ -331,24 +332,27 @@ def clean_result(result, season, event):
 
     # check if field event mark or running mark
     if "'" in final_mark:
+        mark_string = final_mark
         d = final_mark.index("'")
         feet = final_mark[:d]
         inches = final_mark[d + 2:]
         final_mark = ("field", (float(feet) * 12.0) + float(inches))
 
     elif "m" in final_mark:
+        mark_string = final_mark
         d = final_mark.index("m")
         meters = final_mark[:d]
         final_mark = ("field", (float(meters) / 0.0254)) # turning meters into inches
 
     else:
+        mark_string = final_mark
         final_mark = ("track", final_mark)
 
     # TODO: If you do this techincally every result ever would have a wind guage, find different way to store
     if wind == "":
         wind = 0.0
 
-    result = {'pos': pos, 'mark': final_mark, 'date': date, 'meet': meet, 'season': season, 'event': event,'wind': wind, 'pr': pr, 'sr': sr,
+    result = {'pos': pos, 'mark': final_mark, 'mark_string': mark_string,  'date': date, 'meet': meet, 'season': season, 'event': event,'wind': wind, 'pr': pr, 'sr': sr,
               'handtime': handtime, 'converted': converted, 'markType': markType}
 
     return result
@@ -619,14 +623,15 @@ def insert_result(result, season, event, event_id, meet_id):
 
     # dirty, noticing this weeks later, just going to save time for now
     # Clean season line for escape chars
+    season_year = season[:20].strip()
     season_name = season[19:].strip()
 
-    insert = "INSERT INTO Results (Position, TimeMark, DistanceMarkInches, Pr, Sr, Wind, Sport, SeasonYear, SeasonName, HandTime, Converted, MarkType, EventID, MeetID) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
+    insert = "INSERT INTO Results (Position, TimeMark, DistanceMark, MarkString, Pr, Sr, Wind, Sport, SeasonYear, SeasonName, HandTime, Converted, MarkType, EventID, MeetID) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
     vals = ()
     if (result['mark'][0] == "track"):
-        vals = (str(result['pos']), str(result['mark'][1]), "0", result['pr'], result['sr'], str(result['wind']), "TF", season, season_name, result['handtime'], result['converted'], result['markType'], event_id, meet_id)
+        vals = (str(result['pos']), str(result['mark'][1]), "0", result['mark_string'], result['pr'], result['sr'], str(result['wind']), "TF", season_year, season_name, result['handtime'], result['converted'], result['markType'], event_id, meet_id)
     elif (result['mark'][0] == "field"):
-        vals = (str(result['pos']), "0", str(result['mark'][1]), result['pr'], result['sr'], str(result['wind']), "TF", season, season_name, result['handtime'], result['converted'], result['markType'], event_id, meet_id)
+        vals = (str(result['pos']), "0", str(result['mark'][1]), result['mark_string'], result['pr'], result['sr'], str(result['wind']), "TF", season_year, season_name, result['handtime'], result['converted'], result['markType'], event_id, meet_id)
 
     # debug_message(event_id, "", False)
 
@@ -865,10 +870,12 @@ def scrape_athlete(data, athlete_id, school_id):
 # gets necessary data from one result then passes in athletes link to be scraped
 def scrape_result_table (soup):
     global athletes_stored
+    global event_limit
 
     table = soup.find_all("td")
     athlete_links = get_athlete_links(soup)
     school_links = get_school_links(soup)
+
 
 
     # set i to keep track of what line of soup we're on
@@ -880,6 +887,8 @@ def scrape_result_table (soup):
         # only store as many athletes as specified so things dont get out of hand
         # set to any negative number to run scrape of full site
 
+        if len(athlete_links) == 0:
+                break
 
         # pull text out of tag
         text = athlete_result.getText()
@@ -917,6 +926,9 @@ def scrape_result_table (soup):
                     quit("", True)
 
                 athletes_stored += 1
+                if(athletes_stored % event_limit == 0):
+                    #print("\nEvent limit reached\n")
+                    break
 
                 data.update({'grade': grade,'athlete': athlete, 'athlete_link': athlete_link, 'school_link': school_link, 'school': school})
 
@@ -956,6 +968,9 @@ def scrape_result_table (soup):
 
 # builds url to loop through every page for a specific event
 def build_result_url(num_page, event_url):
+    global athletes_stored
+    global event_limit
+
     print("\nScraping Rankings List...\n")
     for page in range(num_page):
         results_url = event_url
@@ -968,6 +983,11 @@ def build_result_url(num_page, event_url):
         soup = get_soup(results_url)
         scrape_result_table(soup)
 
+        if(athletes_stored % event_limit == 0):
+            print("\nEvent limit reached\n")
+            break
+
+
         print("\nNext Page...\n")
 
 
@@ -975,18 +995,23 @@ def build_result_url(num_page, event_url):
 def build_event_url(year):
     # builds url for a certain event number
     # get event from 1 to 478 (keeping small for testing)
-    for event in range(1, 2):
+    for event in range(1, 478):
 
         # at this level make it to base page of an event
         # need to find amount of results
         event_url = year + "&Event=" + str(event)
-        num_results = get_num_results(get_soup(event_url))
+        try:
+            num_results = get_num_results(get_soup(event_url))
+        except Exception as e:
+            print("Skipping event.")
+            continue
+
         print("Parsing event " + str(event))
         print(str(num_results) + " results")
 
         # event has no results reported and is skipped
         if num_results is None:
-            print("Skipping event.")
+            print("Skipping event.\n")
             continue
 
         # get num page for each event

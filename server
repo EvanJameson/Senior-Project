@@ -1,0 +1,37 @@
+Database
+
+  sudo apt-get update
+  sudo apt-get install mysql-server
+
+  <set password>
+
+  login to mysql shell:
+    CREATE DATABASE resultsDB;
+
+
+Python
+  sudo apt install python-pip
+  sudo apt install python3-pip
+
+  pip install --upgrade pip
+
+  pip install MySQL-python
+
+  sudo pip install mysql-connector-python
+  sudo pip install BeautifulSoup4
+  sudo pip install termcolor
+
+
+Scraper
+
+  change pass to new one
+  run
+
+
+Framework
+
+  sudo apt install npm
+  sudo apt install nodejs-legacy
+  sudo apt install linuxbrew-wrapper
+
+

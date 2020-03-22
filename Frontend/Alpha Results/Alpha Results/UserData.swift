@@ -12,6 +12,7 @@ import Combine
 final class UserData: ObservableObject, Identifiable {
     @Published var id = 0
     @Published var searchIndex = "Athletes"
-    @Published var ngrok = "https://089cfda0.ngrok.io"
+    @Published var host = "http://ec2-50-18-32-180.us-west-1.compute.amazonaws.com:3000"
     @Published var athleteResults = ResultsHolder(id: 0)
+
 }

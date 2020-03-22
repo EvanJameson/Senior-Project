@@ -11,8 +11,7 @@ import SwiftUI
 struct ResultsHolder: Identifiable, Hashable {
     let id: Int
     var athleteResults: [Result] = []
-    var events: [String] = []
+    var events: [String: [String]] = [:]
     var seasons: [String] = []
-    
 }
 

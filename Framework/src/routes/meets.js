@@ -6,6 +6,6 @@ var meetController = require('../controllers/meets')
 
 var meetRouter = express.Router();
 
-meetRouter.get('/name/:name', meetController.getMeet);
+meetRouter.get('/:name', meetController.getMeet);
 
 module.exports = meetRouter;

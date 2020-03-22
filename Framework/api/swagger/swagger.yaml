@@ -1,0 +1,322 @@
+openapi: 3.0.0
+info:
+  version: "1.0.0"
+  title: Results API
+paths:
+  /athletes/all:
+    get:
+      description: Get a list of all athletes in the database
+      summary: Get a list of all athletes
+      operationId: GetAll Athletes
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllAthletes'
+
+  /athletes/{name}:
+    get:
+      description: Get a list of athletes matching the name searched
+      summary: Get a list of athletes
+      operationId: GetAthletesByName
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchedAthletes'
+
+    parameters:
+      - name: name
+        in: path
+        description: Athlete name
+        required: true
+        schema:
+          type: string
+
+  /athletes/results/{id}:
+    get:
+      description: Get athletes results by id
+      summary: Get athletes results
+      operationId: GetAthletesResults
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AthleteResults'
+
+    parameters:
+      - name: id
+        in: path
+        description: Athlete id
+        required: true
+        schema:
+          type: integer
+
+  /athletes/bests/{id}:
+    get:
+      description: Get athletes best marks by id
+      summary: Get athletes best marks
+      operationId: GetAthletesBests
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AthleteBests'
+
+    parameters:
+      - name: id
+        in: path
+        description: Athlete id
+        required: true
+        schema:
+          type: integer
+
+  /meets/{name}:
+    get:
+      description: Get a list of meets matching the name searched
+      summary: Get a list of meets
+      operationId: GetMeetsByName
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchedMeets'
+
+    parameters:
+      - name: name
+        in: path
+        description: Meet name
+        required: true
+        schema:
+          type: string
+
+  /schools/{name}:
+    get:
+      description: Get a list of schools matching the name searched
+      summary: Get a list of schools
+      operationId: GetSchoolsByName
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchedSchools'
+
+    parameters:
+      - name: name
+        in: path
+        description: School name
+        required: true
+        schema:
+          type: string
+
+components:
+  schemas:
+    AthleteBest:
+      properties:
+        ResultID:
+          type: integer
+          example: 2
+        MarkString:
+          type: string
+          example: '6.68'
+        TimeMark:
+          type: string
+          example: '00:00:06.680'
+        EventName:
+          type: string
+          example: 60 Meter Dash
+        SeasonYear:
+          type: string
+          example: 2020 Indoor Season
+      required:
+        - ResultID
+    AthleteBests:
+      type: array
+      items:
+        $ref: "#/components/schemas/AthleteBest"
+    AthleteResult:
+      type: object
+      properties:
+        MeetID:
+          type: integer
+          example: 1
+        MeetName:
+          type: string
+          example: Clemson Orange & Purple Elite Indoor
+        Day:
+          type: string
+          example: '2020-01-11T00:00:00.000Z'
+        Sport:
+          type: string
+          example: TF
+        ResultID:
+          type: integer
+          example: 1
+        Position:
+          type: integer
+          example: 3
+        TimeMark:
+          type: string
+          example: '00:00:06.740'
+        DistanceMark:
+          type: integer
+          example: 0
+        MarkString:
+          type: string
+          example: '6.74'
+        PR:
+          type: integer
+          example: 0
+        SR:
+          type: integer
+          example: 0
+        Wind:
+          type: integer
+          example: 0
+        SeasonYear:
+          type: string
+          example: 2020 Indoor Season
+        SeasonName:
+          type: string
+          example: Georgia CollegiateFreshman
+        HandTime:
+          type: integer
+          example: 0
+        Converted:
+          type: integer
+          example: 0
+        MarkType:
+          type: string
+          example: LEGAL
+        EventID:
+          type: integer
+          example: 1
+        EventName:
+          type: string
+          example: 60 Meter Dash
+      required:
+        - AthleteID
+    AthleteResults:
+      type: array
+      items:
+        $ref: "#/components/schemas/AthleteResult"
+    SearchedAthlete:
+      type: object
+      properties:
+        AthleteID:
+          type: integer
+          example: 1
+        AthleteName:
+          type: string
+          example: "Evan Jameson"
+        Gender:
+          type: string
+          example: "Male"
+        Grade:
+          type: string
+          example: "12"
+        SchoolID:
+          type: integer
+          example: 1
+        SchoolName:
+          type: string
+          example: "Del Norte High School"
+        Mascot:
+          type: string
+          example: "Nighthawks"
+        City:
+          type: string
+          example: "San Diego"
+        State:
+          type: string
+          example: "CA"
+      required:
+        - AthleteID
+    SearchedAthletes:
+      type: array
+      items:
+        $ref: "#/components/schemas/SearchedAthlete"
+    AllAthlete:
+      type: object
+      properties:
+        AthleteID:
+          type: integer
+          example: 1
+        AthleteName:
+          type: string
+          example: "Evan Jameson"
+        Gender:
+          type: string
+          example: "Male"
+        Grade:
+          type: string
+          example: "12"
+      required:
+        - AthleteID
+    AllAthletes:
+      type: array
+      items:
+        $ref: "#/components/schemas/AllAthlete"
+    SearchedMeet:
+      type: object
+      properties:
+        MeetID:
+          type: integer
+          example: 1
+        Name:
+          type: string
+          example: Houston Strake Jesuit Relays
+        Day:
+          type: string
+          example: "2019-06-23T00:00:00.000Z"
+        Sport:
+          type: string
+          example: TF
+      required:
+        - MeetID
+    SearchedMeets:
+      type: array
+      items:
+        $ref: "#/components/schemas/SearchedMeet"
+    SearchedSchool:
+      type: object
+      properties:
+        SchoolID:
+          type: integer
+          example: 1
+        Name:
+          type: string
+          example: Houston Strake Jesuit
+        Mascot:
+          type: string
+          example: Crusaders
+        City:
+          type: string
+          example: Houston
+        State:
+          type: string
+          example: TX
+      required:
+        - SchoolID
+    SearchedSchools:
+      type: array
+      items:
+        $ref: "#/components/schemas/SearchedSchool"
+
+servers:
+# Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/EvanJameson/MTP_API/1.0.0
+  - url: http://ec2-50-18-32-180.us-west-1.compute.amazonaws.com:3000

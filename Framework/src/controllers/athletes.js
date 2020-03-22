@@ -41,7 +41,7 @@ exports.getAthlete = async(req, res) => {
 exports.getAthleteResults = async(req, res) => {
   try{
     console.log(req.params.results)
-    db.query('SELECT R.*, E.Name as EventName FROM Events E, (SELECT M.MeetID, M.Name as MeetName, M.Day, M.Sport, R.ResultID, R.Position, R.TimeMark, R.DistanceMarkInches, R.PR, R.SR, R.Wind, R.Season, R.HandTime, R.Converted, R.MarkType, R.EventID FROM Meets M, (SELECT R.* FROM Results R, (SELECT A.AthleteID, AR.ResultID FROM Athletes_Results AR, (SELECT A.AthleteID FROM Athletes A WHERE AthleteID = ?) A WHERE A.AthleteID = AR.AthleteID) RA WHERE RA.ResultID = R.ResultID) R WHERE R.MeetID = M.MeetID) R WHERE R.EventID = E.EventID;'
+    db.query('SELECT R.*, E.Name as EventName FROM Events E, (SELECT M.MeetID, M.Name as MeetName, M.Day, M.Sport, R.ResultID, R.Position, R.TimeMark, R.DistanceMark, R.MarkString, R.PR, R.SR, R.Wind, R.SeasonYear, R.SeasonName, R.HandTime, R.Converted, R.MarkType, R.EventID FROM Meets M, (SELECT R.* FROM Results R, (SELECT A.AthleteID, AR.ResultID FROM Athletes_Results AR, (SELECT A.AthleteID FROM Athletes A WHERE AthleteID = ?) A WHERE A.AthleteID = AR.AthleteID) RA WHERE RA.ResultID = R.ResultID) R WHERE R.MeetID = M.MeetID) R WHERE R.EventID = E.EventID;'
       , [req.params.results], function (err, results, fields){
       if(err) {
         return res.status(500).json({message: err.message});
@@ -55,5 +55,23 @@ exports.getAthleteResults = async(req, res) => {
   }
 }
 
+//GET - Get all of specific athletes best marks
+//Gets athletes results
+exports.getAthleteBests = async(req, res) => {
+  try{
+    console.log(req.params.bests)
+    db.query('SELECT AM.ResultID, AM.MarkString, ZZ.TimeMark, ZZ.Name as EventName, ZZ.SeasonYear FROM (SELECT R.ResultID, R.TimeMark, R.MarkString, R.SeasonYear, E.Name FROM Results R, Events E, (SELECT A.AthleteID, AR.ResultID FROM Athletes_Results AR, Athletes A WHERE A.AthleteID = AR.AthleteID and A.AthleteID = ?) RA WHERE RA.ResultID = R.ResultID and R.EventID = E.EventID) AM, (SELECT MIN(AM.TimeMark) as TimeMark, AM.Name, AM.SeasonYear FROM (SELECT R.ResultID, R.TimeMark, R.MarkString, R.SeasonYear, E.Name FROM Results R, Events E, (SELECT A.AthleteID, AR.ResultID FROM Athletes_Results AR, Athletes A WHERE A.AthleteID = AR.AthleteID and A.AthleteID = ?) RA WHERE RA.ResultID = R.ResultID and R.EventID = E.EventID) AM WHERE AM.TimeMark > 0 GROUP BY AM.Name, AM.SeasonYear) ZZ WHERE ZZ.TimeMark = AM.TimeMark;'
+      , [req.params.bests, req.params.bests], function (err, bests, fields){
+      if(err) {
+        return res.status(500).json({message: err.message});
+      }
+      res.json(bests);
+    });
+  }
+  catch(err) {
+    console.log(err);
+    res.send(404);
+  }
+}
 
 

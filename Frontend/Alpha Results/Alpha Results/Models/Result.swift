@@ -15,14 +15,15 @@ struct Result:  Codable, Identifiable, Hashable {
     let meet: String
     let date: String
     let sport: String
-    //let rid: Int
     let position: Int
     let time: String
     let distance: Double
+    let mark: String
     let pr: Int
     let sr: Int
     let wind: Double
-    let season: String
+    let seasonYear: String
+    let seasonName: String
     let handtime: Int
     let converted: Int
     let marktype: String
@@ -35,14 +36,15 @@ struct Result:  Codable, Identifiable, Hashable {
         case meet = "MeetName"
         case date = "Day"
         case sport = "Sport"
-        //case rid = ""
         case position = "Position"
         case time = "TimeMark"
-        case distance = "DistanceMarkInches"
+        case distance = "DistanceMark"
+        case mark = "MarkString"
         case pr = "PR"
         case sr = "SR"
         case wind = "Wind"
-        case season = "Season"
+        case seasonYear = "SeasonYear"
+        case seasonName = "SeasonName"
         case handtime = "HandTime"
         case converted = "Converted"
         case marktype = "MarkType"
