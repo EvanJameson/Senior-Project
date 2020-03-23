@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import traceback
 import sys
 import urllib.request
@@ -954,14 +956,15 @@ def scrape_result_table (soup):
                     except Exception as e:
                         print_scrape_result(" Failure", "red", debug_width)
                         # add failures to log file
-                        handle_scrape_exception(e, athlete_link)
+                        # handle_scrape_exception(e, athlete_link)
 
                 else:
                     print("Scraping " + athlete + " ", end = '')
                     print_scrape_result(" Athlete exists", "yellow", debug_width)
 
                     # add repeats to logfile
-                    handle_repeat_athlete(athlete_link)
+
+                    # handle_repeat_athlete(athlete_link)
 
         result_index += 1
 
