@@ -15,12 +15,6 @@ struct MeetRow: View {
     
     var body: some View {
         HStack{
-            //Make this some random generated color thing
-//            CircleImage(image: Image(athlete.sname.lowercased()), wh: 50)
-//                .padding(.leading, -7)
-            
-            //sport icon to add some color
-
             VStack(alignment: .leading){
                 Text(meet.name)
                     .fontWeight(.bold)

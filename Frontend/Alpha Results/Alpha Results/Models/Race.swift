@@ -12,7 +12,4 @@ struct Race: Identifiable, Hashable {
     let id: Int
     let event: String
     let mark: String
-    //let grade: String
-    
-
 }

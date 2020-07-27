@@ -16,14 +16,14 @@ struct SearchList: View {
     @EnvironmentObject var userData: UserData
     
     @State private var searchText = ""
-    @State private var host = "http://ec2-50-18-32-180.us-west-1.compute.amazonaws.com:3000"
+    @State private var host = "http://localhost:3000"
     @State private var index = ""
     @State private var showCancelButton: Bool = false
     
-    @State private var athleteSchools: [AthleteSchool] = []//= [AthleteSchool(id: 0 , aname: "", gender: "", grade: "", sid: 0, sname: "", mascot: "", city: "", state: "")]
-    @State private var athletes =  [Athlete(id: 0 , name: "", gender: "", grade: "")]
-    @State private var meets: [Meet] = [] //= [Meet(id: 0, name: "", day: "", sport: "")]
-    @State private var schools: [School] = [] //= [School(id: 0, name: "", mascot: "", city: "", state: "")]
+    @State private var athleteSchools: [AthleteSchool] = []
+    @State private var athletes:[Athlete] = []
+    @State private var meets: [Meet] = []
+    @State private var schools: [School] = []
     
     @State private var athleteSearched: Bool = false
     @State private var meetSearched: Bool = false
@@ -45,8 +45,6 @@ struct SearchList: View {
                         self.showCancelButton = true
                     }, onCommit: {
                         self.shouldAnimate = true
-                        //print("onCommit")
-                        //print(self.userData.searchIndex)
                         if (self.searchIndex == "Athletes"){
                             self.index = "/athletes/"
                             self.athleteSearched = true
@@ -124,22 +122,15 @@ struct SearchList: View {
                     }
                 }
                 .padding(.horizontal)
-                //.navigationBarHidden(showCancelButton)//.animation(.easeInOut) // animation does not work properly
-                
-                //add unique toggle slider here to switch filter index
-                //ToggleIndex()
+
             Picker(selection: self.$index1.animation(.spring(response: 0.55, dampingFraction: 1, blendDuration: 0)) , label: Text(""),content: {
                     Text("Athletes").tag(0)
                     Text("Meets").tag(1)
                     Text("Schools").tag(2)
                 })
                 .onReceive([self.index1].publisher.first()) { (value) in
-                    //self.toggleIndex(ind: value)
                     
                     self.searchIndex = self.indices[value]
-                    //print("Value: " + String(value) + "\nIndex: " + self.indices[value] + "\nSearchIndex: " + self.searchIndex + "\n")
-                    
-                    //print(self.index)
                 }
                 .pickerStyle(SegmentedPickerStyle())
                 .padding(.horizontal)
@@ -296,17 +287,6 @@ private func schoolSearch(searchText: String, searchIndex: String, host: String,
 
     return
 }
-
-//struct SearchList_Previews: PreviewProvider {
-//    static var previews: some View {
-//        Group {
-//            SearchList()
-//                .environment(\.colorScheme, .light)
-//            SearchList()
-//                .environment(\.colorScheme, .dark)
-//        }
-//    }
-//}
 
 // helpers for
 

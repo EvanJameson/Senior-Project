@@ -19,11 +19,9 @@ struct AccountRow: View {
 
             VStack(alignment: .leading){
                 Text("Evan Jameson")
-                    //.fontWeight(.bold)
                     .padding(.bottom, 4)
                 
                 Text("View Athlete Profile")
-                    //.fontWeight(.light)
                     .foregroundColor(.gray)
                 .font(.system(size: 13))
                 
@@ -31,7 +29,6 @@ struct AccountRow: View {
             .padding(.leading, 5)
             Spacer()
         }
-        //.frame(width: UIScreen.screenWidth, height: UIScreen.screenHeight * 0.075)
     }
 }
 

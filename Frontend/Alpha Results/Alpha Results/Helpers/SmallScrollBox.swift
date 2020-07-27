@@ -26,7 +26,6 @@ struct SmallScrollBox: View, Identifiable {
                     Text("Miranda Daschian")
                         .font(.subheadline)
                         .fontWeight(.bold)
-                        //.foregroundColor(col)
                     
                     Text("5000m")
                     .font(.subheadline)
@@ -53,7 +52,6 @@ struct SmallScrollBox: View, Identifiable {
                     Text("Sean McDermott")
                         .font(.subheadline)
                         .fontWeight(.bold)
-                        //.foregroundColor(col)
                     
                     Text("3000m Steeplechase")
                     .font(.subheadline)
@@ -80,7 +78,6 @@ struct SmallScrollBox: View, Identifiable {
                     Text("Evan Jameson")
                         .font(.subheadline)
                         .fontWeight(.bold)
-                        //.foregroundColor(col)
                     
                     Text("10k (XC)")
                     .font(.subheadline)
@@ -107,7 +104,6 @@ struct SmallScrollBox: View, Identifiable {
                     Text("Justin Robison")
                         .font(.subheadline)
                         .fontWeight(.bold)
-                        //.foregroundColor(col)
                     
                     Text("5000m")
                     .font(.subheadline)
@@ -123,7 +119,6 @@ struct SmallScrollBox: View, Identifiable {
                 }
             }
             .padding(.trailing)
-            //.frame(width: UIScreen.screenWidth * 1, height: UIScreen.screenHeight * 0.06, alignment: .leading)
         }
         .frame(width: UIScreen.screenWidth * 1, height: UIScreen.screenHeight * 0.3, alignment: .leading)
         

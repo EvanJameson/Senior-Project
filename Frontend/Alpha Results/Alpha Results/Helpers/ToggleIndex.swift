@@ -31,7 +31,7 @@ struct ToggleIndex: View {
                     .frame(width: 237, height: 0, alignment: .trailing)
                 }
                   RoundedRectangle(cornerRadius: 8)
-                    .fill(Color("tabSlider"))//make light mode white
+                    .fill(Color("tabSlider"))
                     .shadow(radius: 5)
                     .frame(width: 100, height: 30)
                     .animation(.spring())

@@ -37,7 +37,7 @@ struct AthleteResults: View {
     @State private var shouldAnimate = false
     @State var athleteId = 0
     @EnvironmentObject var userData: UserData
-    @State private var host = "http://ec2-50-18-32-180.us-west-1.compute.amazonaws.com:3000"
+    @State private var host = "http://localhost:3000"
     @State private var refresh = false
     let col = Color(UIColor(red: 107.0/255.0, green: 5.0/255.0, blue: 0.0/255.0, alpha: 1))
     
@@ -103,7 +103,7 @@ struct AthleteRecords: View {
     @State private var shouldAnimate = false
     @State var athleteId = 0
     @EnvironmentObject var userData: UserData
-    @State private var host = "http://ec2-50-18-32-180.us-west-1.compute.amazonaws.com:3000"
+    @State private var host = "http://localhost:3000"
     @State private var refresh = false
     @State private var records = RecordsHolder(id: 0)
     
@@ -124,7 +124,6 @@ struct AthleteRecords: View {
                                     AthleteEvent(event: season)
                                     
                                     ForEach(self.records.athleteRecords, id: \.self) { record in
-                                        //AthleteResult(season: season, event: event, result: result)
                                         RecordResult(season: season, event: event, record: record)
                                     }
                                 }
@@ -180,8 +179,6 @@ struct AthleteRankings: View {
 
 struct AthleteInfo_Previews: PreviewProvider {
     static var previews: some View {
-        //let temp = AthleteSchool(id: 0, aname: "Evan Jameson", gender: "Male", grade: "SR", sid: 0, sname: "Cal Poly", mascot: "Mustangs", city: "San Luis Obispo", state: "CA")
-        
         return AthleteInfo(id: 0, dataIndex: "Results")
     }
 }
@@ -231,22 +228,16 @@ struct AthleteResult: View{
             if(self.result.event == event && self.result.seasonYear == season){
                 Text(String(result.position))
                 Spacer()
+                Text(result.mark)
+                    .foregroundColor(self.col)
 
-                //NavigationLink(destination: RaceDetail(race: Race(id: 0, event: result.event, mark: result.time))){
-                    Text(result.mark)
-                        .foregroundColor(self.col)
-                //}
-                    Spacer()
+                Spacer()
                 Text(dayFormatter(day: result.date))
-                //NavigationLink(destination: MeetDetail(meet: Meet(id: 0, name: result.meet, day: "2020-01-114389758943275987452", sport: "TF"))){
                     HStack{
-
                         Text(result.meet)
-
                     }.frame(width: UIScreen.screenWidth * 0.4, height: UIScreen.screenHeight * 0.1, alignment: .trailing)
-                //}
             }
-        }//.padding(.vertical, 4)
+        }
             .padding(.horizontal)
     }
 }
@@ -280,22 +271,11 @@ struct RecordResult: View{
             if(self.record.event == event && self.record.seasonYear == season){
                 Text(String(record.seasonYear))
                 Spacer()
-
-                //NavigationLink(destination: RaceDetail(race: Race(id: 0, event: result.event, mark: result.time))){
-                    Text(String(record.mark))
-                        .foregroundColor(self.col)
-                //}
-                    Spacer()
-                //Text(dayFormatter(day: result.date))
-                //NavigationLink(destination: MeetDetail(meet: Meet(id: 0, name: result.meet, day: "2020-01-114389758943275987452", sport: "TF"))){
-//                    HStack{
-//
-//                        //Text(result.meet)
-//
-//                    }.frame(width: UIScreen.screenWidth * 0.4, height: UIScreen.screenHeight * 0.1, alignment: .trailing)
-                //}
+                Text(String(record.mark))
+                    .foregroundColor(self.col)
+                Spacer()
             }
-        }//.padding(.vertical, 4)
+        }
             .padding(.horizontal)
     }
 }
@@ -305,7 +285,6 @@ struct RecordResult: View{
 // parses data thats returned and returns array of athletes
 private func resultsSearch(athleteID: Int, host: String, completionHandler: @escaping (ResultsHolder?, Error?) -> Void){
     let session = URLSession(configuration: .default, delegate: nil, delegateQueue: .main)
-    //let newSearchText = searchText.replacingOccurrences(of: " ", with: "%20", options: .literal, range: nil)
     var res_list: [Result] = []
     var season_list: [String] = []
     var event_list: [String: [String]] = [:]
@@ -335,7 +314,6 @@ private func resultsSearch(athleteID: Int, host: String, completionHandler: @esc
                     }
                     //old season + new event
                     else if(!event_list[value.seasonYear]!.contains(value.event)){
-                        //event_list.append(value.event)
                         var temp1 = event_list[value.seasonYear]!
                         temp1.append(value.event)
                         _ = event_list.updateValue(temp1, forKey: value.seasonYear)
@@ -391,7 +369,6 @@ private func recordsSearch(athleteID: Int, host: String, completionHandler: @esc
                     }
                     //old season + new event
                     else if(!season_list[value.event]!.contains(value.event)){
-                        //season_list.append(value.seasonYe)
                         var temp1 = season_list[value.event]!
                         temp1.append(value.seasonYear)
                         _ = season_list.updateValue(temp1, forKey: value.event)

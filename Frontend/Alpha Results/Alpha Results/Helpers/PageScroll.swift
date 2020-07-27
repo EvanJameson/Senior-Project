@@ -33,7 +33,7 @@ struct PageScroll<Content: View & Identifiable>: View {
             // 2
                 .content.offset(x: self.isGestureActive ? self.offset : (math(op1: (-geometry.size.width * CGFloat(self.index)),op2: (self.spacin * CGFloat(self.index)))) - self.left)
                 
-                //(math(op1: (-geometry.size.width * CGFloat(self.index)),op2: (self.spacin * CGFloat(self.index))))
+            
             // 3
             .frame(width: geometry.size.width, height: nil, alignment: .leading)
             .gesture(DragGesture()

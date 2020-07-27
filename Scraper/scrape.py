@@ -21,7 +21,7 @@ events = ["100 Meters", "100 Meters - Wheelchair", "200 Meters", "400 Meters", "
 db = mysql.connector.connect(
   host="localhost",
   user="root",
-  passwd="*remotepass",
+  passwd="*localpass",
   database="resultsDB",
   auth_plugin='mysql_native_password'
 )

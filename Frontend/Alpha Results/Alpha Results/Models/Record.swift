@@ -10,9 +10,7 @@ import SwiftUI
 
 struct Record:  Codable, Identifiable, Hashable {
     let id: Int
-    
     let time: String
-    //let distance: Double
     let mark: String
     let seasonYear: String
     let event: String
@@ -20,7 +18,6 @@ struct Record:  Codable, Identifiable, Hashable {
     enum CodingKeys: String, CodingKey{
         case id = "ResultID"
         case time = "TimeMark"
-        //case distance = "DistanceMarkInches"
         case mark = "MarkString"
         case seasonYear = "SeasonYear"
         case event = "EventName"

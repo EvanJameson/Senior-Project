@@ -206,17 +206,6 @@ struct Home: View {
                                 }
                             }.frame(width: UIScreen.screenWidth * 1, height: UIScreen.screenHeight * 0.275, alignment: .leading)
                         }
-                        
-                        
-                        
-                        //league rankings
-                        //section rankings
-                        //state ....
-                        //national ....
-                        //new school records
-                        //improvements in those sections
-                        //no handtimes, auto only
-                        
                     }
                     .navigationBarTitle("Rankings")
                     .navigationBarItems(trailing:
@@ -259,10 +248,7 @@ struct Home: View {
                         else if((self.colorScheme) == .dark){
                             nc.navigationBar.barTintColor = .black
                         }
-                        
-                        //nc.navigationBar.titleTextAttributes = [.foregroundColor : UIColor.white]
                     })
-                    //.navigationViewStyle(StackNavigationViewStyle())
                 }
                     
                 .tabItem {

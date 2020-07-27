@@ -13,12 +13,6 @@ struct SchoolRow: View {
 
     var body: some View {
         HStack{
-            //Make this some random generated color thing
-//            CircleImage(image: Image(athlete.sname.lowercased()), wh: 50)
-//                .padding(.leading, -7)
-            
-            
-            
             VStack(alignment: .leading){
                 Text(school.name)
                     .fontWeight(.bold)

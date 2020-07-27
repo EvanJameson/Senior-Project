@@ -1,3 +1,4 @@
+# CREATE DATABASE resultsDB;
 USE resultsDB;
 
 ###############

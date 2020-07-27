@@ -19,7 +19,6 @@ struct SchoolDetail: View {
             Picker(selection: self.$index.animation(.spring(response: 0.55, dampingFraction: 1, blendDuration: 0)), label: Text(""),content: {
                  Text("Meets").tag(0)
                  Text("Records").tag(1)
-                 //Text("More").tag(2)
              })
              .pickerStyle(SegmentedPickerStyle())
              .padding(.horizontal)
@@ -27,7 +26,6 @@ struct SchoolDetail: View {
                  [
                      SchoolInfo(id: 0, dataIndex: "Meets"),
                      SchoolInfo(id: 1, dataIndex: "Records"),
-                     //SchoolInfo(id: 2, dataIndex: "More")
                  ]
              )
         }

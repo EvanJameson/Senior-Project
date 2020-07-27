@@ -51,7 +51,12 @@ struct Settings: View {
                     
                 }
                 Section(header: ListHeader2(), footer: ListFooter2()) {
-                    Text("Location Settings")
+                    Button(action: {
+                        self.showContent.toggle()
+                    })
+                    {
+                        Text("Location Settings")
+                    }
                 }
                 
                 

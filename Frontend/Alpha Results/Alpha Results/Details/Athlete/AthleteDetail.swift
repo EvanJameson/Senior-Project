@@ -19,7 +19,6 @@ struct AthleteDetail: View {
             Picker(selection: self.$index.animation(.spring(response: 0.55, dampingFraction: 1, blendDuration: 0)), label: Text(""),content: {
                 Text("All Results").tag(0)
                 Text("Season Bests").tag(1)
-                //Text("Rankings").tag(2)
             })
             .pickerStyle(SegmentedPickerStyle())
             .padding(.horizontal)
@@ -27,7 +26,6 @@ struct AthleteDetail: View {
                 [
                     AthleteInfo(id: 0, dataIndex: "Results", athleteId: self.athlete.id),
                     AthleteInfo(id: 1, dataIndex: "Records", athleteId: self.athlete.id),
-                    //AthleteInfo(id: 2, dataIndex: "Rankings", athleteId: self.athlete.id)
                 ]
             ).environmentObject(self.userData)
         }
